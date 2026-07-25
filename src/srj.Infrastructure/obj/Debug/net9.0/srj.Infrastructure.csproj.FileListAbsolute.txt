@@ -30,3 +30,4 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/obj/Debug/net9.0/ref/srj.Infrastructure.dll
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/bin/Debug/net9.0/srj.Application.dll
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/bin/Debug/net9.0/srj.Application.pdb
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/obj/Debug/net9.0/srj.Infrastructure.sourcelink.json

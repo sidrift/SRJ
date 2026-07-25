@@ -4,5 +4,5 @@ namespace srj.Application.Interface.Services.Dashboard;
 
 public interface IDashboardService
 {
-    Task<DashboardRateResponse?> GetTodayRatesAsync();
+    Task<DashboardRateResponse?> GetRatesAsync(DateOnly date);
 }

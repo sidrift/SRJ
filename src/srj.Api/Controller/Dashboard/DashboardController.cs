@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using srj.Application.Interface.Services;
 using srj.Application.Interface.Services.Dashboard;
 
 namespace TheSRJProject.Controller.Dashboard;
@@ -8,27 +9,44 @@ namespace TheSRJProject.Controller.Dashboard;
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;
+    private readonly IIndiaDateTimeService _dateTimeService;
 
     public DashboardController(
-        IDashboardService dashboardService)
+        IDashboardService dashboardService,
+        IIndiaDateTimeService dateTimeService)
     {
         _dashboardService = dashboardService;
+        _dateTimeService = dateTimeService;
     }
 
-    [HttpGet("rates/today")]
-    public async Task<IActionResult> GetTodayRates()
+    [HttpGet("rates/{date}")]
+    public async Task<IActionResult> GetRates(DateOnly date)
     {
-        var result =
-            await _dashboardService.GetTodayRatesAsync();
+        var today = _dateTimeService.Today;
+        var earliestAllowed = today.AddDays(-30);
 
+        if (date > today)
+        {
+            return BadRequest(new
+            {
+                message = "Future dates are not allowed."
+            });
+        }
+
+        if (date < earliestAllowed)
+        {
+            return BadRequest(new
+            {
+                message = "Rates can only be viewed for the last 30 days."
+            });
+        }
+
+        var result = await _dashboardService.GetRatesAsync(date);
 
         if (result == null)
-            return NotFound(new
-            {
-                message = "Today's gold and silver rates are not set.",
-                priceDate = DateOnly.FromDateTime(DateTime.UtcNow)
-            });
-
+        {
+            return Ok(Array.Empty<object>());
+        }
 
         return Ok(result);
     }

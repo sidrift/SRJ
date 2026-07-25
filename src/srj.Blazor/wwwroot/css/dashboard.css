@@ -1,0 +1,208 @@
+/* ======================================
+   DASHBOARD
+====================================== */
+
+.dashboard-container{
+	padding:25px;
+}
+
+.dashboard-header{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	margin-bottom:25px;
+}
+
+.dashboard-header h2{
+	font-weight:700;
+}
+
+.dashboard-header p{
+	color:#777;
+}
+
+.dashboard-date{
+	display:inline-flex;
+	align-items:center;
+	gap:8px;
+
+	background:#f8f9fa;
+
+	padding:10px 18px;
+
+	border-radius:20px;
+
+	border:1px solid #dee2e6;
+
+	font-weight:600;
+}
+
+/* Sections */
+
+.dashboard-section{
+	margin-bottom:35px;
+}
+
+.dashboard-section-title{
+	display:flex;
+	align-items:center;
+	gap:10px;
+
+	margin-bottom:20px;
+
+	font-weight:700;
+}
+
+.dashboard-section-title.gold{
+	color:#8a6d00;
+}
+
+.dashboard-section-title.gold i{
+	color:#d4af37;
+}
+
+.dashboard-section-title.silver{
+	color:#495057;
+}
+
+.dashboard-section-title.silver i{
+	color:#adb5bd;
+}
+
+/* Grid */
+
+.dashboard-grid{
+	display:grid;
+	grid-template-columns:repeat(3,1fr);
+	gap:20px;
+}
+
+/* Cards */
+
+.dashboard-rate-card{
+	background:white;
+
+	border-radius:16px;
+
+	overflow:hidden;
+
+	box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+	transition:.2s;
+}
+
+.dashboard-rate-card:hover{
+	transform:translateY(-4px);
+}
+
+/* Gold */
+
+.dashboard-rate-card.gold{
+	border:1px solid #ead98c;
+}
+
+.dashboard-rate-card.gold .dashboard-rate-header{
+	background:linear-gradient(135deg,#d4af37,#f7e27d);
+	color:#3b2700;
+}
+
+/* Silver */
+
+.dashboard-rate-card.silver{
+	border:1px solid #d9dde2;
+}
+
+.dashboard-rate-card.silver .dashboard-rate-header{
+	background:linear-gradient(135deg,#cfd4da,#f8f9fa);
+	color:#495057;
+}
+
+.dashboard-rate-header{
+	padding:15px 20px;
+	font-weight:700;
+}
+
+.dashboard-rate-body{
+	padding:20px;
+}
+
+.dashboard-price-item{
+	display:flex;
+	justify-content:space-between;
+	padding:12px 0;
+	border-bottom:1px solid #eee;
+}
+
+.dashboard-price-item:last-child{
+	border-bottom:none;
+}
+
+.dashboard-price-item span{
+	color:#777;
+}
+
+.dashboard-price-item strong{
+	font-size:1.15rem;
+}
+
+@media(max-width:768px){
+
+	.dashboard-container{
+		padding:15px;
+	}
+
+	.dashboard-header{
+		flex-direction:column;
+		align-items:flex-start;
+		gap:15px;
+	}
+
+	.dashboard-grid{
+		grid-template-columns:1fr;
+	}
+}
+
+.dashboard-date-picker {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	min-width: 220px;
+}
+
+.dashboard-date-label {
+	font-size: .9rem;
+	font-weight: 600;
+	color: #666;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.dashboard-date-picker input {
+	border-radius: 10px;
+	border: 1px solid #ddd;
+	padding: 10px 14px;
+}
+
+.historical-warning {
+	margin-bottom: 24px;
+	border-left: 5px solid #ffc107;
+	border-radius: 12px;
+	font-weight: 600;
+}
+
+.historical-warning i {
+	margin-right: 8px;
+}
+
+.dashboard-warning {
+	margin-bottom: 20px;
+	border-radius: 12px;
+	font-weight: 600;
+}
+
+.historical-warning {
+	margin-top: 18px;
+	margin-bottom: 22px;
+	border-radius: 12px;
+}

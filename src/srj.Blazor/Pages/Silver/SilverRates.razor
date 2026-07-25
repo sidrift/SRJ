@@ -5,354 +5,318 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-
 <HeadContent>
-	<link href="css/gold-rate.css" rel="stylesheet"/>
+    <link href="css/silver-rate.css" rel="stylesheet" />
 </HeadContent>
-
 
 <PageTitle>Silver Rates</PageTitle>
 
-
-@if (_showSuccess) {
-	<div class="dialog-overlay">
-		<div class="success-dialog">
-			<i class="bi bi-check-circle-fill"></i>
-			Silver price updated successfully.
-		</div>
-	</div>
+@if (_showSuccess)
+{
+    <div class="dialog-overlay">
+        <div class="success-dialog">
+            <i class="bi bi-check-circle-fill"></i>
+            Silver price updated successfully.
+        </div>
+    </div>
 }
-
 
 <div class="@(_showSuccess ? "blur-background" : "")">
 
-	<div class="gold-rate-container">
+    <div class="silver-rate-container">
 
+        <div class="silver-header">
 
-		<div class="gold-header">
+            <div>
 
-			<div>
-				<h2>
-					<i class="bi bi-circle-half"></i>
-					Silver Rates
-				</h2>
+                <h2>
+                    <i class="bi bi-circle-half"></i>
+                    Silver Rates
+                </h2>
 
-				<p>
-					Update today's silver buying and selling rates
-				</p>
-			</div>
 
+            </div>
 
-			<div class="gold-date">
+            <div class="silver-date">
+	            <i class="bi bi-calendar3"></i>
+	            @DateTime.Now.ToString("dd MMM yyyy")
+            </div>
 
-				<i class="bi bi-calendar3"></i>
+        </div>
 
-				@DateTime.Now.ToString("dd MMM yyyy")
+        @if (_loading)
+        {
+            <div class="text-center">
+                <div class="spinner-border text-secondary"></div>
+            </div>
+        }
+        else
+        {
+            @if (!string.IsNullOrEmpty(_error))
+            {
+                <div class="alert alert-danger">
+                    @_error
+                </div>
+            }
 
-			</div>
+            <EditForm EditContext="_editContext"
+                      OnValidSubmit="SaveRate">
 
-		</div>
+                <div class="silver-card">
 
+                    <div class="rate-section">
 
+                        <h5>
+                            <i class="bi bi-box-seam-fill"></i>
+                            Silver - Silly
+                        </h5>
 
-		@if (_loading) {
-			<div class="text-center">
-				<div class="spinner-border text-warning"></div>
-			</div>
-		} else {
-			@if (!string.IsNullOrEmpty(_error)) {
-				<div class="alert alert-danger">
-					@_error
-				</div>
-			}
+                        <div class="rate-grid">
 
+                            <div class="rate-field">
 
-			<EditForm EditContext="_editContext"
-			          OnValidSubmit="SaveRate">
+                                <label>Sell Price</label>
 
+                                <div class="input-group">
 
-				<div class="rate-card">
+                                    <span>₹</span>
 
+                                    <InputNumber class="form-control"
+                                                 @bind-Value="_silverRate.SellPriceSilly" />
 
-					<div class="rate-section">
+                                </div>
 
-						<h5>
-							<i class="bi bi-box-seam-fill"></i>
-							Silver - Silly
-						</h5>
+                            </div>
 
+                            <div class="rate-field">
 
-						<div class="rate-grid">
+                                <label>Buy Price</label>
 
+                                <div class="input-group">
 
-							<div class="rate-field">
+                                    <span>₹</span>
 
-								<label>
-									Sell Price
-								</label>
+                                    <InputNumber class="form-control"
+                                                 @bind-Value="_silverRate.BuyPriceSilly" />
 
-								<div class="input-group">
+                                </div>
 
-                                <span>
-                                    ₹
-                                </span>
+                            </div>
 
-									<InputNumber class="form-control"
-									             @bind-Value="_silverRate.SellPriceSilly"/>
+                        </div>
 
-								</div>
+                    </div>
 
-							</div>
+                    <div class="rate-section">
 
+                        <h5>
+                            <i class="bi bi-box"></i>
+                            Silver - 99
+                        </h5>
 
-							<div class="rate-field">
+                        <div class="rate-grid">
 
-								<label>
-									Buy Price
-								</label>
+                            <div class="rate-field">
 
-								<div class="input-group">
+                                <label>Sell Price</label>
 
-                                <span>
-                                    ₹
-                                </span>
+                                <div class="input-group">
 
-									<InputNumber class="form-control"
-									             @bind-Value="_silverRate.BuyPriceSilly"/>
+                                    <span>₹</span>
 
-								</div>
+                                    <InputNumber class="form-control"
+                                                 @bind-Value="_silverRate.SellPrice99" />
 
-							</div>
+                                </div>
 
+                            </div>
 
-						</div>
+                            <div class="rate-field">
 
-					</div>
+                                <label>Buy Price</label>
 
+                                <div class="input-group">
 
-					<div class="rate-section">
+                                    <span>₹</span>
 
-						<h5>
-							<i class="bi bi-box"></i>
-							Silver - 999
-						</h5>
+                                    <InputNumber class="form-control"
+                                                 @bind-Value="_silverRate.BuyPrice99" />
 
+                                </div>
 
-						<div class="rate-grid">
+                            </div>
 
+                        </div>
 
-							<div class="rate-field">
+                    </div>
 
-								<label>
-									Sell Price
-								</label>
+                    <div class="text-end mt-4">
 
-								<div class="input-group">
+                        <button class="save-btn"
+                                type="submit"
+                                disabled="@(!_canSave || _saving)">
 
-                                <span>
-                                    ₹
-                                </span>
+                            <i class="bi bi-floppy-fill me-2"></i>
 
-									<InputNumber class="form-control"
-									             @bind-Value="_silverRate.SellPrice99"/>
+                            @(_saving
+                                ? "Saving..."
+                                : "Save Silver Rates")
 
-								</div>
+                        </button>
 
-							</div>
+                    </div>
 
+                </div>
 
-							<div class="rate-field">
+            </EditForm>
+        }
 
-								<label>
-									Buy Price
-								</label>
-
-								<div class="input-group">
-
-                                <span>
-                                    ₹
-                                </span>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_silverRate.BuyPrice99"/>
-
-								</div>
-
-							</div>
-
-
-						</div>
-
-					</div>
-
-
-					<button class="save-btn"
-					        disabled="@(!_canSave || _saving)">
-
-						<i class="bi bi-save"></i>
-
-						@(_saving ? "Saving..." : "Save Silver Rate")
-
-					</button>
-
-
-				</div>
-
-
-			</EditForm>
-		}
-
-
-	</div>
+    </div>
 
 </div>
 
-
-
 @code {
-	private SilverRateRequest _silverRate = new();
 
-	private SilverRateRequest _originalRate = new();
+    private SilverRateRequest _silverRate = new();
 
-	private EditContext? _editContext;
+    private SilverRateRequest _originalRate = new();
 
-	private bool _loading;
+    private EditContext? _editContext;
 
-	private bool _saving;
+    private bool _loading;
+    private bool _saving;
+    private bool _canSave;
+    private bool _showSuccess;
 
-	private bool _canSave;
+    private string? _error;
 
-	private bool _showSuccess;
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
 
-	private string? _error;
+        try
+        {
+            var rate =
+                await Http.GetFromJsonAsync<SilverRateResponse>(
+                    "silver-rates/today");
 
-	protected override async Task OnInitializedAsync() {
-		_loading = true;
+            if (rate != null)
+            {
+                _silverRate = new SilverRateRequest
+                {
+                    SellPriceSilly = rate.SellPriceSilly,
+                    BuyPriceSilly = rate.BuyPriceSilly,
+                    SellPrice99 = rate.SellPrice99,
+                    BuyPrice99 = rate.BuyPrice99
+                };
 
+                _originalRate = Clone(_silverRate);
+            }
+        }
+        catch
+        {
+            _silverRate = new SilverRateRequest();
+            _originalRate = new SilverRateRequest();
+        }
 
-		try {
-			var rate =
-				await Http.GetFromJsonAsync<SilverRateResponse>(
-					"silver-rates/today");
+        _editContext = new EditContext(_silverRate);
 
+        _editContext.OnFieldChanged += (_, _) =>
+        {
+            _canSave = HasChanges();
+            StateHasChanged();
+        };
 
-			if (rate != null) {
-				_silverRate = new SilverRateRequest {
-					SellPriceSilly = rate.SellPriceSilly,
-					BuyPriceSilly = rate.BuyPriceSilly,
+        _loading = false;
+    }
 
-					SellPrice99 = rate.SellPrice99,
-					BuyPrice99 = rate.BuyPrice99
-				};
+    private async Task SaveRate()
+    {
+        _error = null;
 
+        if (!IsValidRate())
+        {
+            _error = "All silver prices must be greater than 0.";
+            return;
+        }
 
-				_originalRate = Clone(_silverRate);
-			}
-		}
-		catch {
-			_silverRate = new SilverRateRequest();
-			_originalRate = new SilverRateRequest();
-		}
+        _saving = true;
 
+        try
+        {
+            var response =
+                await Http.PutAsJsonAsync(
+                    "silver-rates",
+                    _silverRate);
 
-		_editContext = new EditContext(_silverRate);
+            if (response.IsSuccessStatusCode)
+            {
+                _showSuccess = true;
 
+                StateHasChanged();
 
-		_editContext.OnFieldChanged += (_, _) => {
-			_canSave = HasChanges();
-			StateHasChanged();
-		};
+                await Task.Delay(2000);
 
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                _error = "Failed to update silver rate.";
+            }
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
 
-		_loading = false;
-	}
+    private bool HasChanges()
+    {
+        return
+            _silverRate.SellPriceSilly != _originalRate.SellPriceSilly ||
+            _silverRate.BuyPriceSilly != _originalRate.BuyPriceSilly ||
+            _silverRate.SellPrice99 != _originalRate.SellPrice99 ||
+            _silverRate.BuyPrice99 != _originalRate.BuyPrice99;
+    }
 
-	private async Task SaveRate() {
-		_error = null;
+    private bool IsValidRate()
+    {
+        return
+            _silverRate.SellPriceSilly > 0 &&
+            _silverRate.BuyPriceSilly > 0 &&
+            _silverRate.SellPrice99 > 0 &&
+            _silverRate.BuyPrice99 > 0;
+    }
 
+    private SilverRateRequest Clone(SilverRateRequest x)
+    {
+        return new SilverRateRequest
+        {
+            SellPriceSilly = x.SellPriceSilly,
+            BuyPriceSilly = x.BuyPriceSilly,
+            SellPrice99 = x.SellPrice99,
+            BuyPrice99 = x.BuyPrice99
+        };
+    }
 
-		if (!IsValidRate()) {
-			_error = "All silver prices must be greater than 0.";
-			return;
-		}
+    public class SilverRateRequest
+    {
+        public decimal? SellPriceSilly { get; set; }
+        public decimal? BuyPriceSilly { get; set; }
+        public decimal? SellPrice99 { get; set; }
+        public decimal? BuyPrice99 { get; set; }
+    }
 
+    public class SilverRateResponse
+    {
+        public DateOnly PriceDate { get; set; }
 
-		_saving = true;
+        public decimal? SellPriceSilly { get; set; }
+        public decimal? BuyPriceSilly { get; set; }
+        public decimal? SellPrice99 { get; set; }
+        public decimal? BuyPrice99 { get; set; }
 
+        public DateTime UpdatedAt { get; set; }
+    }
 
-		try {
-			var response =
-				await Http.PutAsJsonAsync(
-					"silver-rates",
-					_silverRate);
-
-
-			if (response.IsSuccessStatusCode) {
-				_showSuccess = true;
-
-				StateHasChanged();
-
-
-				await Task.Delay(2000);
-
-
-				NavigationManager.NavigateTo("/");
-			} else {
-				_error = "Failed to update silver rate.";
-			}
-		}
-		finally {
-			_saving = false;
-		}
-	}
-
-	private bool HasChanges() {
-		return
-			_silverRate.SellPriceSilly != _originalRate.SellPriceSilly ||
-			_silverRate.BuyPriceSilly != _originalRate.BuyPriceSilly ||
-			_silverRate.SellPrice99 != _originalRate.SellPrice99 ||
-			_silverRate.BuyPrice99 != _originalRate.BuyPrice99;
-	}
-
-	private bool IsValidRate() {
-		return
-			_silverRate.SellPriceSilly > 0 &&
-			_silverRate.BuyPriceSilly > 0 &&
-			_silverRate.SellPrice99 > 0 &&
-			_silverRate.BuyPrice99 > 0;
-	}
-
-	private SilverRateRequest Clone(SilverRateRequest x) {
-		return new SilverRateRequest {
-			SellPriceSilly = x.SellPriceSilly,
-			BuyPriceSilly = x.BuyPriceSilly,
-
-			SellPrice99 = x.SellPrice99,
-			BuyPrice99 = x.BuyPrice99
-		};
-	}
-
-	public class SilverRateRequest {
-		public decimal? SellPriceSilly { get; set; }
-
-		public decimal? BuyPriceSilly { get; set; }
-
-		public decimal? SellPrice99 { get; set; }
-
-		public decimal? BuyPrice99 { get; set; }
-	}
-
-	public class SilverRateResponse {
-		public DateOnly PriceDate { get; set; }
-
-		public decimal? SellPriceSilly { get; set; }
-
-		public decimal? BuyPriceSilly { get; set; }
-
-		public decimal? SellPrice99 { get; set; }
-
-		public decimal? BuyPrice99 { get; set; }
-
-		public DateTime UpdatedAt { get; set; }
-	}
 }

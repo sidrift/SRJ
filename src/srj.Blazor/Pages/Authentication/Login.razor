@@ -1,0 +1,128 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using srj.Application.Dtos.Request.Authentication
+@using srj.Blazor.Components.Layout
+@using srj.Blazor.Services
+@using srj.Blazor.Services.Interfaces
+
+@layout EmptyLayout
+
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@inject TokenService TokenService
+
+<PageTitle>Login</PageTitle>
+
+<HeadContent>
+	<link href="css/auth.css" rel="stylesheet"/>
+</HeadContent>
+
+<div class="auth-container">
+
+	<div class="auth-card">
+
+		<h2>SRJ Jewellers</h2>
+
+		@if (!string.IsNullOrWhiteSpace(_error)) {
+			<div class="alert alert-danger">
+				@_error
+			</div>
+		}
+
+		<EditForm Model="_model"
+		          FormName="LoginForm"
+		          OnValidSubmit="LoginAsync">
+
+			<DataAnnotationsValidator/>
+
+			<ValidationSummary/>
+
+			<div class="mb-3">
+
+				<label class="form-label">
+					Email
+				</label>
+
+				<InputText class="form-control"
+				           @bind-Value="_model.Email"/>
+
+				<ValidationMessage For="@(() => _model.Email)"
+				                   class="validation-message"/>
+
+			</div>
+
+			<div class="mb-4">
+
+				<label class="form-label">
+					Password
+				</label>
+
+				<InputText class="form-control"
+				           type="password"
+				           @bind-Value="_model.Password"/>
+
+				<ValidationMessage For="@(() => _model.Password)"
+				                   class="validation-message"/>
+
+			</div>
+
+			<button class="btn btn-primary w-100"
+			        type="submit"
+			        disabled="@_loading">
+
+				@(_loading ? "Signing In..." : "Login")
+
+			</button>
+
+		</EditForm>
+
+		<div class="auth-footer">
+
+			Don't have an account?
+
+			<NavLink href="/register">
+				Register
+			</NavLink>
+
+		</div>
+
+	</div>
+
+</div>
+
+@code
+{
+	private readonly LoginRequest _model = new()
+	{
+		Email = "user@gmail.com",
+		Password = "String123"
+	};
+
+	private bool _loading;
+
+	private string? _error;
+
+	private async Task LoginAsync() {
+		try {
+			_loading = true;
+			_error = null;
+
+			var response = await AuthenticationService.LoginAsync(_model);
+
+			TokenService.SetToken(
+				response.Token,
+				response.UserName,
+				response.Expiry);
+
+			NavigationManager.NavigateTo("/", true);
+		}
+		catch (Exception ex) {
+			_error = ex.Message;
+		}
+		finally {
+			_loading = false;
+		}
+	}
+}

@@ -1,0 +1,207 @@
+@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@using srj.Blazor.Shared
+
+@inject HttpClient Http
+
+
+<HeadContent>
+	<link href="css/gold-rate.css" rel="stylesheet"/>
+</HeadContent>
+
+
+<PageTitle>Dashboard</PageTitle>
+
+
+<div class="gold-rate-container">
+
+
+	@if (_loading) {
+		<div class="text-center">
+			<div class="spinner-border text-warning"></div>
+		</div>
+	} else if (_rates == null) {
+		<div class="alert alert-danger">
+
+			<i class="bi bi-exclamation-triangle-fill"></i>
+
+			Today's gold and silver price is not set.
+
+			<br/>
+
+			Date:
+			@DateTime.Now.ToString("dd MMM yyyy")
+
+		</div>
+	} else {
+		<div class="gold-header">
+
+			<div>
+
+				<h2>
+					<i class="bi bi-speedometer"></i>
+					Dashboard
+				</h2>
+
+				<p>
+					Today's gold and silver rates
+				</p>
+
+			</div>
+
+
+			<div class="gold-date">
+
+				<i class="bi bi-calendar3"></i>
+
+				@_rates.PriceDate.ToString("dd MMM yyyy")
+
+			</div>
+
+		</div>
+
+
+		<!-- GOLD -->
+
+		<div class="rate-card">
+
+
+			<h4>
+				<i class="bi bi-coin"></i>
+				Gold Rates
+			</h4>
+
+
+			<div class="dashboard-grid">
+
+
+				<RateCard
+					Title="Imported Gold (24K)"
+					Sell="@_rates.Gold.SellPrice24KImp"
+					Buy="@_rates.Gold.BuyPrice24KImp"/>
+
+
+				<RateCard
+					Title="Finished Gold (24K)"
+					Sell="@_rates.Gold.SellPrice24KFt"
+					Buy="@_rates.Gold.BuyPrice24KFt"/>
+
+
+				<RateCard
+					Title="22K Gold"
+					Sell="@_rates.Gold.SellPrice22K"/>
+
+
+				<RateCard
+					Title="20K Gold"
+					Sell="@_rates.Gold.SellPrice20K"/>
+
+
+				<RateCard
+					Title="18K Gold"
+					Sell="@_rates.Gold.SellPrice18K"/>
+
+
+			</div>
+
+
+		</div>
+
+
+		<!-- SILVER -->
+
+		<div class="rate-card mt-4">
+
+
+			<h4>
+
+				<i class="bi bi-circle-half"></i>
+
+				Silver Rates
+
+			</h4>
+
+
+			<div class="dashboard-grid">
+
+
+				<RateCard
+					Title="Silver Silly"
+					Sell="@_rates.Silver.SellPriceSilly"
+					Buy="@_rates.Silver.BuyPriceSilly"/>
+
+
+				<RateCard
+					Title="Silver 999"
+					Sell="@_rates.Silver.SellPrice99"
+					Buy="@_rates.Silver.BuyPrice99"/>
+
+
+			</div>
+
+
+		</div>
+	}
+
+
+</div>
+
+
+
+
+@code {
+	private DashboardRates? _rates;
+
+	private bool _loading;
+
+	protected override async Task OnInitializedAsync() {
+		_loading = true;
+
+
+		try {
+			_rates =
+				await Http.GetFromJsonAsync<DashboardRates>(
+					"dashboard/rates/today");
+		}
+		catch {
+			_rates = null;
+		}
+
+
+		_loading = false;
+	}
+
+	public class DashboardRates {
+		public DateOnly PriceDate { get; set; }
+
+		public GoldRate Gold { get; set; } = new();
+
+		public SilverRate Silver { get; set; } = new();
+	}
+
+	public class GoldRate {
+		public decimal? SellPrice24KImp { get; set; }
+
+		public decimal? BuyPrice24KImp { get; set; }
+
+		public decimal? SellPrice24KFt { get; set; }
+
+		public decimal? BuyPrice24KFt { get; set; }
+
+		public decimal? SellPrice22K { get; set; }
+
+		public decimal? SellPrice20K { get; set; }
+
+		public decimal? SellPrice18K { get; set; }
+	}
+
+	public class SilverRate {
+		public decimal? SellPriceSilly { get; set; }
+
+		public decimal? BuyPriceSilly { get; set; }
+
+		public decimal? SellPrice99 { get; set; }
+
+		public decimal? BuyPrice99 { get; set; }
+	}
+}

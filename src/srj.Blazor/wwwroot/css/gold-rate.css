@@ -1,0 +1,442 @@
+/* ======================================
+   COMMON CONTAINER
+====================================== */
+
+.gold-rate-container {
+	padding: 25px;
+}
+
+/* ======================================
+   HEADER
+====================================== */
+
+.gold-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 25px;
+}
+
+.gold-header h2 {
+	color: #3b2700;
+	font-weight: 700;
+}
+
+.gold-header p {
+	color: #777;
+	margin: 0;
+}
+
+.gold-date {
+	background: #fff8dc;
+	color: #8a6d00;
+	padding: 10px 18px;
+	border-radius: 20px;
+	font-weight: 600;
+}
+
+/* ======================================
+   GOLD / SILVER RATE FORM CARD
+====================================== */
+
+.rate-card {
+
+	background: white;
+
+	border-radius: 16px;
+
+	padding: 25px;
+
+	margin-bottom: 25px;
+
+	box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+
+}
+
+.rate-section {
+
+	margin-bottom: 30px;
+
+}
+
+.rate-section h5 {
+
+	color: #8a6d00;
+
+	border-bottom: 1px solid #eee;
+
+	padding-bottom: 12px;
+
+	margin-bottom: 20px;
+
+	font-weight: 700;
+
+}
+
+/* Form grid */
+
+.rate-grid {
+
+	display: grid;
+
+	grid-template-columns: repeat(2, 1fr);
+
+	gap: 25px;
+
+}
+
+.rate-field label {
+
+	font-weight: 600;
+
+	color: #555;
+
+	margin-bottom: 8px;
+
+	display: block;
+
+}
+
+/* Input */
+
+.input-group {
+
+	display: flex;
+
+}
+
+.input-group span {
+
+	background: #d4af37;
+
+	color: white;
+
+	padding: 10px 15px;
+
+	border-radius: 8px 0 0 8px;
+
+	font-weight: 700;
+
+}
+
+.input-group input {
+
+	border-radius: 0 8px 8px 0;
+
+}
+
+/* Save button */
+
+.save-btn {
+
+	margin-top: 15px;
+
+	background: linear-gradient(
+			135deg,
+			#d4af37,
+			#f7e27d
+	);
+
+	border: none;
+
+	color: #3b2700;
+
+	font-weight: 700;
+
+	padding: 12px 25px;
+
+	border-radius: 10px;
+
+	cursor: pointer;
+
+	transition: .2s ease;
+
+}
+
+.save-btn:hover:not(:disabled) {
+
+	transform: translateY(-2px);
+
+	box-shadow: 0 5px 15px rgba(212, 175, 55, .4);
+
+}
+
+.save-btn:disabled {
+
+	opacity: .5;
+
+	cursor: not-allowed;
+
+}
+
+/* ======================================
+   DASHBOARD
+====================================== */
+
+.dashboard-container {
+
+	padding: 25px;
+
+}
+
+.dashboard-container .rate-card {
+
+	margin-bottom: 25px;
+
+}
+
+.dashboard-container h4 {
+
+	color: #3b2700;
+
+	font-weight: 700;
+
+	display: flex;
+
+	align-items: center;
+
+	gap: 10px;
+
+	margin-bottom: 20px;
+
+}
+
+.dashboard-container h4 i {
+
+	color: #d4af37;
+
+}
+
+/* Dashboard grid */
+
+.dashboard-grid {
+
+	display: grid;
+
+	grid-template-columns:repeat(3, 1fr);
+
+	gap: 20px;
+
+}
+
+/* Dashboard Rate Card */
+
+.dashboard-rate-card {
+
+	background: white;
+
+	border-radius: 16px;
+
+	overflow: hidden;
+
+	border: 1px solid #ead98c;
+
+	box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+
+	transition: .2s ease;
+
+}
+
+.dashboard-rate-card:hover {
+
+	transform: translateY(-4px);
+
+	box-shadow: 0 12px 30px rgba(212, 175, 55, .25);
+
+}
+
+/* Dashboard card title */
+
+.dashboard-rate-header {
+
+	background: linear-gradient(
+			135deg,
+			#d4af37,
+			#f7e27d
+	);
+
+	color: #3b2700;
+
+	padding: 15px 20px;
+
+	font-weight: 700;
+
+	font-size: 1.1rem;
+
+}
+
+.dashboard-rate-header i {
+
+	margin-right: 8px;
+
+}
+
+/* Dashboard body */
+
+.dashboard-rate-body {
+
+	padding: 20px;
+
+}
+
+.dashboard-price-item {
+
+	display: flex;
+
+	justify-content: space-between;
+
+	align-items: center;
+
+	padding: 12px 0;
+
+	border-bottom: 1px solid #eee;
+
+}
+
+.dashboard-price-item:last-child {
+
+	border-bottom: none;
+
+}
+
+.dashboard-price-item span {
+
+	color: #777;
+
+	font-weight: 600;
+
+}
+
+.dashboard-price-item strong {
+
+	color: #3b2700;
+
+	font-size: 1.15rem;
+
+}
+
+.dashboard-price-item.single {
+
+	justify-content: space-between;
+
+}
+
+/* ======================================
+   SUCCESS POPUP
+====================================== */
+
+.dialog-overlay {
+
+	position: fixed;
+
+	inset: 0;
+
+	background: rgba(0, 0, 0, .25);
+
+	backdrop-filter: blur(5px);
+
+	display: flex;
+
+	justify-content: center;
+
+	align-items: center;
+
+	z-index: 9999;
+
+}
+
+.success-dialog {
+
+	background: #fff8dc;
+
+	color: #3b2700;
+
+	border: 2px solid #d4af37;
+
+	padding: 25px 40px;
+
+	border-radius: 14px;
+
+	font-weight: 700;
+
+	display: flex;
+
+	align-items: center;
+
+	gap: 12px;
+
+	box-shadow: 0 10px 35px rgba(0, 0, 0, .35);
+
+}
+
+.success-dialog i {
+
+	color: #198754;
+
+	font-size: 1.6rem;
+
+}
+
+/* ======================================
+   LOADING / ERROR
+====================================== */
+
+.spinner-border {
+
+	width: 3rem;
+
+	height: 3rem;
+
+}
+
+.alert-danger {
+
+	background: #fff4f4;
+
+	border: 1px solid #dc3545;
+
+	border-radius: 12px;
+
+	padding: 18px;
+
+	font-weight: 600;
+
+}
+
+/* ======================================
+   RESPONSIVE
+====================================== */
+
+@media (max-width: 768px) {
+
+	.gold-rate-container,
+	.dashboard-container {
+
+		padding: 15px;
+
+	}
+
+	.gold-header {
+
+		flex-direction: column;
+
+		align-items: flex-start;
+
+		gap: 15px;
+
+	}
+
+	.rate-grid,
+	.dashboard-grid {
+
+		grid-template-columns:1fr;
+
+	}
+
+	.rate-card {
+
+		padding: 18px;
+
+	}
+
+}

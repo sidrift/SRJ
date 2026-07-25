@@ -1,0 +1,131 @@
+@page "/register"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using srj.Application.Dtos.Request.Authentication
+@using srj.Blazor.Components.Layout
+@using srj.Blazor.Services.Interfaces
+
+@layout EmptyLayout
+
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Register</PageTitle>
+
+<HeadContent>
+	<link href="css/auth.css" rel="stylesheet"/>
+</HeadContent>
+
+<div class="auth-container">
+
+	<div class="auth-card">
+
+		<h2>Create Account</h2>
+
+		@if (!string.IsNullOrWhiteSpace(_error)) {
+			<div class="alert alert-danger">
+				@_error
+			</div>
+		}
+
+		<EditForm Model="_model"
+		          FormName="RegisterForm"
+		          OnValidSubmit="RegisterAsync">
+
+			<DataAnnotationsValidator/>
+
+			<ValidationSummary/>
+
+			<div class="mb-3">
+
+				<label class="form-label">
+					Full Name
+				</label>
+
+				<InputText class="form-control"
+				           @bind-Value="_model.FullName"/>
+
+				<ValidationMessage For="@(() => _model.FullName)"
+				                   class="validation-message"/>
+
+			</div>
+
+			<div class="mb-3">
+
+				<label class="form-label">
+					Email
+				</label>
+
+				<InputText class="form-control"
+				           @bind-Value="_model.Email"/>
+
+				<ValidationMessage For="@(() => _model.Email)"
+				                   class="validation-message"/>
+
+			</div>
+
+			<div class="mb-4">
+
+				<label class="form-label">
+					Password
+				</label>
+
+				<InputText class="form-control"
+				           type="password"
+				           @bind-Value="_model.Password"/>
+
+				<ValidationMessage For="@(() => _model.Password)"
+				                   class="validation-message"/>
+
+			</div>
+
+			<button class="btn btn-success w-100"
+			        type="submit"
+			        disabled="@_loading">
+
+				@(_loading ? "Creating Account..." : "Register")
+
+			</button>
+
+		</EditForm>
+
+		<div class="auth-footer">
+
+			Already have an account?
+
+			<NavLink href="/login">
+				Login
+			</NavLink>
+
+		</div>
+
+	</div>
+
+</div>
+
+@code
+{
+	private readonly RegisterRequest _model = new();
+
+	private bool _loading;
+
+	private string? _error;
+
+	private async Task RegisterAsync() {
+		try {
+			_loading = true;
+			_error = null;
+
+			await AuthenticationService.RegisterAsync(_model);
+
+			NavigationManager.NavigateTo("/login", true);
+		}
+		catch (Exception ex) {
+			_error = ex.Message;
+		}
+		finally {
+			_loading = false;
+		}
+	}
+}

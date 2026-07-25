@@ -1,0 +1,6 @@
+@TheSRJProject_HostAddress = http://localhost:5136
+
+GET {{TheSRJProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

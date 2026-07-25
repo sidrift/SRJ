@@ -1,0 +1,231 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/srj.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/srj.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/srj.Application.csproj",
+        "projectName": "srj.Application",
+        "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/srj.Application.csproj",
+        "packagesPath": "/Users/sid/.nuget/packages/",
+        "outputPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/sid/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj": {
+                "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "BarcodeLib": {
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[4.150.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.312/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj",
+        "projectName": "srj.Domain",
+        "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj",
+        "packagesPath": "/Users/sid/.nuget/packages/",
+        "outputPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/sid/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.312/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/srj.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/srj.Infrastructure.csproj",
+        "projectName": "srj.Infrastructure",
+        "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/srj.Infrastructure.csproj",
+        "packagesPath": "/Users/sid/.nuget/packages/",
+        "outputPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/sid/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/srj.Application.csproj": {
+                "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/srj.Application.csproj"
+              },
+              "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj": {
+                "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/srj.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.18, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.18, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[9.0.18, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.19.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.312/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

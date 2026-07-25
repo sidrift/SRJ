@@ -1,0 +1,105 @@
+﻿@using srj.Blazor.Services
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject TokenService TokenService
+
+<div class="page">
+
+	<div class="sidebar">
+		<NavMenu/>
+	</div>
+
+	<main>
+
+		<div class="top-row px-4">
+
+			<div class="profile-container">
+
+				<details class="profile-menu">
+
+					<summary class="profile-summary">
+
+						<div class="profile-avatar">
+							@(_userName[..1].ToUpper())
+						</div>
+
+						<div class="profile-info">
+
+                            <span class="profile-name">
+                                @_userName
+                            </span>
+
+						</div>
+
+						<i class="bi bi-chevron-down profile-arrow"></i>
+
+					</summary>
+
+					<div class="profile-dropdown">
+
+						<button class="dropdown-item"
+						        @onclick='() => NavigationManager.NavigateTo("/profile")'>
+
+                            <span class="dropdown-icon">
+                                <i class="bi bi-person-gear"></i>
+                            </span>
+
+							<span>Edit Profile</span>
+
+						</button>
+
+						<button class="dropdown-item logout-button"
+						        @onclick="Logout">
+
+                            <span class="dropdown-icon">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </span>
+
+							<span>Logout</span>
+
+						</button>
+
+					</div>
+
+				</details>
+
+			</div>
+
+		</div>
+
+		<article class="content px-4">
+			@Body
+		</article>
+
+	</main>
+
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+
+	An unhandled error has occurred.
+
+	<a href="." class="reload">
+		Reload
+	</a>
+
+	<span class="dismiss">
+        🗙
+    </span>
+
+</div>
+
+@code
+{
+	private string _userName = "";
+
+	protected override void OnInitialized() {
+		_userName = TokenService.GetUserName() ?? "User";
+	}
+
+	private void Logout() {
+		TokenService.Clear();
+
+		NavigationManager.NavigateTo("/login", true);
+	}
+}

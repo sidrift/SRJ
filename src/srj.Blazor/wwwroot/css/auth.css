@@ -1,0 +1,116 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: #f4f6f9;
+	font-family: "Segoe UI", sans-serif;
+}
+
+.auth-container {
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	/* Space around the card on small screens */
+	padding: 24px;
+	box-sizing: border-box;
+}
+
+.auth-card {
+	width: 100%;
+	max-width: 420px;
+
+	background: #fff;
+
+	padding: 40px;
+
+	border-radius: 12px;
+
+	box-shadow: 0 8px 25px rgba(0, 0, 0, .10);
+
+	box-sizing: border-box;
+}
+
+.auth-card h2 {
+	text-align: center;
+	margin-bottom: 30px;
+	color: #1f2937;
+	font-weight: 700;
+}
+
+.auth-card label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+.auth-card .form-control {
+	height: 46px;
+	border-radius: 8px;
+}
+
+.auth-card .btn {
+	height: 46px;
+	border-radius: 8px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.auth-card .alert {
+	border-radius: 8px;
+}
+
+.auth-footer {
+	margin-top: 22px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.auth-footer a {
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.auth-footer a:hover {
+	text-decoration: underline;
+}
+
+.validation-message {
+	color: #dc3545;
+	font-size: .875rem;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+
+	.auth-container {
+		padding: 20px;
+	}
+
+	.auth-card {
+		padding: 32px 24px;
+	}
+}
+
+/* Phone */
+@media (max-width: 480px) {
+
+	.auth-container {
+		padding: 18px;
+		align-items: center;
+	}
+
+	.auth-card {
+		padding: 28px 20px;
+		border-radius: 10px;
+	}
+
+	.auth-card h2 {
+		font-size: 1.6rem;
+		margin-bottom: 24px;
+	}
+
+	.auth-card .btn {
+		height: 44px;
+	}
+}

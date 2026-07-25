@@ -1,0 +1,82 @@
+﻿@inject IJSRuntime Js
+
+<div class="top-row navbar navbar-dark">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/">
+			SRJ
+		</a>
+	</div>
+</div>
+
+<input id="menu-toggle"
+       type="checkbox"
+       class="menu-toggle"/>
+
+<label for="menu-toggle"
+       class="navbar-toggler">
+	<i class="bi bi-list"></i>
+</label>
+
+<div class="nav-scrollable">
+	<nav class="nav flex-column">
+
+		<div class="nav-item">
+			<NavLink class="nav-link" href="/" Match="NavLinkMatch.All" @onclick="CloseMenu">
+				<span class="nav-icon"><i class="bi bi-house-door-fill"></i></span>
+				<span class="nav-text">Dashboard</span>
+			</NavLink>
+		</div>
+
+		<div class="nav-item">
+			<NavLink class="nav-link" href="/gold-rates" @onclick="CloseMenu">
+                <span class="nav-icon">
+                    <i class="bi bi-coin"></i>
+                </span>
+
+				<span class="nav-text">
+                    Gold Rates
+                </span>
+			</NavLink>
+		</div>
+
+		<div class="nav-item">
+			<NavLink class="nav-link" href="/silver-rates" @onclick="CloseMenu">
+                <span class="nav-icon">
+                    <i class="bi bi-circle-half"></i>
+                </span>
+
+				<span class="nav-text">
+                    Silver Rates
+                </span>
+			</NavLink>
+		</div>
+
+		<div class="nav-item">
+			<NavLink class="nav-link" href="/item-categories" @onclick="CloseMenu">
+				<span class="nav-icon"><i class="bi bi-tags-fill"></i></span>
+				<span class="nav-text">Item Categories</span>
+			</NavLink>
+		</div>
+
+		<div class="nav-item">
+			<NavLink class="nav-link" href="/gold-jewellery" @onclick="CloseMenu">
+				<span class="nav-icon"><i class="bi bi-gem"></i></span>
+				<span class="nav-text">Gold Jewellery</span>
+			</NavLink>
+		</div>
+
+		<div class="nav-item">
+			<NavLink class="nav-link" href="/silver-jewellery" @onclick="CloseMenu">
+				<span class="nav-icon"><i class="bi bi-gem"></i></span>
+				<span class="nav-text">Silver Jewellery</span>
+			</NavLink>
+		</div>
+
+	</nav>
+</div>
+
+@code {
+	private async Task CloseMenu() {
+		await Js.InvokeVoidAsync("closeNavMenu");
+	}
+}

@@ -1,0 +1,66 @@
+<div class="dashboard-rate-card">
+
+	<div class="dashboard-rate-header">
+
+		<i class="bi bi-gem"></i>
+
+		@Title
+
+	</div>
+
+
+	<div class="dashboard-rate-body">
+
+
+		@if (Buy.HasValue) {
+			<div class="dashboard-price-item">
+
+                <span>
+                    Sell Price
+                </span>
+
+				<strong>
+					₹ @Sell?.ToString("N2")
+				</strong>
+
+			</div>
+
+
+			<div class="dashboard-price-item">
+
+                <span>
+                    Buy Price
+                </span>
+
+				<strong>
+					₹ @Buy?.ToString("N2")
+				</strong>
+
+			</div>
+		} else {
+			<div class="dashboard-price-item">
+
+                <span>
+                    Sell Price
+                </span>
+
+				<strong>
+					₹ @Sell?.ToString("N2")
+				</strong>
+
+			</div>
+		}
+
+
+	</div>
+
+</div>
+
+
+@code {
+	[Parameter] public string Title { get; set; } = "";
+
+	[Parameter] public decimal? Sell { get; set; }
+
+	[Parameter] public decimal? Buy { get; set; }
+}

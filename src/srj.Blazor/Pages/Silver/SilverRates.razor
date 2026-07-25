@@ -1,0 +1,358 @@
+@page "/silver-rates"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+
+<HeadContent>
+	<link href="css/gold-rate.css" rel="stylesheet"/>
+</HeadContent>
+
+
+<PageTitle>Silver Rates</PageTitle>
+
+
+@if (_showSuccess) {
+	<div class="dialog-overlay">
+		<div class="success-dialog">
+			<i class="bi bi-check-circle-fill"></i>
+			Silver price updated successfully.
+		</div>
+	</div>
+}
+
+
+<div class="@(_showSuccess ? "blur-background" : "")">
+
+	<div class="gold-rate-container">
+
+
+		<div class="gold-header">
+
+			<div>
+				<h2>
+					<i class="bi bi-circle-half"></i>
+					Silver Rates
+				</h2>
+
+				<p>
+					Update today's silver buying and selling rates
+				</p>
+			</div>
+
+
+			<div class="gold-date">
+
+				<i class="bi bi-calendar3"></i>
+
+				@DateTime.Now.ToString("dd MMM yyyy")
+
+			</div>
+
+		</div>
+
+
+
+		@if (_loading) {
+			<div class="text-center">
+				<div class="spinner-border text-warning"></div>
+			</div>
+		} else {
+			@if (!string.IsNullOrEmpty(_error)) {
+				<div class="alert alert-danger">
+					@_error
+				</div>
+			}
+
+
+			<EditForm EditContext="_editContext"
+			          OnValidSubmit="SaveRate">
+
+
+				<div class="rate-card">
+
+
+					<div class="rate-section">
+
+						<h5>
+							<i class="bi bi-box-seam-fill"></i>
+							Silver - Silly
+						</h5>
+
+
+						<div class="rate-grid">
+
+
+							<div class="rate-field">
+
+								<label>
+									Sell Price
+								</label>
+
+								<div class="input-group">
+
+                                <span>
+                                    ₹
+                                </span>
+
+									<InputNumber class="form-control"
+									             @bind-Value="_silverRate.SellPriceSilly"/>
+
+								</div>
+
+							</div>
+
+
+							<div class="rate-field">
+
+								<label>
+									Buy Price
+								</label>
+
+								<div class="input-group">
+
+                                <span>
+                                    ₹
+                                </span>
+
+									<InputNumber class="form-control"
+									             @bind-Value="_silverRate.BuyPriceSilly"/>
+
+								</div>
+
+							</div>
+
+
+						</div>
+
+					</div>
+
+
+					<div class="rate-section">
+
+						<h5>
+							<i class="bi bi-box"></i>
+							Silver - 999
+						</h5>
+
+
+						<div class="rate-grid">
+
+
+							<div class="rate-field">
+
+								<label>
+									Sell Price
+								</label>
+
+								<div class="input-group">
+
+                                <span>
+                                    ₹
+                                </span>
+
+									<InputNumber class="form-control"
+									             @bind-Value="_silverRate.SellPrice99"/>
+
+								</div>
+
+							</div>
+
+
+							<div class="rate-field">
+
+								<label>
+									Buy Price
+								</label>
+
+								<div class="input-group">
+
+                                <span>
+                                    ₹
+                                </span>
+
+									<InputNumber class="form-control"
+									             @bind-Value="_silverRate.BuyPrice99"/>
+
+								</div>
+
+							</div>
+
+
+						</div>
+
+					</div>
+
+
+					<button class="save-btn"
+					        disabled="@(!_canSave || _saving)">
+
+						<i class="bi bi-save"></i>
+
+						@(_saving ? "Saving..." : "Save Silver Rate")
+
+					</button>
+
+
+				</div>
+
+
+			</EditForm>
+		}
+
+
+	</div>
+
+</div>
+
+
+
+@code {
+	private SilverRateRequest _silverRate = new();
+
+	private SilverRateRequest _originalRate = new();
+
+	private EditContext? _editContext;
+
+	private bool _loading;
+
+	private bool _saving;
+
+	private bool _canSave;
+
+	private bool _showSuccess;
+
+	private string? _error;
+
+	protected override async Task OnInitializedAsync() {
+		_loading = true;
+
+
+		try {
+			var rate =
+				await Http.GetFromJsonAsync<SilverRateResponse>(
+					"silver-rates/today");
+
+
+			if (rate != null) {
+				_silverRate = new SilverRateRequest {
+					SellPriceSilly = rate.SellPriceSilly,
+					BuyPriceSilly = rate.BuyPriceSilly,
+
+					SellPrice99 = rate.SellPrice99,
+					BuyPrice99 = rate.BuyPrice99
+				};
+
+
+				_originalRate = Clone(_silverRate);
+			}
+		}
+		catch {
+			_silverRate = new SilverRateRequest();
+			_originalRate = new SilverRateRequest();
+		}
+
+
+		_editContext = new EditContext(_silverRate);
+
+
+		_editContext.OnFieldChanged += (_, _) => {
+			_canSave = HasChanges();
+			StateHasChanged();
+		};
+
+
+		_loading = false;
+	}
+
+	private async Task SaveRate() {
+		_error = null;
+
+
+		if (!IsValidRate()) {
+			_error = "All silver prices must be greater than 0.";
+			return;
+		}
+
+
+		_saving = true;
+
+
+		try {
+			var response =
+				await Http.PutAsJsonAsync(
+					"silver-rates",
+					_silverRate);
+
+
+			if (response.IsSuccessStatusCode) {
+				_showSuccess = true;
+
+				StateHasChanged();
+
+
+				await Task.Delay(2000);
+
+
+				NavigationManager.NavigateTo("/");
+			} else {
+				_error = "Failed to update silver rate.";
+			}
+		}
+		finally {
+			_saving = false;
+		}
+	}
+
+	private bool HasChanges() {
+		return
+			_silverRate.SellPriceSilly != _originalRate.SellPriceSilly ||
+			_silverRate.BuyPriceSilly != _originalRate.BuyPriceSilly ||
+			_silverRate.SellPrice99 != _originalRate.SellPrice99 ||
+			_silverRate.BuyPrice99 != _originalRate.BuyPrice99;
+	}
+
+	private bool IsValidRate() {
+		return
+			_silverRate.SellPriceSilly > 0 &&
+			_silverRate.BuyPriceSilly > 0 &&
+			_silverRate.SellPrice99 > 0 &&
+			_silverRate.BuyPrice99 > 0;
+	}
+
+	private SilverRateRequest Clone(SilverRateRequest x) {
+		return new SilverRateRequest {
+			SellPriceSilly = x.SellPriceSilly,
+			BuyPriceSilly = x.BuyPriceSilly,
+
+			SellPrice99 = x.SellPrice99,
+			BuyPrice99 = x.BuyPrice99
+		};
+	}
+
+	public class SilverRateRequest {
+		public decimal? SellPriceSilly { get; set; }
+
+		public decimal? BuyPriceSilly { get; set; }
+
+		public decimal? SellPrice99 { get; set; }
+
+		public decimal? BuyPrice99 { get; set; }
+	}
+
+	public class SilverRateResponse {
+		public DateOnly PriceDate { get; set; }
+
+		public decimal? SellPriceSilly { get; set; }
+
+		public decimal? BuyPriceSilly { get; set; }
+
+		public decimal? SellPrice99 { get; set; }
+
+		public decimal? BuyPrice99 { get; set; }
+
+		public DateTime UpdatedAt { get; set; }
+	}
+}

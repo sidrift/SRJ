@@ -17,11 +17,12 @@ public class JewelryCategoryController : ControllerBase
     {
         _service = service;
     }
-
     [HttpGet]
-    public async Task<ActionResult<List<ItemCategoryResponse>>> GetAll([FromQuery] Metal? metal)
+    public async Task<ActionResult<List<ItemCategoryResponse>>> GetAll(
+        [FromQuery] Metal? metal,
+        [FromQuery] string? name)
     {
-        var items = await _service.GetAllAsync(metal);
+        var items = await _service.GetAllAsync(metal, name);
 
         var response = items.Select(x => new ItemCategoryResponse
         {
@@ -32,7 +33,6 @@ public class JewelryCategoryController : ControllerBase
 
         return Ok(response);
     }
-
     [HttpGet("{id:long}")]
     public async Task<ActionResult<ItemCategoryResponse>> GetById(long id)
     {

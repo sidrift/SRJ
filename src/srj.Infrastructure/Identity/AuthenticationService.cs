@@ -38,7 +38,8 @@ public class AuthenticationService : IAuthenticationService
         {
             UserName = request.Email,
             Email = request.Email,
-            FullName = request.FullName
+            FullName = request.FullName,
+            IsApproved = false
         };
 
         var result = await _userManager.CreateAsync(
@@ -58,6 +59,12 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null)
             throw new UnauthorizedAccessException("Invalid email or password.");
+
+        if (!user.IsApproved)
+        {
+            throw new Exception(
+                "Your account is pending admin approval.");
+        }
 
         var result =
             await _signInManager.CheckPasswordSignInAsync(

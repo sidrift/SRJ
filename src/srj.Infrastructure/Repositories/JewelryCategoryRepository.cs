@@ -20,10 +20,25 @@ public class JewelryCategoryRepository : IJewelryCategoryRepository
         return await _repo.ItemCategories.FirstOrDefaultAsync(i => i.Id == id);
     }
 
-    public async Task<List<ItemCategory>> GetAllAsync(Metal? metal = null)
+    public async Task<List<ItemCategory>> GetAllAsync(Metal? metal = null, string? name  = null)
     {
-        return await _repo.ItemCategories
-            .Where(x => !metal.HasValue || x.Metal == metal.Value)
+        var query = _repo.ItemCategories.AsQueryable();
+
+        if (metal.HasValue)
+        {
+            query = query.Where(x => x.Metal == metal.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            name = name.Trim();
+
+            query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        return await query
+            .OrderBy(x => x.Metal)
+            .ThenBy(x => x.Name)
             .ToListAsync();
     }
 
@@ -34,7 +49,7 @@ public class JewelryCategoryRepository : IJewelryCategoryRepository
 
         var exists = await _repo.ItemCategories
             .AnyAsync(x =>
-                x.Name == item.Name &&
+                x.Name.ToLower() == item.Name.ToLower() &&
                 x.Metal == item.Metal);
 
         if (exists)

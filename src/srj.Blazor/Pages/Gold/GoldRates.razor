@@ -1,10 +1,12 @@
 @page "/gold-rates"
+
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
 
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+@inherits srj.Blazor.Services.AuthorizedPageBase
 
 <HeadContent>
 	<link href="css/gold-rate.css" rel="stylesheet"/>

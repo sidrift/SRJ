@@ -22,9 +22,9 @@ public class JewelryCategoryService : IJewelryCategoryService
         return await _categoryRepository.GetByIdAsync(id);
     }
 
-    public async Task<List<ItemCategory>> GetAllAsync(Metal? metal = null)
+    public async Task<List<ItemCategory>> GetAllAsync(Metal? metal = null, string? name = null)
     {
-        return await _categoryRepository.GetAllAsync(metal);
+        return await _categoryRepository.GetAllAsync(metal, name);
     }
 
     public async Task<ItemCategory> CreateAsync(ItemCategory item)

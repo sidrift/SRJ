@@ -10,14 +10,16 @@
 
 <input id="menu-toggle"
        type="checkbox"
-       class="menu-toggle"/>
+       class="menu-toggle"
+       @ref="_menuToggle"/>
 
 <label for="menu-toggle"
-       class="navbar-toggler">
+       class="navbar-toggler"
+       @onclick:stopPropagation>
 	<i class="bi bi-list"></i>
 </label>
 
-<div class="nav-scrollable">
+<div class="nav-scrollable" @ref="_sidebar">
 	<nav class="nav flex-column">
 
 		<div class="nav-item">
@@ -76,7 +78,29 @@
 </div>
 
 @code {
-	private async Task CloseMenu() {
-		await Js.InvokeVoidAsync("closeNavMenu");
+
+	private ElementReference _sidebar;
+
+	private ElementReference _menuToggle;
+
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
+		{
+			await Js.InvokeVoidAsync(
+				"registerSidebarOutsideClick",
+				_sidebar,
+				_menuToggle);
+		}
 	}
+
+
+
+	private async Task CloseMenu()
+	{
+		await Js.InvokeVoidAsync(
+			"closeNavMenu");
+	}
+
 }

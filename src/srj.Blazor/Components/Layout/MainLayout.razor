@@ -2,6 +2,7 @@
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject TokenService TokenService
+@inject IJSRuntime Js
 
 <div class="page">
 
@@ -15,7 +16,7 @@
 
 			<div class="profile-container">
 
-				<details class="profile-menu">
+				<details class="profile-menu" @ref="_profileMenu">
 
 					<summary class="profile-summary">
 
@@ -38,7 +39,7 @@
 					<div class="profile-dropdown">
 
 						<button class="dropdown-item"
-						        @onclick='() => NavigationManager.NavigateTo("/profile")'>
+						        @onclick="GoToProfile">
 
                             <span class="dropdown-icon">
                                 <i class="bi bi-person-gear"></i>
@@ -84,8 +85,8 @@
 	</a>
 
 	<span class="dismiss">
-        🗙
-    </span>
+		🗙
+	</span>
 
 </div>
 
@@ -93,11 +94,36 @@
 {
 	private string _userName = "";
 
-	protected override void OnInitialized() {
+	private ElementReference _profileMenu;
+
+
+	protected override void OnInitialized()
+	{
 		_userName = TokenService.GetUserName() ?? "User";
 	}
 
-	private void Logout() {
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
+		{
+			await Js.InvokeVoidAsync(
+				"registerOutsideClick",
+				_profileMenu);
+		}
+	}
+
+
+
+	private void GoToProfile()
+	{
+		NavigationManager.NavigateTo("/profile");
+	}
+
+
+
+	private void Logout()
+	{
 		TokenService.Clear();
 
 		NavigationManager.NavigateTo("/login", true);

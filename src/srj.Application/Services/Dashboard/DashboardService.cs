@@ -21,26 +21,17 @@ public class DashboardService : IDashboardService
         _dateTimeService = dateTimeService;
     }
 
-    public async Task<DashboardRateResponse?> GetTodayRatesAsync()
+    public async Task<DashboardRateResponse?> GetRatesAsync(DateOnly date)
     {
-        var today = _dateTimeService.Today;
-
-
         var goldRate =
-            await _goldRateRepository.GetByDateAsync(today);
-
+            await _goldRateRepository.GetByDateAsync(date);
 
         var silverRate =
-            await _silverRateRepository.GetByDateAsync(today);
-
-
-        if (goldRate == null && silverRate == null)
-            return null;
-
+            await _silverRateRepository.GetByDateAsync(date);
 
         return new DashboardRateResponse
         {
-            PriceDate = today,
+            PriceDate = date,
 
             Gold = goldRate == null
                 ? null
@@ -56,7 +47,6 @@ public class DashboardService : IDashboardService
                     SellPrice20K = goldRate.SellPrice20K,
                     SellPrice18K = goldRate.SellPrice18K
                 },
-
 
             Silver = silverRate == null
                 ? null

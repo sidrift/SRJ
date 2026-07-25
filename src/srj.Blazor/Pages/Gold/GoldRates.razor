@@ -36,9 +36,6 @@
 					Gold Rates
 				</h2>
 
-				<p>
-					Update today's gold buying and selling rates
-				</p>
 			</div>
 
 			<div class="gold-date">
@@ -144,14 +141,19 @@
 					</div>
 
 
-					<button class="save-btn"
-					        disabled="@(!_canSave || _saving)">
+					<div class="text-end mt-4">
 
-						<i class="bi bi-save"></i>
+						<button class="save-btn"
+						        type="submit"
+						        disabled="@(!_canSave || _saving)">
 
-						@(_saving ? "Saving..." : "Save Gold Rate")
+							<i class="bi bi-floppy-fill me-2"></i>
 
-					</button>
+							@(_saving ? "Saving..." : "Save Gold Rates")
+
+						</button>
+
+					</div>
 
 
 				</div>

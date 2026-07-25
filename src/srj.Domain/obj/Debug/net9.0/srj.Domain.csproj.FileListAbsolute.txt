@@ -21,3 +21,4 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/obj/Debug/net9.0/refint/srj.Domain.dll
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/obj/Debug/net9.0/srj.Domain.pdb
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/obj/Debug/net9.0/ref/srj.Domain.dll
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Domain/obj/Debug/net9.0/srj.Domain.sourcelink.json

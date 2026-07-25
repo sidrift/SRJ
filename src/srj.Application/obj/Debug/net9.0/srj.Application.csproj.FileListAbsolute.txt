@@ -65,3 +65,4 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Application/bin/Debug/net9.0/srj.Domain.pdb
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Application/obj/Debug/net9.0/srj.Appl.FE16197C.Up2Date
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Application/obj/Debug/net9.0/ref/srj.Application.dll
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Application/obj/Debug/net9.0/srj.Application.sourcelink.json

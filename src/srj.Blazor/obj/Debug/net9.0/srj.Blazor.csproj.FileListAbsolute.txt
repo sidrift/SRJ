@@ -169,7 +169,6 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/scopedcss/projectbundle/srj.Blazor.bundle.scp.css
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/zeorwt4xo4-g32j7043xa.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/z7jmmvjwr1-9ytpidafgc.gz
-/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/rakla69dhs-6x3acbjwf8.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/jx0oayjrbq-655xoogmh9.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/lw35vaap1u-7p6rd0f0ie.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/u12kedh55p-c2jlpeoesf.gz
@@ -227,3 +226,7 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/srj.Blazor.pdb
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/srj.Blazor.genruntimeconfig.cache
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/ref/srj.Blazor.dll
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/srj.Blazor.sourcelink.json
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/rakla69dhs-ov527tzo6c.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/aoo2zirh9g-xr1t8nnnyi.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/97lnwicezb-94ot5h2t78.gz

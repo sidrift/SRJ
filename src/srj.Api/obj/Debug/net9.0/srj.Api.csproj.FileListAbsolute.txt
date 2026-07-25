@@ -346,3 +346,4 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Api/obj/Debug/net9.0/srj.Api.csproj.Up2Date
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Api/obj/Debug/net9.0/srj.Api.genruntimeconfig.cache
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Api/obj/Debug/net9.0/ref/srj.Api.dll
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Api/obj/Debug/net9.0/srj.Api.sourcelink.json

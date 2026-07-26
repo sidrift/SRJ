@@ -43,11 +43,14 @@
 
 	<!-- ADD CATEGORY -->
 
-	<div class="category-card">
+	<div class="category-card @(_model.Metal == 1 ? "gold-theme" : "silver-theme")">
 
 		<h4>
-			<i class="bi bi-plus-circle-fill"></i>
-			Add Category
+			<i class="bi @(_model.Metal == 1
+				             ? "bi-plus-circle-fill"
+				             : "bi-plus-circle-fill")"></i>
+
+			Add @(_model.Metal == 1 ? "Gold" : "Silver") Category
 		</h4>
 
 		<div class="metal-selection">

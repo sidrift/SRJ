@@ -50,6 +50,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaGJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/Pages/Estimate.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXN0aW1hdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/Pages/Gold/GoldJewellery.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR29sZC9Hb2xkSmV3ZWxsZXJ5LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

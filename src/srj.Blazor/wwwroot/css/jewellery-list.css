@@ -191,18 +191,9 @@
 }
 
 .empty-state i {
-	font-size: 3.5rem;
-	color: #d0d0d0;
-	margin-bottom: 1rem;
-}
-
-.empty-state h5 {
-	margin-bottom: 0.5rem;
-	font-weight: 600;
-}
-
-.empty-state p {
-	margin: 0;
+	font-size: 60px;
+	color: #c69214;
+	margin-bottom: 16px;
 }
 
 .pagination-bar {

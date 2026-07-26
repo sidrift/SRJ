@@ -31,7 +31,7 @@ public class GoldRateService : IGoldRateService
             BuyPrice24KFt = request.BuyPrice24KFt,
 
             // Auto-calculated
-            SellPrice22K = Math.Round(request.SellPrice24KImp * 0.916m, 2),
+            SellPrice22K = Math.Round(request.SellPrice24KImp * 0.92m, 2),
             SellPrice20K = Math.Round(request.SellPrice24KImp * 0.833m, 2),
             SellPrice18K = Math.Round(request.SellPrice24KImp * 0.750m, 2),
 

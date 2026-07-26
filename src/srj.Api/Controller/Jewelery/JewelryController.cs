@@ -41,7 +41,11 @@ public class JewelryController : ControllerBase
 
     {
     if (string.IsNullOrWhiteSpace(sku))
-        return BadRequest("SKU is required.");
+        return BadRequest(new
+        {
+            Message = "SKU is required."
+
+        });
 
     try
     {
@@ -100,23 +104,24 @@ public class JewelryController : ControllerBase
                     Purity = silver.PurityInPercentage,
                     SilverMakingChargePerGram = silver.SilverMakingChargePerGram ?? 0,
 
-                    HasStones = silver.HasStones,
-                    StoneWeight = silver.StoneWeight,
-                    StoneType = silver.StoneType,
-                    StonePrice = silver.StonePrice,
-
                     BarcodeImageUrl = silver.BarcodeImageUrl
                 }
             };
         }
 
 
-        return BadRequest(
-            "Invalid SKU format. SKU must start with G- or S-.");
+        return BadRequest(new
+        {
+            Message = "Invalid SKU format. SKU must start with G- or S-."
+        });
     }
     catch (KeyNotFoundException)
     {
-        return NotFound("Jewellery item not found.");
+        return NotFound(new
+        {
+            Message = "Jewellery item not found."
+
+        });
     }
     }
 }

@@ -8,15 +8,18 @@ public class SkuGenerator : ISkuGenerator
 {
     public Task<string> GenerateAsync(Metal metal, ItemCategory category)
     {
-        var metalCode = metal == Metal.Gold ? "G" : "S";
         var categoryCode = category.Name
             .Replace(" ", "")
             .ToUpperInvariant();
 
+        categoryCode = categoryCode.Length > 5
+            ? categoryCode[..5]
+            : categoryCode;
+
         // 12-character unique identifier
         var uniqueId = Guid.NewGuid().ToString("N")[..12].ToUpperInvariant();
 
-        var sku = $"{metalCode}-{categoryCode}-{uniqueId}";
+        var sku = $"{categoryCode}-{uniqueId}";
 
         return Task.FromResult(sku);
     }

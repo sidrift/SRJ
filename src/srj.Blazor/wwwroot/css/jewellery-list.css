@@ -1,0 +1,294 @@
+.inventory-container {
+	padding: 24px;
+	max-width: 1600px;
+	margin: 0 auto;
+}
+
+.inventory-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+}
+
+.inventory-header h2 {
+	margin: 0;
+	color: #c69214;
+	font-weight: 700;
+}
+
+.inventory-header h2 i {
+	margin-right: 10px;
+}
+
+.inventory-card {
+	background: #fff;
+	border-radius: 16px;
+	padding: 24px;
+	box-shadow: 0 8px 24px rgba(0,0,0,.06);
+	margin-bottom: 24px;
+}
+
+.inventory-card h5 {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 24px;
+	color: #c69214;
+	font-weight: 600;
+}
+
+.filter-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+	gap: 20px;
+}
+
+.filter-field {
+	display: flex;
+	flex-direction: column;
+}
+
+.filter-field label {
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: #555;
+}
+
+.form-control,
+.form-select {
+	border-radius: 10px;
+	height: 46px;
+}
+
+.comparison-group {
+	display: flex;
+	gap: 10px;
+}
+
+.comparison-select {
+	width: 90px;
+	flex-shrink: 0;
+}
+
+.filter-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 28px;
+}
+
+.search-btn,
+.clear-btn,
+.page-btn {
+	border: none;
+	border-radius: 10px;
+	padding: 12px 24px;
+	font-weight: 600;
+	transition: .2s;
+}
+
+.search-btn {
+	background: linear-gradient(135deg,#d8a316,#b98500);
+	color: white;
+}
+
+.search-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 18px rgba(198,146,20,.25);
+}
+
+.clear-btn {
+	background: #f4f4f4;
+	border: 1px solid #ddd;
+}
+
+.clear-btn:hover {
+	background: #ececec;
+}
+
+.table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 18px;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.page-size {
+	width: 110px;
+}
+
+.inventory-table {
+	margin-bottom: 0;
+}
+
+.inventory-table thead th {
+	background: #faf7ef;
+	color: #8c6b00;
+	font-weight: 700;
+	border-bottom: 2px solid #eddba5;
+	white-space: nowrap;
+}
+
+.inventory-table tbody tr:hover {
+	background: #fffdf6;
+}
+
+.inventory-table td,
+.inventory-table th {
+	vertical-align: middle;
+}
+
+.metal-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 85px;
+	padding: 6px 14px;
+	border-radius: 30px;
+	font-size: .85rem;
+	font-weight: 600;
+}
+
+.metal-badge.gold {
+	background: #fff4cf;
+	color: #9f7700;
+}
+
+.metal-badge.silver {
+	background: #edf1f4;
+	color: #59656f;
+}
+
+.stone {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-weight: 600;
+}
+
+.stone.yes {
+	color: #198754;
+}
+
+.stone.no {
+	color: #6c757d;
+}
+
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	width: 100%;
+	min-height: 320px;
+
+	text-align: center;
+	color: #6c757d;
+}
+
+.empty-state i {
+	font-size: 3.5rem;
+	color: #d0d0d0;
+	margin-bottom: 1rem;
+}
+
+.empty-state h5 {
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+}
+
+.empty-state p {
+	margin: 0;
+}
+
+.pagination-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 24px;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.page-btn {
+	background: linear-gradient(135deg,#d8a316,#b98500);
+	color: white;
+	min-width: 130px;
+}
+
+.page-btn:hover:not(:disabled) {
+	transform: translateY(-2px);
+}
+
+.page-btn:disabled {
+	opacity: .45;
+	cursor: not-allowed;
+}
+
+@media (max-width: 992px) {
+
+	.filter-grid {
+		grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+	}
+
+}
+
+@media (max-width: 768px) {
+
+	.inventory-container {
+		padding: 14px;
+	}
+
+	.inventory-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+	}
+
+	.filter-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.comparison-group {
+		flex-direction: column;
+	}
+
+	.comparison-select {
+		width: 100%;
+	}
+
+	.filter-actions {
+		flex-direction: column;
+	}
+
+	.search-btn,
+	.clear-btn {
+		width: 100%;
+	}
+
+	.table-header {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.page-size {
+		width: 100%;
+	}
+
+	.inventory-card {
+		overflow-x: auto;
+	}
+
+	.pagination-bar {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.page-btn {
+		width: 100%;
+	}
+}

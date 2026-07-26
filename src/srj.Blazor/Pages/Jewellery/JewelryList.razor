@@ -1,0 +1,609 @@
+@page "/jewellery"
+
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using srj.Domain.Enums
+
+@inject HttpClient Http
+
+<PageTitle>Jewellery Inventory</PageTitle>
+
+<HeadContent>
+    <link href="css/jewellery-list.css" rel="stylesheet" />
+</HeadContent>
+
+<div class="inventory-container">
+
+	<div class="inventory-header">
+
+		<div>
+			<h2>
+				<i class="bi bi-box-seam"></i>
+				Jewellery Inventory
+			</h2>
+
+			<p class="text-muted mb-0">
+				Search and manage jewellery items
+			</p>
+		</div>
+
+	</div>
+
+	<div class="inventory-card">
+
+		<h5>
+			<i class="bi bi-funnel-fill"></i>
+			Filters
+		</h5>
+
+		<div class="filter-grid">
+
+			<!-- SKU -->
+
+			<div class="filter-field">
+
+				<label>SKU</label>
+
+				<InputText class="form-control"
+				           @bind-Value="_search.Sku"
+				           placeholder="Search by SKU..." />
+
+			</div>
+
+			<!-- Metal -->
+
+			<div class="filter-field">
+
+				<label>Metal</label>
+
+				<InputSelect class="form-select"
+				             @bind-Value="_search.Metal"
+				             @bind-Value:after="OnMetalChanged">
+
+					<option value="">All Metals</option>
+					<option value="@Metal.Gold">Gold</option>
+					<option value="@Metal.Silver">Silver</option>
+
+				</InputSelect>
+
+			</div>
+
+			<!-- Category -->
+
+			<div class="filter-field">
+
+				<label>Category</label>
+
+				<InputSelect class="form-select"
+				             @bind-Value="_search.CategoryId">
+
+					<option value="">All Categories</option>
+
+					@foreach (var category in _categories)
+					{
+						<option value="@category.Id">
+							@category.Name
+						</option>
+					}
+
+				</InputSelect>
+
+			</div>
+
+			<!-- Purity -->
+
+			<div class="filter-field">
+
+				<label>Purity</label>
+
+				<div class="comparison-group">
+
+					<InputSelect class="form-select comparison-select"
+					             @bind-Value="_search.PurityComparison">
+
+						<option value="">Equal</option>
+						<option value="@ComparisonType.GreaterThan">Greater Than</option>
+						<option value="@ComparisonType.LessThan">Less Than</option>
+
+					</InputSelect>
+
+					<InputNumber class="form-control"
+					             @bind-Value="_search.Purity" />
+
+				</div>
+
+			</div>
+
+			<!-- Weight -->
+
+			<div class="filter-field">
+
+				<label>Weight (g)</label>
+
+				<div class="comparison-group">
+
+					<InputSelect class="form-select comparison-select"
+					             @bind-Value="_search.WeightComparison">
+
+						<option value="">Equal</option>
+						<option value="@ComparisonType.GreaterThan">Greater Than</option>
+						<option value="@ComparisonType.LessThan">Less Than</option>
+
+					</InputSelect>
+
+					<InputNumber class="form-control"
+					             @bind-Value="_search.Weight" />
+
+				</div>
+
+			</div>
+
+			<!-- Has Stones -->
+
+			<div class="filter-field">
+
+				<label>Contains Stones</label>
+
+				<InputSelect class="form-select"
+				             @bind-Value="_search.HasStones">
+
+					<option value="">All</option>
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+
+				</InputSelect>
+
+			</div>
+
+		</div>
+
+		<div class="filter-actions">
+
+			<button class="search-btn"
+			        @onclick="Search">
+
+				<i class="bi bi-search me-2"></i>
+
+				Search
+
+			</button>
+
+			<button class="clear-btn"
+			        @onclick="ResetFilters">
+
+				<i class="bi bi-arrow-clockwise me-2"></i>
+
+				Clear
+
+			</button>
+
+		</div>
+
+	</div>
+
+	<div class="inventory-card mt-4">
+
+		<div class="table-header">
+
+			<div>
+
+				<h5 class="mb-1">
+					<i class="bi bi-list-ul"></i>
+					Jewellery Items
+				</h5>
+
+				<small class="text-muted">
+					@_result.TotalCount item(s) found
+				</small>
+
+			</div>
+
+			<div>
+
+				<InputSelect class="form-select page-size"
+				             @bind-Value="_search.PageSize">
+
+					<option value="20">20</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+
+				</InputSelect>
+
+			</div>
+
+		</div>
+
+		@if (_loading)
+		{
+			<div class="text-center py-5">
+
+				<div class="spinner-border text-warning"></div>
+
+			</div>
+		}
+		else if (!_result.Items.Any())
+		{
+			<div class="empty-state">
+
+				<i class="bi bi-inbox"></i>
+
+				<h5>No jewellery found</h5>
+
+				<p>Try changing your search filters.</p>
+
+			</div>
+		}
+		else
+		{
+			<table class="table inventory-table align-middle">
+
+				<thead>
+
+				<tr>
+					<th style="width:70px">#</th>
+					<th>SKU</th>
+					<th>Metal</th>
+					<th>Category</th>
+					<th>Weight</th>
+					<th>Purity</th>
+					<th>Stone</th>
+					<th>Created</th>
+				</tr>
+
+				</thead>
+
+				<tbody>
+
+				@{
+					var rowNumber = ((_search.PageNumber - 1) * _search.PageSize) + 1;
+
+				}
+				@foreach (var item in _result.Items)
+				{
+					<tr>
+
+
+						<td class="row-number">
+							@(rowNumber++)
+						</td>
+
+						<td>
+
+							<strong>@item.Sku</strong>
+
+						</td>
+
+						<td>
+
+							<span class="metal-badge @(item.Metal == Metal.Gold ? "gold" : "silver")">
+
+								@(item.Metal)
+
+							</span>
+
+						</td>
+
+						<td>
+
+							@item.CategoryName
+
+						</td>
+
+						<td>
+
+							@item.WeightInGrams g
+
+						</td>
+
+						<td>
+
+							@item.Purity %
+
+						</td>
+
+						<td>
+
+							@if (item.HasStones)
+							{
+								<span class="stone yes">
+
+									<i class="bi bi-check-circle-fill"></i>
+
+									Yes
+
+								</span>
+							}
+							else
+							{
+								<span class="stone no">
+
+									<i class="bi bi-x-circle-fill"></i>
+
+									No
+
+								</span>
+							}
+
+						</td>
+
+						<td>
+
+							@item.CreatedAt.ToString("dd MMM yyyy")
+
+						</td>
+
+					</tr>
+				}
+
+				</tbody>
+
+			</table>
+
+			<div class="pagination-bar">
+
+				<button class="page-btn"
+				        disabled="@(_search.PageNumber == 1)"
+				        @onclick="PreviousPage">
+
+					<i class="bi bi-chevron-left"></i>
+
+					Previous
+
+				</button>
+
+				<span>
+
+					Page @_search.PageNumber of @_result.TotalPages
+
+				</span>
+
+				<button class="page-btn"
+				        disabled="@(_search.PageNumber >= _result.TotalPages)"
+				        @onclick="NextPage">
+
+					Next
+
+					<i class="bi bi-chevron-right"></i>
+
+				</button>
+
+			</div>
+		}
+
+	</div>
+
+</div>
+
+
+@code {
+
+    private JewelrySearchRequest _search = new()
+    {
+        PageNumber = 1,
+        PageSize = 20
+    };
+
+    private PagedResponse<JewelryListResponse> _result = new();
+
+    private List<CategoryDto> _categories = new();
+
+    private bool _loading;
+    private bool _searching;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await Search();
+    }
+
+    private async Task LoadCategories()
+    {
+	    try
+	    {
+		    var url = "item-categories";
+
+		    if (_search.Metal.HasValue)
+		    {
+			    url += $"?metal={(int)_search.Metal.Value}";
+		    }
+
+		    _categories =
+			    await Http.GetFromJsonAsync<List<CategoryDto>>(url)
+			    ?? new();
+	    }
+	    catch
+	    {
+		    _categories = new();
+	    }
+    }
+    private async Task OnMetalChanged()
+    {
+	    _search.CategoryId = null;
+	    _search.PageNumber = 1;
+
+	    await LoadCategories();
+	    // await Search(); // Uncomment if you want auto-search
+    }
+
+    private async Task Search()
+    {
+        _searching = true;
+
+        try
+        {
+            var query = BuildQueryString();
+
+            _result =
+                await Http.GetFromJsonAsync<PagedResponse<JewelryListResponse>>(
+                    $"jewelry{query}")
+                ?? new PagedResponse<JewelryListResponse>();
+        }
+        finally
+        {
+            _searching = false;
+        }
+    }
+
+    private string BuildQueryString()
+    {
+        var parameters = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(_search.Sku))
+            parameters.Add($"Sku={Uri.EscapeDataString(_search.Sku)}");
+
+        if (_search.CategoryId.HasValue)
+            parameters.Add($"CategoryId={_search.CategoryId}");
+
+        if (_search.Metal.HasValue)
+            parameters.Add($"Metal={(int)_search.Metal.Value}");
+
+        if (_search.Purity.HasValue)
+            parameters.Add($"Purity={_search.Purity.Value}");
+
+        if (_search.PurityComparison.HasValue)
+            parameters.Add($"PurityComparison={(int)_search.PurityComparison.Value}");
+
+        if (_search.Weight.HasValue)
+            parameters.Add($"Weight={_search.Weight.Value}");
+
+        if (_search.WeightComparison.HasValue)
+            parameters.Add($"WeightComparison={(int)_search.WeightComparison.Value}");
+
+        if (_search.HasStones.HasValue)
+            parameters.Add($"HasStones={_search.HasStones.Value.ToString().ToLower()}");
+
+        parameters.Add($"PageNumber={_search.PageNumber}");
+        parameters.Add($"PageSize={_search.PageSize}");
+
+        return parameters.Any()
+            ? "?" + string.Join("&", parameters)
+            : string.Empty;
+    }
+
+    private async Task ApplyFilters()
+    {
+        _search.PageNumber = 1;
+        await Search();
+    }
+
+    private async Task ResetFilters()
+    {
+        _search = new JewelrySearchRequest
+        {
+            PageNumber = 1,
+            PageSize = 20
+        };
+
+        await LoadCategories();
+        await Search();
+    }
+
+    private async Task PreviousPage()
+    {
+        if (_search.PageNumber <= 1)
+            return;
+
+        _search.PageNumber--;
+
+        await Search();
+    }
+
+    private async Task NextPage()
+    {
+        if (_search.PageNumber >= _result.TotalPages)
+            return;
+
+        _search.PageNumber++;
+
+        await Search();
+    }
+
+    public class JewelrySearchRequest
+    {
+        public string? Sku { get; set; }
+
+        public int? CategoryId { get; set; }
+
+        public Metal? Metal { get; set; }
+
+        public decimal? Purity { get; set; }
+
+        public ComparisonType? PurityComparison { get; set; }
+
+        public decimal? Weight { get; set; }
+
+        public ComparisonType? WeightComparison { get; set; }
+
+        public bool? HasStones { get; set; }
+
+        public int PageNumber { get; set; } = 1;
+
+        public int PageSize { get; set; } = 20;
+    }
+
+    public enum ComparisonType
+    {
+        Equal = 1,
+        GreaterThan = 2,
+        LessThan = 3
+    }
+
+    public class JewelryListResponse
+    {
+        public Guid Id { get; set; }
+
+        public string Sku { get; set; } = string.Empty;
+
+        public long CategoryId { get; set; }
+
+        public string CategoryName { get; set; } = string.Empty;
+
+        public Metal Metal { get; set; }
+
+        public decimal WeightInGrams { get; set; }
+
+        public decimal Purity { get; set; }
+
+        public bool HasStones { get; set; }
+
+        public decimal? StoneWeight { get; set; }
+
+        public string? StoneType { get; set; }
+
+        public decimal? StonePrice { get; set; }
+
+        public decimal? MakingChargePercentage { get; set; }
+
+        public decimal? MakingChargeWeight { get; set; }
+
+        public decimal? SilverMakingChargePerGram { get; set; }
+
+        public decimal? HallMarkCharge { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class CategoryDto
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+    }
+
+    public class PagedResponse<T>
+    {
+        public List<T> Items { get; set; } = new();
+
+        public int PageNumber { get; set; }
+
+        public int PageSize { get; set; }
+
+        public int TotalCount { get; set; }
+
+        public int TotalPages { get; set; }
+
+        public bool HasPreviousPage => PageNumber > 1;
+
+        public bool HasNextPage => PageNumber < TotalPages;
+    }
+}

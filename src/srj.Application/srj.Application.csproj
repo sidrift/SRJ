@@ -15,4 +15,8 @@
       <PackageReference Include="SkiaSharp" Version="4.150.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dtos\Response\Jewellery\" />
+    </ItemGroup>
+
 </Project>

@@ -7,14 +7,14 @@ namespace srj.Application.Services;
 public abstract class JewelryServiceBase
 {
     protected readonly IBarcodeService BarcodeService;
-    protected readonly IJewelryCategoryRepository CategoryRepository;
+    protected readonly IItemCategoryRepository CategoryRepository;
     protected readonly IFileStorageService FileStorage;
     protected readonly IJewelryItemRepository Repository;
     protected readonly ISkuGenerator SkuGenerator;
 
     protected JewelryServiceBase(
         IJewelryItemRepository repository,
-        IJewelryCategoryRepository categoryRepository,
+        IItemCategoryRepository categoryRepository,
         ISkuGenerator skuGenerator,
         IBarcodeService barcodeService,
         IFileStorageService fileStorage)

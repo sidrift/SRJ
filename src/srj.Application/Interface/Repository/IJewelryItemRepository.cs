@@ -1,3 +1,6 @@
+using srj.Application.Dtos.Commons;
+using srj.Application.Dtos.Request.Jewelery;
+using srj.Application.Dtos.Response.Silver;
 using srj.Domain.Enums;
 using srj.Domain.Models;
 
@@ -12,4 +15,5 @@ public interface IJewelryItemRepository
     Task UpdateAsync(JewelryItem item);
     Task DeleteBySkuAsync(string sku);
     Task<bool> HasItemsByCategoryIdAsync(long categoryId);
+    Task<PagedResponse<JewelryListResponse>> SearchAsync(JewelrySearchRequest request);
 }

@@ -10,6 +10,12 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+
+});
+
 builder.Services.AddSingleton<TokenService>();
 
 builder.Services.AddTransient<JwtHttpHandler>();

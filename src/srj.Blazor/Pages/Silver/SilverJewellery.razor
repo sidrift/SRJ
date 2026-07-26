@@ -1,0 +1,351 @@
+@page "/silver-jewellery"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+
+@inject HttpClient Http
+
+<PageTitle>Silver Jewellery</PageTitle>
+
+<HeadContent>
+    <link href="css/silver-jewellery.css" rel="stylesheet" />
+</HeadContent>
+
+<div class="silver-rate-container">
+
+    <div class="silver-header">
+
+        <div>
+            <h2>
+                <i class="bi bi-gem"></i>
+                Silver Jewellery
+            </h2>
+
+            <p class="text-muted mb-0">
+                Add new silver jewellery item
+            </p>
+        </div>
+
+    </div>
+@if (_editContext != null) {
+	<EditForm EditContext="_editContext"
+	          OnValidSubmit="Save">
+
+		<div class="rate-card">
+
+			<!-- Category -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-tags-fill"></i>
+					Category
+				</h5>
+
+				<div class="rate-field">
+
+					<label>Category</label>
+
+					<InputSelect class="form-select"
+					             @bind-Value="_model.CategoryId">
+
+						<option value="0">
+							-- Select Category --
+						</option>
+
+						@foreach (var category in _categories) {
+							<option value="@category.Id">
+								@category.Name
+							</option>
+						}
+
+					</InputSelect>
+
+				</div>
+
+			</div>
+
+			<div class="form-check form-switch remember-category">
+
+				<InputCheckbox id="rememberCategory"
+				               class="form-check-input"
+				               @bind-Value="_rememberCategory"/>
+
+				<label class="form-check-label"
+				       for="rememberCategory">
+					Remember Category
+				</label>
+
+			</div>
+
+			<!-- Weight & Purity -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-speedometer2"></i>
+					Weight & Purity
+				</h5>
+
+				<div class="rate-grid">
+
+					<div class="rate-field">
+
+						<label>Weight (grams)</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_model.WeightInGrams"/>
+
+					</div>
+
+					<div class="rate-field">
+
+						<label>Purity (%)</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_model.Purity"/>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<!-- Making Charge -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-cash-stack"></i>
+					Making Charge
+				</h5>
+
+				<div class="rate-field">
+
+					<label>Making Charge (₹ / gram)</label>
+
+					<InputNumber class="form-control"
+					             @bind-Value="_model.SilverMakingChargePerGram"/>
+
+				</div>
+
+			</div>
+
+			<div class="text-end mt-4">
+
+				<button class="save-btn"
+				        type="submit"
+				        disabled="@(!_canSave || _saving)">
+
+					<i class="bi bi-floppy-fill me-2"></i>
+
+					@(_saving ? "Saving..." : "Save Jewellery")
+
+				</button>
+
+			</div>
+
+		</div>
+
+	</EditForm>
+}
+</div>
+
+@if (_showSuccessDialog)
+{
+    <div class="dialog-overlay">
+
+        <div class="success-dialog">
+
+            <div class="dialog-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <h4>Silver Jewellery Added</h4>
+
+            <p>
+                The jewellery item has been added successfully.
+            </p>
+
+            <button class="save-btn"
+                    @onclick="CloseSuccessDialog">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+}
+
+
+@code {
+
+    private bool _rememberCategory = true;
+
+    private EditContext? _editContext;
+    private bool _canSave;
+
+    private bool _showSuccessDialog;
+
+    private SilverJewelleryRequest _model = new()
+    {
+        Purity = 92m
+    };
+
+    private List<CategoryDto> _categories = new();
+
+    private bool _loading;
+    private bool _saving;
+
+    private string? _errorMessage;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+	    await LoadCategories();
+
+	    CreateEditContext();
+    }
+
+    private void CreateEditContext()
+    {
+	    _editContext = new EditContext(_model);
+
+	    _editContext.OnFieldChanged += (_, _) =>
+	    {
+		    _canSave = CanSave();
+		    StateHasChanged();
+	    };
+
+	    _canSave = CanSave();
+    }
+
+    private bool CanSave()
+    {
+	    if (_model.CategoryId <= 0)
+		    return false;
+
+	    if (!_model.WeightInGrams.HasValue || _model.WeightInGrams <= 0)
+		    return false;
+
+	    if (_model.Purity <= 0)
+		    return false;
+
+	    if (!_model.SilverMakingChargePerGram.HasValue ||
+	        _model.SilverMakingChargePerGram <= 0)
+		    return false;
+
+	    return true;
+    }
+
+    private async Task LoadCategories()
+    {
+        _loading = true;
+        _errorMessage = null;
+
+        try
+        {
+            _categories =
+                await Http.GetFromJsonAsync<List<CategoryDto>>(
+                    "item-categories?metal=2")
+                ?? new();
+        }
+        catch
+        {
+            _errorMessage = "Unable to load categories.";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+
+
+    private async Task Save()
+    {
+        _saving = true;
+        _errorMessage = null;
+
+        try
+        {
+            var response =
+                await Http.PostAsJsonAsync(
+                    "jewelry/silver",
+                    _model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var categoryId =
+                    _rememberCategory
+                        ? _model.CategoryId
+                        : 0;
+
+                _model = new SilverJewelleryRequest
+                {
+                    CategoryId = categoryId,
+                    Purity = 92m
+                };
+
+                CreateEditContext();
+                _showSuccessDialog = true;
+            }
+            else
+            {
+                var error =
+                    await response.Content
+                        .ReadFromJsonAsync<ApiError>();
+
+                _errorMessage =
+                    error?.Message ??
+                    "Unable to save jewellery.";
+            }
+        }
+        catch
+        {
+            _errorMessage =
+                "Unable to connect to server.";
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+
+
+    private void CloseSuccessDialog()
+    {
+        _showSuccessDialog = false;
+    }
+
+
+
+    public class SilverJewelleryRequest
+    {
+        public int CategoryId { get; set; }
+
+        public decimal? WeightInGrams { get; set; }
+
+        public decimal? SilverMakingChargePerGram { get; set; }
+
+        public decimal Purity { get; set; }
+    }
+
+
+
+    public class CategoryDto
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+    }
+
+
+
+    public class ApiError
+    {
+        public string? Message { get; set; }
+    }
+
+}

@@ -1,0 +1,1428 @@
+@page "/manage-jewellery"
+
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using srj.Application.Dtos.Request.Gold
+@using srj.Application.Dtos.Response.Gold
+@using srj.Domain.Enums
+
+@inject HttpClient Http
+
+<PageTitle>Manage Jewellery</PageTitle>
+
+<HeadContent>
+    <link href="css/manage-jewellery.css" rel="stylesheet" />
+</HeadContent>
+
+<div class="gold-rate-container">
+
+	<!-- Header -->
+
+	<div class="gold-header">
+
+		<div>
+
+			<h2>
+				<i class="bi bi-pencil-square"></i>
+				Manage Jewellery
+			</h2>
+
+			<p class="text-muted mb-0">
+				Search, edit and delete jewellery.
+			</p>
+
+		</div>
+
+	</div>
+
+
+
+	<!-- Search -->
+
+	<div class="rate-card">
+
+		<div class="search-row">
+
+			<InputText class="form-control"
+			           @bind-Value="_sku"
+			           placeholder="Enter Gold SKU..." />
+
+			<button class="save-btn"
+			        @onclick="LoadItem"
+			        disabled="@_loading">
+
+				@if (_loading)
+				{
+					<span class="spinner-border spinner-border-sm"></span>
+				}
+				else
+				{
+					<i class="bi bi-search me-2"></i>
+				}
+
+				Search
+
+			</button>
+
+		</div>
+
+	</div>
+
+
+
+	@if (!string.IsNullOrWhiteSpace(_error))
+	{
+		<div class="alert alert-danger mt-3">
+			@_error
+		</div>
+	}
+
+
+
+	@if (_item != null)
+	{
+		<EditForm EditContext="_editContext">
+
+			<div class="rate-card">
+
+				<!-- Barcode -->
+
+				@if (!string.IsNullOrWhiteSpace(_item.BarcodeImageUrl))
+				{
+					<div class="barcode-section">
+
+						<img src="@GetBarcodeUrl(_item.BarcodeImageUrl)"
+						     class="barcode-image" />
+
+					</div>
+				}
+
+				<!-- Category -->
+
+				<div class="rate-section">
+
+					<h5>
+						<i class="bi bi-tags-fill"></i>
+						Category
+					</h5>
+
+					<div class="rate-field">
+
+						<label>Category</label>
+
+						<InputSelect class="form-select"
+						             @bind-Value="_selectedCategoryId"
+						             @bind-Value:after="CategoryChanged"
+						             disabled="@(!_isEditing)">
+
+							@foreach (var category in _categories)
+							{
+								<option value="@category.Id">
+									@category.Name
+								</option>
+							}
+
+						</InputSelect>
+
+					</div>
+
+				</div>
+
+
+
+				<!-- Weight -->
+
+				<div class="rate-section">
+
+					<h5>
+						<i class="bi bi-speedometer2"></i>
+						Weight & Purity
+					</h5>
+
+					<div class="rate-grid">
+
+						<div class="rate-field">
+
+							<label>Weight (grams)</label>
+
+							<InputNumber class="form-control"
+							             @bind-Value="_item.WeightInGrams"
+							             disabled="@(!_isEditing)" />
+
+						</div>
+
+						<div class="rate-field">
+
+							<label>Purity (%)</label>
+
+							<InputNumber class="form-control"
+							             @bind-Value="_item.PurityInPercentage"
+							             disabled="@(!_isEditing)" />
+
+						</div>
+
+					</div>
+
+				</div>
+
+
+
+				<!-- Making Charges -->
+
+				<div class="rate-section">
+
+					<h5>
+						<i class="bi bi-cash-stack"></i>
+						Making Charges
+					</h5>
+
+
+					<div class="charge-type-group">
+
+						<InputRadioGroup @bind-Value="_item.MakingChargeType">
+
+							<label class="charge-option
+                @(_item.MakingChargeType == MakingChargeType.Percentage ? "active" : "")">
+
+								<InputRadio Value="MakingChargeType.Percentage"
+								            disabled="@(!_isEditing)" />
+
+								<i class="bi bi-percent"></i>
+
+								<span>
+									Percentage
+								</span>
+
+							</label>
+
+
+							<label class="charge-option
+                @(_item.MakingChargeType == MakingChargeType.Weight ? "active" : "")">
+
+								<InputRadio Value="MakingChargeType.Weight"
+								            disabled="@(!_isEditing)" />
+
+								<i class="bi bi-speedometer2"></i>
+
+								<span>
+									Per Gram
+								</span>
+
+							</label>
+
+						</InputRadioGroup>
+
+					</div>
+
+
+					@if (_item.MakingChargeType == MakingChargeType.Percentage)
+					{
+						<div class="rate-field">
+
+							<label>
+								Making Charge (%)
+							</label>
+
+							<InputNumber class="form-control"
+							             @bind-Value="_item.MakingChargePercentage"
+							             disabled="@(!_isEditing)" />
+
+						</div>
+					}
+					else
+					{
+						<div class="rate-field">
+
+							<label>
+								Making Charge (₹ / gram)
+							</label>
+
+							<InputNumber class="form-control"
+							             @bind-Value="_item.MakingChargeWeight"
+							             disabled="@(!_isEditing)" />
+
+						</div>
+					}
+
+				</div>
+
+				<!-- Hallmark -->
+
+				<div class="rate-section">
+
+					<h5>
+						<i class="bi bi-patch-check-fill"></i>
+						Hallmark
+					</h5>
+
+					<div class="rate-field">
+
+						<label>Hallmark Charge</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_item.HallMarkCharge"
+						             disabled="@(!_isEditing)" />
+
+					</div>
+
+				</div>
+
+
+
+				<!-- Stone -->
+
+				<div class="rate-section">
+
+					<h5>
+						<i class="bi bi-diamond-fill"></i>
+						Stone Details
+					</h5>
+
+					<div class="form-check form-switch mb-4">
+
+						<InputCheckbox id="hasStone"
+						               class="form-check-input"
+						               @bind-Value="_item.HasStones"
+						               disabled="@(!_isEditing)" />
+
+						<label class="form-check-label"
+						       for="hasStone">
+
+							Contains Stones
+
+						</label>
+
+					</div>
+
+					@if (_item.HasStones)
+					{
+						<div class="rate-grid">
+
+							<div class="rate-field">
+
+								<label>Stone Type</label>
+
+								<InputText class="form-control"
+								           @bind-Value="_item.StoneType"
+								           disabled="@(!_isEditing)" />
+
+							</div>
+
+							<div class="rate-field">
+
+								<label>Stone Weight (grams)</label>
+
+								<InputNumber class="form-control"
+								             @bind-Value="_item.StoneWeight"
+								             disabled="@(!_isEditing)" />
+
+							</div>
+
+							<div class="rate-field">
+
+								<label>Stone Price (₹)</label>
+
+								<InputNumber class="form-control"
+								             @bind-Value="_item.StonePrice"
+								             disabled="@(!_isEditing)" />
+
+							</div>
+
+						</div>
+					}
+
+				</div>
+
+
+
+				<!-- Buttons -->
+
+				<div class="text-end mt-4">
+
+					@if (!_isEditing)
+					{
+						<button type="button"
+						        class="edit-btn"
+						        @onclick="ShowEditDialog">
+
+							<i class="bi bi-pencil-fill me-2"></i>
+
+							Edit
+
+						</button>
+					}
+					else
+					{
+						<button type="button"
+						        class="save-btn"
+						        disabled="@(!_canUpdate || _saving)"
+						        @onclick="ShowUpdateDialog">
+
+							<i class="bi bi-floppy-fill me-2"></i>
+
+							Update
+
+						</button>
+
+
+						<button type="button"
+						        class="cancel-btn ms-2"
+						        @onclick="CancelEdit">
+
+							Cancel
+
+						</button>
+					}
+
+
+					<button type="button"
+					        class="delete-btn ms-2"
+					        @onclick="ShowDeleteDialog">
+
+						<i class="bi bi-trash-fill me-2"></i>
+
+						Delete
+
+					</button>
+
+				</div>
+
+			</div>
+
+		</EditForm>
+	}
+
+
+
+	<!-- Edit Confirmation -->
+
+	@if (_showEditDialog)
+	{
+		<div class="dialog-overlay">
+
+			<div class="confirm-dialog">
+
+				<div class="dialog-icon warning">
+					<i class="bi bi-pencil-square"></i>
+				</div>
+
+				<h4>Edit Jewellery</h4>
+
+				<p>
+					You are about to edit this jewellery item.
+				</p>
+
+				<div class="dialog-buttons">
+
+					<button class="cancel-btn"
+					        @onclick="CloseDialogs">
+
+						Cancel
+
+					</button>
+
+					<button class="save-btn"
+					        @onclick="ConfirmEdit">
+
+						Continue
+
+					</button>
+
+				</div>
+
+			</div>
+
+		</div>
+	}
+
+
+
+	<!-- Update Confirmation -->
+
+	@if (_showUpdateDialog)
+	{
+		<div class="dialog-overlay">
+
+			<div class="confirm-dialog">
+
+				<div class="dialog-icon">
+					<i class="bi bi-check-circle-fill"></i>
+				</div>
+
+				<h4>Update Jewellery</h4>
+
+				<p>
+					Save the changes made to this jewellery item?
+				</p>
+
+				<div class="dialog-buttons">
+
+					<button class="cancel-btn"
+					        @onclick="CancelUpdate">
+
+						Cancel
+
+					</button>
+
+					<button class="save-btn"
+					        @onclick="ConfirmUpdate">
+
+						Update
+
+					</button>
+
+				</div>
+
+			</div>
+
+		</div>
+	}
+
+
+
+	<!-- Delete Confirmation -->
+
+	@if (_showDeleteDialog)
+	{
+		<div class="dialog-overlay">
+
+			<div class="confirm-dialog">
+
+				<div class="dialog-icon delete">
+					<i class="bi bi-trash-fill"></i>
+				</div>
+
+				<h4>Delete Jewellery</h4>
+
+				<p>
+					This action cannot be undone.<br />
+					Delete this jewellery item?
+				</p>
+
+				<div class="dialog-buttons">
+
+					<button class="cancel-btn"
+					        @onclick="CancelDelete">
+
+						Cancel
+
+					</button>
+
+					<button class="delete-btn"
+					        @onclick="ConfirmDelete">
+
+						Delete
+
+					</button>
+
+				</div>
+
+			</div>
+
+		</div>
+	}
+
+
+
+	<!-- Update Success -->
+
+	@if (_showSavedDialog)
+	{
+		<div class="dialog-overlay">
+
+			<div class="confirm-dialog success">
+
+				<div class="dialog-icon">
+
+					<i class="bi bi-check-circle-fill"></i>
+
+				</div>
+
+				<h4>Jewellery Updated</h4>
+
+				<p>
+					Jewellery has been updated successfully.
+				</p>
+
+				<button class="save-btn"
+				        @onclick="CloseSavedDialog">
+
+					OK
+
+				</button>
+
+			</div>
+
+		</div>
+	}
+
+
+
+	<!-- Delete Success -->
+
+	@if (_showDeletedDialog)
+	{
+		<div class="dialog-overlay">
+
+			<div class="confirm-dialog success">
+
+				<div class="dialog-icon">
+
+					<i class="bi bi-check-circle-fill"></i>
+
+				</div>
+
+				<h4>Jewellery Deleted</h4>
+
+				<p>
+					Jewellery has been deleted successfully.
+				</p>
+
+				<button class="save-btn"
+				        @onclick="CloseDeletedDialog">
+
+					OK
+
+				</button>
+
+			</div>
+
+		</div>
+	}
+
+</div>
+
+@code
+{
+    private string _sku = string.Empty;
+
+    private GoldJewelryDetailsResponse? _item;
+    private GoldJewelryDetailsResponse? _originalItem;
+
+    private List<CategoryDto> _categories = new();
+
+    private long _selectedCategoryId;
+    private long _originalCategoryId;
+
+    private EditContext? _editContext;
+
+    private bool _loading;
+    private bool _saving;
+
+    private bool _isEditing;
+    private bool _canUpdate;
+
+    private bool _showEditDialog;
+    private bool _showUpdateDialog;
+    private bool _showDeleteDialog;
+
+    private bool _showSavedDialog;
+    private bool _showDeletedDialog;
+
+    private string? _error;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+    }
+
+
+    private async Task LoadCategories()
+    {
+        try
+        {
+            _categories =
+                await Http.GetFromJsonAsync<List<CategoryDto>>(
+                    "item-categories?metal=1")
+                ?? new();
+        }
+        catch
+        {
+            _categories = new();
+        }
+    }
+
+
+    private async Task LoadItem()
+    {
+        _loading = true;
+        _error = null;
+
+        _item = null;
+        _originalItem = null;
+
+        _isEditing = false;
+        _canUpdate = false;
+
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(_sku))
+            {
+                _error = "Please enter a SKU.";
+                return;
+            }
+
+
+            _item =
+                await Http.GetFromJsonAsync<GoldJewelryDetailsResponse>(
+                    $"jewelry/gold/{Uri.EscapeDataString(_sku)}");
+
+
+            if (_item == null)
+            {
+                _error = "Jewellery not found.";
+                return;
+            }
+
+
+            _selectedCategoryId =
+                _categories
+                    .FirstOrDefault(x => x.Name == _item.Category)
+                    ?.Id ?? 0;
+
+
+            _originalCategoryId = _selectedCategoryId;
+
+
+            _originalItem = Clone(_item);
+
+
+            CreateEditContext();
+        }
+        catch (HttpRequestException ex)
+            when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            _error = "Jewellery item not found.";
+        }
+        catch (HttpRequestException ex)
+            when (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            _error = "This SKU is not a Gold jewellery item.";
+        }
+        catch
+        {
+            _error = "Unable to load jewellery.";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+    private void ConfirmEdit()
+    {
+	    _showEditDialog = false;
+
+	    _isEditing = true;
+
+	    CreateEditContext();
+
+	    UpdateCanUpdate();
+    }
+
+    private string GetBarcodeUrl(string? path)
+    {
+	    if (string.IsNullOrWhiteSpace(path))
+		    return string.Empty;
+
+	    return new Uri(
+			    Http.BaseAddress!,
+			    path)
+		    .ToString();
+    }
+
+    private async Task ConfirmUpdate()
+{
+    _showUpdateDialog = false;
+
+    if (_item == null)
+        return;
+
+
+    _saving = true;
+
+    _error = null;
+
+
+    try
+    {
+        // Remove stone details if item does not contain stones
+        if (!_item.HasStones)
+        {
+            _item.StoneType = null;
+            _item.StoneWeight = null;
+            _item.StonePrice = null;
+        }
+
+
+        var request = new UpdateGoldJewelryRequest
+        {
+            Sku = _item.Sku,
+
+            CategoryId = _selectedCategoryId,
+
+            WeightInGrams = _item.WeightInGrams,
+
+            HasStones = _item.HasStones,
+
+            StoneType = _item.StoneType,
+
+            StoneWeight = _item.StoneWeight,
+
+            StonePrice = _item.StonePrice,
+
+
+            Purity = _item.PurityInPercentage,
+
+
+            MakingChargeType = _item.MakingChargeType,
+
+
+            // Send percentage only for percentage mode
+            MakingChargePercentage =
+                _item.MakingChargeType == MakingChargeType.Percentage
+                    ? _item.MakingChargePercentage
+                    : null,
+
+
+            // Send weight only for direct weight mode
+            MakingChargeWeight =
+                _item.MakingChargeType == MakingChargeType.Weight
+                    ? _item.MakingChargeWeight
+                    : 0,
+
+
+            HallMarkCharge = _item.HallMarkCharge
+        };
+
+
+        var response =
+            await Http.PutAsJsonAsync(
+                "jewelry/gold",
+                request);
+
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _item =
+                await response.Content
+                    .ReadFromJsonAsync<GoldJewelryDetailsResponse>();
+
+
+            if (_item != null)
+            {
+                _selectedCategoryId =
+                    _categories
+                        .FirstOrDefault(x =>
+                            x.Name == _item.Category)
+                        ?.Id ?? 0;
+
+
+                _originalCategoryId = _selectedCategoryId;
+
+                _originalItem = Clone(_item);
+
+
+                _isEditing = false;
+
+                _canUpdate = false;
+
+
+                CreateEditContext();
+
+
+                _showSavedDialog = true;
+            }
+        }
+        else
+        {
+            var error =
+                await response.Content
+                    .ReadFromJsonAsync<ApiErrorResponse>();
+
+            _error =
+                error?.Message ??
+                "Unable to update jewellery.";
+        }
+    }
+    catch
+    {
+        _error = "Unable to connect to server.";
+    }
+    finally
+    {
+        _saving = false;
+    }
+}
+
+
+private async Task ConfirmDelete()
+{
+	_showDeleteDialog = false;
+
+
+	if (_item == null)
+		return;
+
+
+	_error = null;
+
+
+	try
+	{
+		var response =
+			await Http.DeleteAsync(
+				$"jewelry/gold/{_item.Sku}");
+
+
+
+		if (response.IsSuccessStatusCode)
+		{
+			_sku = string.Empty;
+
+			_item = null;
+
+			_originalItem = null;
+
+
+			_selectedCategoryId = 0;
+
+			_originalCategoryId = 0;
+
+
+			_isEditing = false;
+
+			_canUpdate = false;
+
+
+			_showDeletedDialog = true;
+		}
+		else
+		{
+			var error =
+				await response.Content
+					.ReadFromJsonAsync<ApiErrorResponse>();
+
+			_error =
+				error?.Message ??
+				"Unable to delete jewellery.";
+		}
+	}
+	catch
+	{
+		_error =
+			"Unable to connect to server.";
+	}
+}
+    private void CancelUpdate()
+    {
+	    _showUpdateDialog = false;
+    }
+
+    private void CancelDelete()
+    {
+	    _showDeleteDialog = false;
+    }
+
+
+
+    private void CreateEditContext()
+    {
+        if (_item == null)
+            return;
+
+
+        _editContext = new EditContext(_item);
+
+
+        _editContext.OnFieldChanged -= OnFieldChanged;
+        _editContext.OnFieldChanged += OnFieldChanged;
+
+
+        UpdateCanUpdate();
+    }
+
+
+
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        UpdateCanUpdate();
+
+        InvokeAsync(StateHasChanged);
+    }
+
+
+
+    private void CategoryChanged()
+    {
+        UpdateCanUpdate();
+    }
+
+
+
+    private void UpdateCanUpdate()
+    {
+	    if (!_isEditing || _item == null || _originalItem == null)
+	    {
+		    _canUpdate = false;
+		    return;
+	    }
+
+
+	    if (!ValidateItem())
+	    {
+		    _canUpdate = false;
+		    return;
+	    }
+
+
+	    _canUpdate =
+		    _selectedCategoryId != _originalCategoryId ||
+
+		    _item.WeightInGrams != _originalItem.WeightInGrams ||
+
+		    _item.PurityInPercentage != _originalItem.PurityInPercentage ||
+
+		    _item.HasStones != _originalItem.HasStones ||
+
+		    _item.StoneType != _originalItem.StoneType ||
+
+		    _item.StoneWeight != _originalItem.StoneWeight ||
+
+		    _item.StonePrice != _originalItem.StonePrice ||
+
+		    _item.MakingChargeType != _originalItem.MakingChargeType ||
+
+		    _item.MakingChargePercentage != _originalItem.MakingChargePercentage ||
+
+		    _item.MakingChargeWeight != _originalItem.MakingChargeWeight ||
+
+		    _item.HallMarkCharge != _originalItem.HallMarkCharge;
+    }
+
+
+    private bool ValidateItem()
+    {
+	    if (_item == null)
+		    return false;
+
+
+	    if (_selectedCategoryId <= 0)
+		    return false;
+
+
+	    if (_item.WeightInGrams <= 0)
+		    return false;
+
+
+	    if (_item.PurityInPercentage <= 0)
+		    return false;
+
+
+	    if (_item.HallMarkCharge < 0)
+		    return false;
+
+
+
+	    if (_item.MakingChargeType == MakingChargeType.Percentage)
+	    {
+		    // Percentage mode requires percentage value
+		    // Backend calculates MakingChargeWeight
+
+		    if (!_item.MakingChargePercentage.HasValue ||
+		        _item.MakingChargePercentage <= 0)
+		    {
+			    return false;
+		    }
+	    }
+	    else
+	    {
+		    // Weight mode directly stores making charge weight
+
+		    if (_item.MakingChargeWeight <= 0)
+		    {
+			    return false;
+		    }
+	    }
+
+
+
+	    if (_item.HasStones)
+	    {
+		    if (string.IsNullOrWhiteSpace(_item.StoneType))
+			    return false;
+
+
+		    if (!_item.StoneWeight.HasValue ||
+		        _item.StoneWeight <= 0)
+		    {
+			    return false;
+		    }
+
+
+		    if (!_item.StonePrice.HasValue ||
+		        _item.StonePrice <= 0)
+		    {
+			    return false;
+		    }
+	    }
+
+
+	    return true;
+    }
+
+    // EDIT DIALOG
+
+    private void ShowEditDialog()
+    {
+        _showEditDialog = true;
+    }
+
+
+
+    private void EnableEditing()
+    {
+        _showEditDialog = false;
+
+        _isEditing = true;
+
+        CreateEditContext();
+
+        UpdateCanUpdate();
+    }
+
+
+
+    private void CancelEdit()
+    {
+        if (_originalItem == null)
+            return;
+
+
+        _item = Clone(_originalItem);
+
+        _selectedCategoryId = _originalCategoryId;
+
+
+        _isEditing = false;
+
+        _canUpdate = false;
+
+
+        CreateEditContext();
+    }
+
+
+
+
+    // UPDATE DIALOG
+
+    private void ShowUpdateDialog()
+    {
+        if (_canUpdate)
+            _showUpdateDialog = true;
+    }
+
+
+
+    private void CloseUpdateDialog()
+    {
+        _showUpdateDialog = false;
+    }
+
+
+
+private async Task Update()
+{
+    _showUpdateDialog = false;
+
+
+    if (_item == null)
+        return;
+
+
+    _saving = true;
+
+    _error = null;
+
+
+    try
+    {
+
+        if (!_item.HasStones)
+        {
+            _item.StoneType = null;
+            _item.StoneWeight = null;
+            _item.StonePrice = null;
+        }
+
+
+
+        var request = new UpdateGoldJewelryRequest
+        {
+            Sku = _item.Sku,
+
+            CategoryId = _selectedCategoryId,
+
+            WeightInGrams = _item.WeightInGrams,
+
+
+            HasStones = _item.HasStones,
+
+            StoneType = _item.StoneType,
+
+            StoneWeight = _item.StoneWeight,
+
+            StonePrice = _item.StonePrice,
+
+
+            Purity = _item.PurityInPercentage,
+
+
+            MakingChargeType = _item.MakingChargeType,
+
+
+            // Only send percentage when percentage mode is selected
+            MakingChargePercentage =
+                _item.MakingChargeType == MakingChargeType.Percentage
+                    ? _item.MakingChargePercentage
+                    : null,
+
+
+            // Backend calculates this for percentage mode
+            // Direct value for weight mode
+            MakingChargeWeight =
+                _item.MakingChargeType == MakingChargeType.Weight
+                    ? _item.MakingChargeWeight
+                    : 0,
+
+
+            HallMarkCharge =
+                _item.HallMarkCharge
+        };
+
+
+
+        var response =
+            await Http.PutAsJsonAsync(
+                "jewelry/gold",
+                request);
+
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _item =
+                await response.Content
+                    .ReadFromJsonAsync<GoldJewelryDetailsResponse>();
+
+
+            if (_item != null)
+            {
+                _selectedCategoryId =
+                    _categories
+                        .FirstOrDefault(x =>
+                            x.Name == _item.Category)
+                        ?.Id ?? 0;
+
+
+                _originalCategoryId =
+                    _selectedCategoryId;
+
+
+                _originalItem =
+                    Clone(_item);
+
+
+                _isEditing = false;
+
+                _canUpdate = false;
+
+
+                CreateEditContext();
+
+
+                _showSavedDialog = true;
+            }
+        }
+        else
+        {
+            var error =
+                await response.Content
+                    .ReadFromJsonAsync<ApiErrorResponse>();
+
+            _error =
+                error?.Message ??
+                "Unable to update jewellery.";
+        }
+
+    }
+    catch
+    {
+        _error =
+            "Unable to connect to server.";
+    }
+    finally
+    {
+        _saving = false;
+    }
+}
+
+
+    // DELETE DIALOG
+
+
+    private void ShowDeleteDialog()
+    {
+        _showDeleteDialog = true;
+    }
+
+
+
+    private void CloseDeleteDialog()
+    {
+        _showDeleteDialog = false;
+    }
+
+
+
+
+    private async Task Delete()
+    {
+        _showDeleteDialog = false;
+
+
+        if (_item == null)
+            return;
+
+
+        try
+        {
+            var response =
+                await Http.DeleteAsync(
+                    $"jewelry/gold/{_item.Sku}");
+
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _item = null;
+                _originalItem = null;
+
+                _sku = string.Empty;
+
+                _selectedCategoryId = 0;
+
+                _isEditing = false;
+
+                _canUpdate = false;
+
+
+                _showDeletedDialog = true;
+            }
+            else
+            {
+                var error =
+                    await response.Content
+                    .ReadFromJsonAsync<ApiErrorResponse>();
+
+                _error =
+                    error?.Message ??
+                    "Unable to delete jewellery.";
+            }
+
+        }
+        catch
+        {
+            _error =
+                "Unable to connect to server.";
+        }
+    }
+
+
+
+
+    private void CloseSavedDialog()
+    {
+        _showSavedDialog = false;
+    }
+
+
+
+    private void CloseDeletedDialog()
+    {
+        _showDeletedDialog = false;
+    }
+
+
+
+    private void CloseDialogs()
+    {
+        _showEditDialog = false;
+        _showUpdateDialog = false;
+        _showDeleteDialog = false;
+    }
+
+
+
+
+    private static GoldJewelryDetailsResponse Clone(
+        GoldJewelryDetailsResponse item)
+    {
+        return new GoldJewelryDetailsResponse
+        {
+            Id = item.Id,
+
+            Sku = item.Sku,
+
+            Category = item.Category,
+
+            WeightInGrams = item.WeightInGrams,
+
+            PurityInPercentage =
+                item.PurityInPercentage,
+
+            HasStones = item.HasStones,
+
+            StoneType = item.StoneType,
+
+            StoneWeight = item.StoneWeight,
+
+            StonePrice = item.StonePrice,
+
+            MakingChargeType =
+                item.MakingChargeType,
+
+            MakingChargePercentage =
+                item.MakingChargePercentage,
+
+            MakingChargeWeight =
+                item.MakingChargeWeight,
+
+            HallMarkCharge =
+                item.HallMarkCharge,
+
+            BarcodeImageUrl =
+                item.BarcodeImageUrl
+        };
+    }
+
+
+
+
+    public class CategoryDto
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+    }
+
+
+
+    public class ApiErrorResponse
+    {
+        public string? Message { get; set; }
+    }
+}

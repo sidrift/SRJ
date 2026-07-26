@@ -1,0 +1,560 @@
+@page "/gold-jewellery"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using srj.Domain.Enums
+
+
+@inject HttpClient Http
+
+<PageTitle>Gold Jewellery</PageTitle>
+
+<HeadContent>
+    <link href="css/gold-jewellery.css" rel="stylesheet" />
+</HeadContent>
+
+<div class="gold-rate-container">
+
+	<div class="gold-header">
+
+		<div>
+			<h2>
+				<i class="bi bi-gem"></i>
+				Gold Jewellery
+			</h2>
+
+			<p class="text-muted mb-0">
+				Add new gold jewellery item
+			</p>
+		</div>
+
+	</div>
+
+
+
+	<EditForm EditContext="_editContext"
+	          OnValidSubmit="Save">
+
+		<div class="rate-card">
+
+			<!-- Category -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-tags-fill"></i>
+					Category
+				</h5>
+
+				<div class="rate-field">
+
+					<label>Category</label>
+
+					<InputSelect class="form-select"
+					             @bind-Value="_model.CategoryId">
+
+						<option value="0">
+							-- Select Category --
+						</option>
+
+						@foreach (var category in _categories)
+						{
+							<option value="@category.Id">
+								@category.Name
+							</option>
+						}
+
+					</InputSelect>
+
+				</div>
+
+			</div>
+
+			<div class="form-check form-switch remember-category">
+
+				<InputCheckbox
+					id="rememberCategory"
+					class="form-check-input"
+					@bind-Value="_rememberCategory" />
+
+				<label class="form-check-label" for="rememberCategory">
+					Remember Category
+				</label>
+
+			</div>
+
+
+			<!-- Weight -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-speedometer2"></i>
+					Weight & Purity
+				</h5>
+
+				<div class="rate-grid">
+
+					<div class="rate-field">
+
+						<label>Weight (grams)</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_model.WeightInGrams" />
+
+					</div>
+
+
+					<div class="rate-field">
+
+						<label>Purity (%)</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_model.Purity" />
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+
+			<!-- Making Charge -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-cash-stack"></i>
+					Making Charges
+				</h5>
+
+				<div class="charge-type-group">
+
+					<InputRadioGroup @bind-Value="_model.MakingChargeType">
+
+						<label class="charge-option">
+
+							<InputRadio Value="MakingChargeType.Percentage" />
+
+							<i class="bi bi-percent"></i>
+
+							<span>
+								Percentage
+							</span>
+
+						</label>
+
+
+						<label class="charge-option">
+
+							<InputRadio Value="MakingChargeType.Weight" />
+
+							<i class="bi bi-speedometer2"></i>
+
+							<span>
+								Per Gram
+							</span>
+
+						</label>
+
+					</InputRadioGroup>
+
+				</div>
+
+
+
+				@if (_model.MakingChargeType == MakingChargeType.Percentage)
+				{
+					<div class="rate-field">
+
+						<label>Making Charge (%)</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_model.MakingChargePercentage" />
+
+					</div>
+				}
+				else
+				{
+					<div class="rate-field">
+
+						<label>Making Charge (₹ / gram)</label>
+
+						<InputNumber class="form-control"
+						             @bind-Value="_model.MakingChargeWeight" />
+
+					</div>
+				}
+
+			</div>
+
+
+
+			<!-- Hallmark -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-patch-check-fill"></i>
+					Hallmark
+				</h5>
+
+				<div class="rate-field">
+
+					<label>Hallmark Charge</label>
+
+					<InputNumber class="form-control"
+					             @bind-Value="_model.HallMarkCharge" />
+
+				</div>
+
+			</div>
+
+
+
+			<!-- Stone -->
+
+			<div class="rate-section">
+
+				<h5>
+					<i class="bi bi-diamond-fill"></i>
+					Stone Details
+				</h5>
+
+				<div class="form-check form-switch mb-4">
+
+					<InputCheckbox
+						id="hasStone"
+						class="form-check-input"
+						@bind-Value="_model.HasStones" />
+
+					<label class="form-check-label" for="hasStone">
+						Contains Stones
+					</label>
+
+				</div>
+
+
+
+				@if (_model.HasStones)
+				{
+
+					<div class="rate-grid">
+
+						<div class="rate-field">
+
+							<label>Stone Type</label>
+
+							<InputText class="form-control"
+							           @bind-Value="_model.StoneType" />
+
+						</div>
+
+
+						<div class="rate-field">
+
+							<label>Stone Weight (grams)</label>
+
+							<InputNumber class="form-control"
+							             @bind-Value="_model.StoneWeight" />
+
+						</div>
+
+
+						<div class="rate-field">
+
+							<label>Stone Price (₹)</label>
+
+							<InputNumber class="form-control"
+							             @bind-Value="_model.StonePrice" />
+
+						</div>
+
+					</div>
+
+				}
+
+			</div>
+
+
+
+			<div class="text-end mt-4">
+
+				<button class="save-btn"
+				        type="submit"
+				        disabled="@(!_canSave || _saving)">
+
+					<i class="bi bi-floppy-fill me-2"></i>
+
+					Save Jewellery
+
+				</button>
+
+			</div>
+
+		</div>
+
+	</EditForm>
+
+	@if (_showSuccessDialog)
+	{
+		<div class="dialog-overlay">
+
+			<div class="success-dialog">
+
+				<div class="dialog-icon">
+					<i class="bi bi-check-circle-fill"></i>
+				</div>
+
+				<h4>Jewellery Added</h4>
+
+				<p>
+					The jewellery item has been added successfully.
+				</p>
+
+				<button class="save-btn"
+				        @onclick="CloseSuccessDialog">
+					OK
+				</button>
+
+			</div>
+
+		</div>
+	}
+
+</div>
+
+@code {
+
+	private bool _rememberCategory = true;
+	private bool _showSuccessDialog;
+    private GoldJewelleryRequest _model = new()
+    {
+        Purity = 91.6m,
+        MakingChargeType = MakingChargeType.Percentage,
+        HasStones = false,
+        HallMarkCharge = 250
+    };
+    private EditContext _editContext = default!;
+    private List<CategoryDto> _categories = new();
+
+    private bool _loading;
+    private bool _saving;
+
+    private string? _successMessage;
+
+    private bool _canSave;
+    private string? _errorMessage;
+
+    protected override void OnInitialized()
+    {
+	    CreateEditContext();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+	    await LoadCategories();
+    }
+
+    private void CreateEditContext()
+    {
+	    _editContext = new EditContext(_model);
+
+	    _editContext.OnFieldChanged += (_, _) =>
+	    {
+		    _canSave = CanSave();
+		    StateHasChanged();
+	    };
+
+	    _canSave = CanSave();
+    }
+
+    private bool CanSave()
+    {
+	    if (_model.CategoryId <= 0)
+		    return false;
+
+	    if (!_model.WeightInGrams.HasValue || _model.WeightInGrams <= 0)
+		    return false;
+
+	    if (_model.Purity <= 0)
+		    return false;
+
+	    if (_model.HallMarkCharge < 0)
+		    return false;
+
+	    if (_model.MakingChargeType == MakingChargeType.Percentage)
+	    {
+		    if (!_model.MakingChargePercentage.HasValue ||
+		        _model.MakingChargePercentage <= 0)
+			    return false;
+	    }
+	    else
+	    {
+		    if (!_model.MakingChargeWeight.HasValue ||
+		        _model.MakingChargeWeight <= 0)
+			    return false;
+	    }
+
+	    if (_model.HasStones)
+	    {
+		    if (string.IsNullOrWhiteSpace(_model.StoneType))
+			    return false;
+
+		    if (!_model.StoneWeight.HasValue ||
+		        _model.StoneWeight <= 0)
+			    return false;
+
+		    if (!_model.StonePrice.HasValue ||
+		        _model.StonePrice <= 0)
+			    return false;
+	    }
+
+	    return true;
+    }
+
+    private async Task LoadCategories()
+    {
+        _loading = true;
+        _errorMessage = null;
+
+        try
+        {
+            _categories =
+                await Http.GetFromJsonAsync<List<CategoryDto>>(
+                    "item-categories?metal=1")
+                ?? new();
+        }
+        catch
+        {
+            _errorMessage =
+                "Unable to load categories.";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void CloseSuccessDialog()
+    {
+	    _showSuccessDialog = false;
+    }
+
+    private async Task Save()
+    {
+        _saving = true;
+
+        _successMessage = null;
+        _errorMessage = null;
+
+        try
+        {
+            if (!_model.HasStones)
+            {
+                _model.StoneWeight = null;
+                _model.StoneType = null;
+                _model.StonePrice = null;
+            }
+
+            if (_model.MakingChargeType == MakingChargeType.Percentage)
+            {
+                _model.MakingChargeWeight = null;
+            }
+            else
+            {
+                _model.MakingChargePercentage = null;
+            }
+
+            var response =
+                await Http.PostAsJsonAsync(
+                    "jewelry/gold",
+                    _model);
+
+            if (response.IsSuccessStatusCode)
+            {
+	            _showSuccessDialog = true;
+
+                var categoryId = _rememberCategory
+	                ? _model.CategoryId
+	                : 0;
+
+                _model = new GoldJewelleryRequest
+                {
+	                CategoryId = categoryId,
+                    Purity = 91.6m,
+                    MakingChargeType = MakingChargeType.Percentage,
+                    HallMarkCharge = 250,
+                    HasStones = false
+                };
+
+            CreateEditContext();
+            }
+            else
+            {
+                var error =
+                    await response.Content
+                        .ReadFromJsonAsync<ApiError>();
+
+                _errorMessage =
+                    error?.Message
+                    ?? "Unable to save jewellery.";
+            }
+        }
+        catch
+        {
+            _errorMessage =
+                "Unable to connect to server.";
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+
+
+    public class GoldJewelleryRequest
+    {
+        public string? Sku { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public decimal? WeightInGrams { get; set; }
+
+        public bool HasStones { get; set; }
+
+        public decimal? StoneWeight { get; set; }
+
+        public string? StoneType { get; set; }
+
+        public decimal? StonePrice { get; set; }
+
+        public decimal Purity { get; set; }
+
+        public MakingChargeType MakingChargeType { get; set; }
+
+        public decimal? MakingChargePercentage { get; set; }
+
+        public decimal? MakingChargeWeight { get; set; }
+
+        public decimal HallMarkCharge { get; set; }
+    }
+
+
+
+    public class CategoryDto
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+    }
+
+
+
+    public class ApiError
+    {
+        public string? Message { get; set; }
+    }
+
+}

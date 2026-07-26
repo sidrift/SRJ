@@ -39,4 +39,8 @@
         <Folder Include="wwwroot\barcodes\"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <EditorConfigFiles Remove="Controller\Gold\.editorconfig" />
+    </ItemGroup>
+
 </Project>

@@ -5,12 +5,12 @@ using srj.Domain.Models;
 
 namespace srj.Application.Services.Items;
 
-public class JewelryCategoryService : IJewelryCategoryService
+public class ItemCategoryService : IItemCategoryService
 {
-    private readonly IJewelryCategoryRepository _categoryRepository;
+    private readonly IItemCategoryRepository _categoryRepository;
     private readonly IJewelryItemRepository _itemRepository;
 
-    public JewelryCategoryService(IJewelryCategoryRepository categoryRepository,
+    public ItemCategoryService(IItemCategoryRepository categoryRepository,
         IJewelryItemRepository itemRepository)
     {
         _categoryRepository = categoryRepository;
@@ -29,14 +29,18 @@ public class JewelryCategoryService : IJewelryCategoryService
 
     public async Task<ItemCategory> CreateAsync(ItemCategory item)
     {
-        if (string.IsNullOrWhiteSpace(item.Name)) throw new ArgumentException("Category name is required.");
+        if (string.IsNullOrWhiteSpace(item.Name))
+        {
+            throw new ArgumentException("Category name is required.");
+        }
 
         return await _categoryRepository.CreateAsync(item);
     }
 
     public async Task UpdateAsync(ItemCategory item)
     {
-        if (string.IsNullOrWhiteSpace(item.Name)) throw new ArgumentException("Category name is required.");
+        if (string.IsNullOrWhiteSpace(item.Name))
+            throw new ArgumentException("Category name is required.");
 
         await _categoryRepository.UpdateAsync(item);
     }
@@ -56,4 +60,5 @@ public class JewelryCategoryService : IJewelryCategoryService
 
         await _categoryRepository.DeleteAsync(id);
     }
+
 }

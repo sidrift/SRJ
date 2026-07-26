@@ -11,11 +11,13 @@ using srj.Application.Interface.Services.Authentication;
 using srj.Application.Interface.Services.Dashboard;
 using srj.Application.Interface.Services.Gold;
 using srj.Application.Interface.Services.Items;
+using srj.Application.Interface.Services.Jewelery;
 using srj.Application.Interface.Services.Silver;
 using srj.Application.Services;
 using srj.Application.Services.Dashboard;
 using srj.Application.Services.Gold;
 using srj.Application.Services.Items;
+using srj.Application.Services.Jewelery;
 using srj.Application.Services.Silver;
 using srj.Infrastructure.DbContext;
 using srj.Infrastructure.Identity;
@@ -136,12 +138,14 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddScoped<IJewelryItemRepository, JewelryItemRepository>();
-builder.Services.AddScoped<IJewelryCategoryRepository, JewelryCategoryRepository>();
+builder.Services.AddScoped<IItemCategoryRepository, ItemCategoryRepository>();
 
 builder.Services.AddScoped<IGoldRateRepository, GoldRateRepository>();
 builder.Services.AddScoped<ISilverRateRepository, SilverRateRepository>();
 
-builder.Services.AddScoped<IJewelryCategoryService, JewelryCategoryService>();
+builder.Services.AddScoped<IItemCategoryService, ItemCategoryService>();
+
+builder.Services.AddScoped<IJewelryQueryService, JewelryQueryService>();
 
 builder.Services.AddScoped<IGoldJewelryItemService, GoldJewelryItemService>();
 builder.Services.AddScoped<ISilverJewelryItemService, SilverJewelryItemService>();
@@ -172,6 +176,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 

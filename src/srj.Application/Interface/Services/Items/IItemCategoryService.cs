@@ -1,9 +1,10 @@
+using srj.Application.Dtos.Response.Items;
 using srj.Domain.Enums;
 using srj.Domain.Models;
 
-namespace srj.Application.Interface.Repository;
+namespace srj.Application.Interface.Services.Items;
 
-public interface IJewelryCategoryRepository
+public interface IItemCategoryService
 {
     Task<ItemCategory?> GetByIdAsync(long id);
     Task<List<ItemCategory>> GetAllAsync(Metal? metal = null, string? name = null);

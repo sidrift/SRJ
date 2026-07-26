@@ -1,0 +1,1266 @@
+.gold-rate-container {
+
+	--primary: #d4af37;
+	--primary-dark: #9c7b16;
+	--primary-light: #fff8dc;
+	--border: #e7c55a;
+	--text-accent: #4b3600;
+
+	padding: 24px;
+	max-width: 1600px;
+	margin: 0 auto;
+
+	transition: .35s ease;
+}
+
+
+/* ============================
+   THEMES
+============================ */
+
+.gold-theme {
+
+	--primary: #d4af37;
+	--primary-dark: #9c7b16;
+	--primary-light: #fff8dc;
+	--border: #e7c55a;
+	--text-accent: #4b3600;
+
+}
+
+
+.silver-theme {
+
+	--primary: #a6b0be;
+	--primary-dark: #5d6878;
+	--primary-light: #f3f5f7;
+	--border: #cfd5dd;
+	--text-accent: #374151;
+
+}
+
+
+
+/* ============================
+   HEADER
+============================ */
+
+.gold-header {
+
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+
+	margin-bottom:24px;
+
+	gap:20px;
+
+}
+
+
+.gold-header h2 {
+
+	margin:0 0 6px;
+
+	font-weight:700;
+
+	color:#222;
+
+}
+
+
+.gold-header h2 i {
+
+	color:var(--primary);
+
+}
+
+
+.gold-header p {
+
+	margin:0;
+
+	color:#777;
+
+}
+
+
+
+/* ============================
+   METAL BANNER
+============================ */
+
+
+.metal-banner {
+
+	display:flex;
+
+	align-items:center;
+
+	gap:16px;
+
+	padding:16px 24px;
+
+	border-radius:18px;
+
+	color:var(--text-accent);
+
+	font-weight:600;
+
+
+	background:linear-gradient(
+			135deg,
+			var(--primary),
+			var(--primary-light)
+	);
+
+
+	border:1px solid var(--border);
+
+	box-shadow:
+			0 10px 28px rgba(0,0,0,.15);
+
+
+	animation:fadeIn .35s ease;
+
+}
+
+
+
+.metal-banner i {
+
+	font-size:2.2rem;
+
+}
+
+
+.metal-name {
+
+	font-size:1.6rem;
+
+	font-weight:700;
+
+}
+
+
+
+@keyframes fadeIn {
+
+	from {
+
+		opacity:0;
+
+		transform:translateY(-10px);
+
+	}
+
+	to {
+
+		opacity:1;
+
+		transform:translateY(0);
+
+	}
+
+}
+
+
+
+/* ============================
+   CARDS
+============================ */
+
+
+.rate-card {
+
+	background:white;
+
+	border-radius:16px;
+
+	padding:28px;
+
+	margin-bottom:25px;
+
+	box-shadow:
+			0 5px 18px rgba(0,0,0,.08);
+
+}
+
+
+
+/* ============================
+   SEARCH
+============================ */
+
+
+.search-row {
+
+	display:flex;
+
+	gap:16px;
+
+	align-items:center;
+
+}
+
+
+.search-row .form-control {
+
+	height:46px;
+
+}
+
+
+
+/* ============================
+   SECTIONS
+============================ */
+
+
+.rate-section {
+
+	margin-bottom:24px;
+
+	padding-bottom:20px;
+
+	border-bottom:1px solid #eee;
+
+}
+
+
+
+.rate-section:last-child {
+
+	border-bottom:none;
+
+	margin-bottom:0;
+
+}
+
+
+
+.rate-section h5 {
+
+	display:flex;
+
+	align-items:center;
+
+	gap:10px;
+
+	margin-bottom:18px;
+
+	font-size:18px;
+
+	font-weight:700;
+
+}
+
+
+
+.rate-section h5 i {
+
+	color:var(--primary);
+
+}
+
+
+
+/* ============================
+   GRID
+============================ */
+
+
+.rate-grid {
+
+	display:grid;
+
+	grid-template-columns:repeat(2,1fr);
+
+	gap:18px;
+
+}
+
+
+
+/* ============================
+   FIELDS
+============================ */
+
+
+.rate-field {
+
+	display:flex;
+
+	flex-direction:column;
+
+	gap:7px;
+
+}
+
+
+
+.rate-field label {
+
+	font-weight:600;
+
+	color:#555;
+
+}
+
+
+
+.form-control,
+.form-select {
+
+	height:44px;
+
+	border-radius:10px;
+
+	border:1px solid #ddd;
+
+}
+
+
+
+.form-control:focus,
+.form-select:focus {
+
+	border-color:var(--primary);
+
+	box-shadow:
+			0 0 0 .2rem rgba(212,175,55,.18);
+
+}
+
+
+
+.form-control:disabled,
+.form-select:disabled {
+
+	background:#f8f9fa;
+
+}
+
+
+/* ============================
+   BARCODE
+============================ */
+
+.barcode-section {
+
+	text-align:center;
+
+	margin-bottom:30px;
+
+	padding-bottom:20px;
+
+	border-bottom:1px solid #eee;
+
+	overflow:hidden;
+
+	width:100%;
+
+}
+
+
+.barcode-image {
+
+	display:block;
+
+	width:100%;
+
+	max-width:320px;
+
+	height:auto;
+
+	margin:0 auto;
+
+	padding:15px;
+
+	border-radius:12px;
+
+	border:1px solid #ddd;
+
+	background:white;
+
+	object-fit:contain;
+
+	box-sizing:border-box;
+
+}
+
+/* ============================
+   MAKING CHARGE
+============================ */
+
+
+.charge-type-group {
+
+	display:flex;
+
+	gap:16px;
+
+	margin-bottom:20px;
+
+}
+
+
+
+.charge-option {
+
+	display:flex;
+
+	align-items:center;
+
+	gap:10px;
+
+	padding:12px 22px;
+
+	border-radius:12px;
+
+	border:1px solid var(--border);
+
+	background:white;
+
+	cursor:pointer;
+
+	font-weight:600;
+
+	transition:.2s;
+
+}
+
+
+
+.charge-option input {
+
+	display:none;
+
+}
+
+
+
+.charge-option.active {
+
+	background:linear-gradient(
+			135deg,
+			var(--primary),
+			var(--primary-light)
+	);
+
+	border-color:var(--primary);
+
+}
+
+
+
+/* ============================
+   BUTTONS
+============================ */
+
+
+.save-btn,
+.edit-btn,
+.cancel-btn,
+.delete-btn,
+.estimate-btn {
+
+
+	border:none;
+
+	border-radius:10px;
+
+	padding:11px 22px;
+
+	font-weight:600;
+
+
+	display:inline-flex;
+
+	align-items:center;
+
+	justify-content:center;
+
+	gap:8px;
+
+
+	transition:.2s ease;
+
+}
+
+
+
+.save-btn,
+.edit-btn {
+
+
+	background:linear-gradient(
+			135deg,
+			var(--primary),
+			var(--primary-dark)
+	);
+
+	color:white;
+
+}
+
+
+
+.cancel-btn {
+
+	background:#6c757d;
+
+	color:white;
+
+}
+
+
+
+.delete-btn {
+
+	background:#dc3545;
+
+	color:white;
+
+}
+
+
+
+.delete-btn:hover {
+
+	background:#bb2d3b;
+
+}
+
+
+
+/* ============================
+   ESTIMATE BUTTON
+============================ */
+
+
+.estimate-btn {
+
+
+	background:linear-gradient(
+			135deg,
+			#0f766e,
+			#14b8a6
+	);
+
+
+	color:white;
+
+
+	box-shadow:
+			0 6px 16px rgba(20,184,166,.25);
+
+
+}
+
+
+
+.estimate-btn:hover {
+
+	transform:translateY(-2px);
+
+
+	box-shadow:
+			0 10px 22px rgba(20,184,166,.35);
+
+}
+
+
+
+/* ============================
+   ACTIONS
+============================ */
+
+
+.action-buttons {
+
+	display:flex;
+
+	justify-content:space-between;
+
+	align-items:center;
+
+	margin-top:25px;
+
+	gap:16px;
+
+	flex-wrap:wrap;
+
+}
+
+
+
+.left-actions,
+.right-actions {
+
+	display:flex;
+
+	align-items:center;
+
+	gap:12px;
+
+}
+
+
+
+/* ============================
+   DIALOG
+============================ */
+
+
+.dialog-overlay {
+
+	position:fixed;
+
+	inset:0;
+
+	background:rgba(0,0,0,.45);
+
+	display:flex;
+
+	align-items:center;
+
+	justify-content:center;
+
+	z-index:9999;
+
+}
+
+
+
+.confirm-dialog,
+.success-dialog {
+
+
+	width:420px;
+
+	max-width:92%;
+
+	background:white;
+
+	padding:30px;
+
+	border-radius:18px;
+
+	text-align:center;
+
+	box-shadow:
+			0 12px 35px rgba(0,0,0,.25);
+
+}
+
+
+
+.dialog-icon {
+
+	width:70px;
+
+	height:70px;
+
+	margin:0 auto 20px;
+
+	border-radius:50%;
+
+	display:flex;
+
+	align-items:center;
+
+	justify-content:center;
+
+	font-size:32px;
+
+	background:var(--primary);
+
+	color:white;
+
+}
+
+
+
+.dialog-icon.warning {
+
+	background:#f0ad4e;
+
+}
+
+
+
+.dialog-icon.delete {
+
+	background:#dc3545;
+
+}
+
+
+
+.dialog-buttons {
+
+	display:flex;
+
+	justify-content:center;
+
+	gap:12px;
+
+	margin-top:20px;
+
+}
+
+
+
+/* ============================
+   SPINNER
+============================ */
+
+
+.spinner-border {
+
+	width:18px;
+
+	height:18px;
+
+}
+
+
+
+/* ============================
+   MOBILE
+============================ */
+
+
+@media(max-width:768px) {
+
+
+	.barcode-section {
+
+		padding:0;
+
+		margin-bottom:18px;
+
+	}
+
+
+	.barcode-image {
+
+		width:100%;
+
+		max-width:100%;
+
+		padding:10px;
+
+	}
+
+	.gold-rate-container {
+
+		padding:12px;
+
+	}
+
+
+
+	.gold-header {
+
+		flex-direction:column;
+
+		align-items:flex-start;
+
+		gap:12px;
+
+	}
+
+
+
+	.gold-header h2 {
+
+		font-size:1.35rem;
+
+	}
+
+
+
+	.metal-banner {
+
+		width:100%;
+
+		padding:14px 16px;
+
+	}
+
+
+
+	.metal-name {
+
+		font-size:1.3rem;
+
+	}
+
+
+
+	.rate-card {
+
+		padding:16px;
+
+	}
+
+
+
+	.search-row {
+
+		flex-direction:column;
+
+		align-items:stretch;
+
+	}
+
+
+
+	.search-row input,
+	.search-row button {
+
+		width:100%;
+
+	}
+
+
+
+	.rate-grid {
+
+		grid-template-columns:1fr;
+
+	}
+
+
+
+	.charge-type-group {
+
+		flex-direction:column;
+
+	}
+
+
+
+	.charge-option {
+
+		width:100%;
+
+		justify-content:center;
+
+	}
+
+
+
+	.action-buttons {
+
+		flex-direction:column;
+
+		align-items:stretch;
+
+	}
+
+
+
+	.left-actions,
+	.right-actions {
+
+		width:100%;
+
+		flex-direction:column;
+
+	}
+
+
+
+	.left-actions button,
+	.right-actions button {
+
+		width:100%;
+
+	}
+
+
+
+	.confirm-dialog,
+	.success-dialog {
+
+		width:calc(100% - 32px);
+
+		padding:22px;
+
+	}
+
+
+
+	.dialog-buttons {
+
+		flex-direction:column;
+
+	}
+
+
+
+	.dialog-buttons button {
+
+		width:100%;
+
+	}
+
+}
+
+
+
+/* ============================
+   SMALL PHONE
+============================ */
+
+
+@media(max-width:400px) {
+
+
+	.gold-rate-container {
+
+		padding:8px;
+
+	}
+
+
+	.rate-card {
+
+		padding:14px;
+
+	}
+
+
+	.gold-header h2 {
+
+		font-size:1.2rem;
+
+	}
+
+
+	.metal-name {
+
+		font-size:1.1rem;
+
+	}
+
+}
+
+
+
+/* ============================
+   SILVER DELETE SUCCESS
+============================ */
+
+
+.confirm-dialog.success.silver .dialog-icon {
+
+	background:linear-gradient(
+			135deg,
+			#adb5bd,
+			#dee2e6
+	);
+
+	color:#495057;
+
+}
+
+
+
+.confirm-dialog.success.silver .save-btn {
+
+	background:linear-gradient(
+			135deg,
+			#adb5bd,
+			#dee2e6
+	);
+
+	color:#343a40;
+
+}
+
+/* ============================
+   GLOBAL MOBILE OVERFLOW FIX
+============================ */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+
+.gold-rate-container {
+	width:100%;
+	overflow-x:hidden;
+}
+
+
+
+/* ============================
+   BARCODE FINAL FIX
+============================ */
+
+.barcode-section {
+
+	width:100%;
+	overflow:hidden;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+
+}
+
+
+.barcode-image {
+
+	width:100%;
+	max-width:320px;
+
+	height:auto;
+
+	display:block;
+
+	object-fit:contain;
+
+	padding:12px;
+
+	box-sizing:border-box;
+
+}
+
+
+
+/* ============================
+   ACTION BUTTON ALIGNMENT
+============================ */
+
+
+.action-buttons {
+
+	display:flex;
+
+	justify-content:space-between;
+
+	align-items:center;
+
+	width:100%;
+
+	gap:12px;
+
+	flex-wrap:nowrap;
+
+	margin-top:25px;
+
+}
+
+
+
+.left-actions,
+.right-actions {
+
+	display:flex;
+
+	align-items:center;
+
+	gap:12px;
+
+	flex-wrap:nowrap;
+
+}
+
+
+
+.left-actions button,
+.right-actions button {
+
+	white-space:nowrap;
+
+}
+
+
+
+/* Generate Estimate */
+
+.estimate-btn {
+
+	background:linear-gradient(
+			135deg,
+			#059669,
+			#10b981
+	);
+
+	color:white;
+
+	box-shadow:
+			0 6px 15px rgba(5,150,105,.25);
+
+}
+
+
+.estimate-btn:hover {
+
+	transform:translateY(-2px);
+
+	box-shadow:
+			0 10px 20px rgba(5,150,105,.35);
+
+}
+
+
+
+
+/* ============================
+   MOBILE RESPONSIVE FIX
+============================ */
+
+
+@media(max-width:768px) {
+
+
+	.gold-rate-container {
+
+		padding:12px;
+
+	}
+
+
+
+	.rate-card {
+
+		padding:16px;
+
+	}
+
+
+
+	/* Header */
+
+	.gold-header {
+
+		flex-direction:column;
+
+		align-items:flex-start;
+
+	}
+
+
+
+	/* Search */
+
+	.search-row {
+
+		flex-direction:column;
+
+		width:100%;
+
+	}
+
+
+	.search-row input,
+	.search-row button {
+
+		width:100%;
+
+	}
+
+
+
+	/* Barcode */
+
+	.barcode-image {
+
+		max-width:100%;
+
+		padding:8px;
+
+	}
+
+
+
+
+	/* Buttons */
+
+	.action-buttons {
+
+		flex-direction:column;
+
+		align-items:stretch;
+
+		gap:12px;
+
+	}
+
+
+	.left-actions,
+	.right-actions {
+
+		width:100%;
+
+		flex-direction:column;
+
+	}
+
+
+	.left-actions button,
+	.right-actions button {
+
+		width:100%;
+
+		margin-left:0 !important;
+
+	}
+
+
+
+}
+
+
+
+/* ============================
+   SMALL MOBILE
+============================ */
+
+
+@media(max-width:400px) {
+
+
+	.gold-rate-container {
+
+		padding:8px;
+
+	}
+
+
+	.rate-card {
+
+		padding:14px;
+
+	}
+
+
+	.barcode-image {
+
+		padding:6px;
+
+	}
+
+
+
+	.gold-header h2 {
+
+		font-size:1.15rem;
+
+	}
+
+
+	.metal-name {
+
+		font-size:1.1rem;
+
+	}
+
+}

@@ -1,0 +1,571 @@
+@page "/estimate/{Metal}/{Sku}"
+
+@using Microsoft.AspNetCore.Components.Web
+@using System.Net.Http.Json
+
+@inject HttpClient Http
+
+
+<PageTitle>Jewellery Estimate</PageTitle>
+
+
+<HeadContent>
+    <link href="css/estimate.css" rel="stylesheet" />
+</HeadContent>
+
+
+
+<div class="estimate-container">
+
+
+@if (_loading)
+{
+    <div class="loading">
+
+        <div class="spinner-border text-warning"></div>
+
+        <p>
+            Calculating estimate...
+        </p>
+
+    </div>
+}
+else if (!string.IsNullOrEmpty(_error))
+{
+
+    <div class="alert alert-danger">
+        @_error
+    </div>
+
+}
+else if (_goldEstimate != null || _silverEstimate != null)
+{
+
+
+    <div class="estimate-header">
+
+
+        <div>
+
+            <h2>
+                <i class="bi bi-receipt"></i>
+                Jewellery Estimate
+            </h2>
+
+
+            <p>
+                SKU :
+                @(IsGold
+                    ? _goldEstimate?.Sku
+                    : _silverEstimate?.Sku)
+            </p>
+
+
+        </div>
+
+
+
+        <span class="metal-badge @Metal.ToLower()">
+            @Metal
+        </span>
+
+
+    </div>
+
+
+
+
+
+    <div class="estimate-grid">
+
+
+
+        <!-- DETAILS CARD -->
+
+        <div class="estimate-card">
+
+
+            <h5>
+                <i class="bi bi-gem"></i>
+                Jewellery Details
+            </h5>
+
+
+
+            @if (IsGold)
+            {
+
+                <div class="detail-row">
+                    <span>
+                        Gross Weight
+                    </span>
+
+                    <strong>
+                        @_goldEstimate!.GrossWeight g
+                    </strong>
+                </div>
+
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Stone Weight
+                    </span>
+
+                    <strong>
+                        @_goldEstimate.StoneWeight g
+                    </strong>
+
+                </div>
+
+
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Net Gold Weight
+                    </span>
+
+                    <strong>
+                        @_goldEstimate.NetGoldWeight g
+                    </strong>
+
+                </div>
+
+
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Gold Rate
+                    </span>
+
+                    <strong>
+                        ₹ @_goldEstimate.GoldRatePerGram.ToString("N2") / g
+                    </strong>
+
+                </div>
+
+
+
+            }
+            else
+            {
+
+                <div class="detail-row">
+
+                    <span>
+                        Weight
+                    </span>
+
+                    <strong>
+                        @_silverEstimate!.WeightInGrams g
+                    </strong>
+
+                </div>
+
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Silver Rate
+                    </span>
+
+                    <strong>
+                        ₹ @_silverEstimate.SilverRatePerGram.ToString("N2") / g
+                    </strong>
+
+                </div>
+
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Making Charge
+                    </span>
+
+                    <strong>
+                        ₹ @_silverEstimate.MakingChargePerGram.ToString("N2") / g
+                    </strong>
+
+                </div>
+
+
+            }
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <!-- PRICE BREAKDOWN -->
+
+
+        <div class="estimate-card">
+
+
+            <h5>
+                <i class="bi bi-calculator"></i>
+                Price Breakdown
+            </h5>
+
+
+
+
+            @if (IsGold)
+            {
+
+
+                <div class="price-row">
+
+                    <span>
+                        Gold Amount
+                    </span>
+
+                    <strong>
+                        ₹ @_goldEstimate!.GoldAmount.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+
+                <div class="price-row">
+
+                    <span>
+                        Stone Amount
+                    </span>
+
+                    <strong>
+                        ₹ @_goldEstimate.StoneAmount.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+
+
+                <div class="price-row">
+
+                    <span>
+                        Hallmark
+                    </span>
+
+                    <strong>
+                        ₹ @_goldEstimate.HallmarkAmount.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+
+
+                <div class="price-row">
+
+                    <span>
+                        Making Charge Weight
+                    </span>
+
+                    <strong>
+                        @_goldEstimate.MakingChargeWeight g
+                    </strong>
+
+                </div>
+
+
+
+            }
+            else
+            {
+
+
+
+                <div class="price-row">
+
+                    <span>
+                        Silver Rate / Gram
+                    </span>
+
+                    <strong>
+                        ₹ @_silverEstimate!.SilverRatePerGram.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+
+                <div class="price-row">
+
+                    <span>
+                        Making Charge / Gram
+                    </span>
+
+                    <strong>
+                        ₹ @_silverEstimate.MakingChargePerGram.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+
+
+                <div class="price-row">
+
+                    <span>
+                        Final Rate / Gram
+                    </span>
+
+                    <strong>
+                        ₹ @_silverEstimate.FinalRatePerGram.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+
+            }
+
+
+
+
+            <hr />
+
+
+
+            <div class="total">
+
+
+                <span>
+                    Total Estimate
+                </span>
+
+
+                <strong>
+
+                    ₹ @(IsGold
+                        ? _goldEstimate!.TotalAmount.ToString("N2")
+                        : _silverEstimate!.TotalAmount.ToString("N2"))
+
+                </strong>
+
+
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+}
+
+
+</div>
+
+
+
+
+
+
+
+@code {
+
+
+    [Parameter]
+    public string Metal { get; set; } = "";
+
+
+    [Parameter]
+    public string Sku { get; set; } = "";
+
+
+
+    private bool _loading;
+
+
+    private string? _error;
+
+
+
+    private GoldEstimateResponse? _goldEstimate;
+
+
+    private SilverEstimateResponse? _silverEstimate;
+
+
+
+    private bool IsGold =>
+        Metal.Equals(
+            "gold",
+            StringComparison.OrdinalIgnoreCase);
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEstimate();
+    }
+
+
+
+
+
+    private async Task LoadEstimate()
+    {
+
+        _loading = true;
+
+
+        try
+        {
+
+
+            var url =
+                $"calculate-pricing/{Metal.ToLower()}/{Sku}";
+
+
+
+            if (IsGold)
+            {
+
+                _goldEstimate =
+                    await Http.GetFromJsonAsync<GoldEstimateResponse>(url);
+
+
+                if (_goldEstimate == null)
+                {
+                    _error = "Unable to generate gold estimate.";
+                }
+
+            }
+            else
+            {
+
+                _silverEstimate =
+                    await Http.GetFromJsonAsync<SilverEstimateResponse>(url);
+
+
+
+                if (_silverEstimate == null)
+                {
+                    _error = "Unable to generate silver estimate.";
+                }
+
+            }
+
+
+        }
+        catch(HttpRequestException ex)
+        {
+
+            _error = ex.Message;
+
+        }
+        catch(Exception)
+        {
+
+            _error =
+                "Something went wrong while generating estimate.";
+
+        }
+        finally
+        {
+
+            _loading = false;
+
+        }
+
+    }
+
+
+
+
+
+    // =============================
+    // GOLD RESPONSE
+    // =============================
+
+
+    public class GoldEstimateResponse
+    {
+
+        public string Sku { get; set; } = "";
+
+
+        public decimal GrossWeight { get; set; }
+
+
+        public decimal StoneWeight { get; set; }
+
+
+        public decimal NetGoldWeight { get; set; }
+
+
+        public decimal GoldRatePerGram { get; set; }
+
+
+        public decimal MakingChargeWeight { get; set; }
+
+
+        public decimal TotalChargeableGoldWeight { get; set; }
+
+
+        public decimal GoldAmount { get; set; }
+
+
+        public decimal StoneAmount { get; set; }
+
+
+        public decimal HallmarkAmount { get; set; }
+
+
+        public decimal TotalAmount { get; set; }
+
+    }
+
+
+
+
+
+    // =============================
+    // SILVER RESPONSE
+    // =============================
+
+
+    public class SilverEstimateResponse
+    {
+
+        public string Sku { get; set; } = "";
+
+
+        public decimal WeightInGrams { get; set; }
+
+
+        public decimal SilverRatePerGram { get; set; }
+
+
+        public decimal MakingChargePerGram { get; set; }
+
+
+        public decimal FinalRatePerGram { get; set; }
+
+
+        public decimal TotalAmount { get; set; }
+
+    }
+
+
+}

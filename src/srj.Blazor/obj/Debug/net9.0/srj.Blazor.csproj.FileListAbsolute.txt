@@ -229,5 +229,10 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/rakla69dhs-ov527tzo6c.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/aoo2zirh9g-xr1t8nnnyi.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/97lnwicezb-94ot5h2t78.gz
-/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/w01lw8ornb-7qm59pxw1e.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/jx0oayjrbq-zm9ofxgt8d.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/bjtzoh7ywo-o9xt3fcp27.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/cp2cb1llt5-89g72hsyi8.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/w01lw8ornb-vmqcy63k9n.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/byun5p42tw-wjz324taxk.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/ycp5sefnb0-l18ww0kwl8.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/7lgke4854i-zwv8q53lyq.gz

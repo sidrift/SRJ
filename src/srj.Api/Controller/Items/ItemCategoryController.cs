@@ -9,11 +9,11 @@ namespace TheSRJProject.Controller.Items;
 
 [ApiController]
 [Route("api/item-categories")]
-public class JewelryCategoryController : ControllerBase
+public class ItemCategoryController : ControllerBase
 {
-    private readonly IJewelryCategoryService _service;
+    private readonly IItemCategoryService _service;
 
-    public JewelryCategoryController(IJewelryCategoryService service)
+    public ItemCategoryController(IItemCategoryService service)
     {
         _service = service;
     }

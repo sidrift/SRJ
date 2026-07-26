@@ -6,11 +6,11 @@ using srj.Infrastructure.DbContext;
 
 namespace srj.Infrastructure.Repositories;
 
-public class JewelryCategoryRepository : IJewelryCategoryRepository
+public class ItemCategoryRepository : IItemCategoryRepository
 {
     private readonly JewelryDbContext _repo;
 
-    public JewelryCategoryRepository(JewelryDbContext repo)
+    public ItemCategoryRepository(JewelryDbContext repo)
     {
         _repo = repo;
     }
@@ -45,16 +45,24 @@ public class JewelryCategoryRepository : IJewelryCategoryRepository
     public async Task<ItemCategory> CreateAsync(ItemCategory item)
     {
         if (string.IsNullOrWhiteSpace(item.Name))
-            throw new ArgumentException("Item category name cannot be empty.", nameof(item.Name));
+            throw new ArgumentException(
+                "Item category name cannot be empty.",
+                nameof(item.Name));
 
-        var exists = await _repo.ItemCategories
-            .AnyAsync(x =>
-                x.Name.ToLower() == item.Name.ToLower() &&
-                x.Metal == item.Metal);
+        var normalizedName = NormalizeCategoryName(item.Name);
+
+        var prefix = item.Metal == Metal.Gold ? "G-" : "S-";
+
+        var fullName = prefix + normalizedName;
+
+        var exists = await _repo.ItemCategories.AnyAsync(x =>
+            x.Name.ToLower() == fullName.ToLower());
 
         if (exists)
             throw new InvalidOperationException(
                 "Category already exists for this metal.");
+
+        item.Name = fullName;
 
         _repo.ItemCategories.Add(item);
 
@@ -66,13 +74,18 @@ public class JewelryCategoryRepository : IJewelryCategoryRepository
     public async Task UpdateAsync(ItemCategory item)
     {
         if (string.IsNullOrWhiteSpace(item.Name))
-            throw new ArgumentException("Item category name cannot be empty.", nameof(item.Name));
+            throw new ArgumentException(
+                "Item category name cannot be empty.",
+                nameof(item.Name));
 
         var existingItem = await _repo.ItemCategories.FindAsync(item.Id);
 
-        if (existingItem == null) throw new KeyNotFoundException($"Item category with ID {item.Id} was not found.");
+        if (existingItem == null)
+            throw new KeyNotFoundException(
+                $"Item category with ID {item.Id} was not found.");
 
-        existingItem.Name = item.Name;
+        var prefix = existingItem.Metal == Metal.Gold ? "G-" : "S-";
+        existingItem.Name = prefix + NormalizeCategoryName(item.Name);
 
         await _repo.SaveChangesAsync();
     }
@@ -85,5 +98,18 @@ public class JewelryCategoryRepository : IJewelryCategoryRepository
 
         _repo.ItemCategories.Remove(item);
         await _repo.SaveChangesAsync();
+    }
+
+    private static string NormalizeCategoryName(string name)
+    {
+        name = name.Trim();
+
+        if (name.StartsWith("G-", StringComparison.OrdinalIgnoreCase) ||
+            name.StartsWith("S-", StringComparison.OrdinalIgnoreCase))
+        {
+            name = name[2..].TrimStart();
+        }
+
+        return name;
     }
 }

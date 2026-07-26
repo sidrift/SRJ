@@ -139,11 +139,6 @@ public class SilverJewelryItemController : ControllerBase
             Purity = item.PurityInPercentage,
             SilverMakingChargePerGram = item.SilverMakingChargePerGram ?? 0,
 
-            HasStones = item.HasStones,
-            StoneWeight = item.StoneWeight,
-            StoneType = item.StoneType,
-            StonePrice = item.StonePrice,
-
             BarcodeImageUrl = item.BarcodeImageUrl
         };
     }

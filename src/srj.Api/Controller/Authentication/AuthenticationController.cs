@@ -23,9 +23,26 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> Register(
         RegisterRequest request)
     {
-        await _service.RegisterAsync(request);
+        try
+        {
+            await _service.RegisterAsync(request);
 
-        return Ok();
+            return Ok();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                message = "Something went wrong. Please try again."
+            });
+        }
     }
 
     [AllowAnonymous]
@@ -33,6 +50,32 @@ public class AuthenticationController : ControllerBase
     public async Task<ActionResult<LoginResponse>> Login(
         LoginRequest request)
     {
-        return Ok(await _service.LoginAsync(request));
+        try
+        {
+            var response = await _service.LoginAsync(request);
+
+            return Ok(response);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new
+            {
+                message = ex.Message
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new
+            {
+                message = "Something went wrong. Please try again."
+            });
+        }
     }
 }

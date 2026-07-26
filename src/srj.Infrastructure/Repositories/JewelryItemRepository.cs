@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using srj.Application.Dtos.Commons;
+using srj.Application.Dtos.Request.Jewelery;
+using srj.Application.Dtos.Response.Silver;
 using srj.Application.Interface.Repository;
 using srj.Domain.Enums;
 using srj.Domain.Models;
@@ -72,4 +75,118 @@ public class JewelryItemRepository : IJewelryItemRepository
         return await _context.JewelryItems
             .AnyAsync(x => x.CategoryId == categoryId);
     }
+
+   public async Task<PagedResponse<JewelryListResponse>> SearchAsync(JewelrySearchRequest request)
+{
+    var query = _context.JewelryItems
+        .AsNoTracking()
+        .Include(x => x.Category)
+        .AsQueryable();
+
+    // SKU
+    if (!string.IsNullOrWhiteSpace(request.Sku))
+    {
+        query = query.Where(x =>
+            x.Sku.ToLower().Contains(request.Sku.ToLower()));
+    }
+
+    // Category
+    if (request.CategoryId.HasValue)
+    {
+        query = query.Where(x =>
+            x.CategoryId == request.CategoryId.Value);
+    }
+
+    // Metal
+    if (request.Metal.HasValue)
+    {
+        query = query.Where(x =>
+            x.Category.Metal == request.Metal.Value);
+    }
+
+    // Has Stones
+    if (request.HasStones.HasValue)
+    {
+        query = query.Where(x =>
+            x.HasStones == request.HasStones.Value);
+    }
+
+    // Purity
+    if (request.Purity.HasValue)
+    {
+        switch (request.PurityComparison)
+        {
+            case ComparisonType.GreaterThan:
+                query = query.Where(x =>
+                    x.PurityInPercentage > request.Purity.Value);
+                break;
+
+            case ComparisonType.LessThan:
+                query = query.Where(x =>
+                    x.PurityInPercentage < request.Purity.Value);
+                break;
+
+            default:
+                query = query.Where(x =>
+                    x.PurityInPercentage == request.Purity.Value);
+                break;
+        }
+    }
+
+    // Weight
+    if (request.Weight.HasValue)
+    {
+        switch (request.WeightComparison)
+        {
+            case ComparisonType.GreaterThan:
+                query = query.Where(x =>
+                    x.WeightInGrams > request.Weight.Value);
+                break;
+
+            case ComparisonType.LessThan:
+                query = query.Where(x =>
+                    x.WeightInGrams < request.Weight.Value);
+                break;
+
+            default:
+                query = query.Where(x =>
+                    x.WeightInGrams == request.Weight.Value);
+                break;
+        }
+    }
+
+    var totalRecords = await query.CountAsync();
+
+    var items = await query
+        .OrderByDescending(x => x.CreatedAt)
+        .Skip((request.PageNumber - 1) * request.PageSize)
+        .Take(request.PageSize)
+        .Select(x => new JewelryListResponse
+        {
+            Id = x.Id,
+            Sku = x.Sku,
+            CategoryId = x.CategoryId,
+            CategoryName = x.Category.Name,
+            Metal = x.Category.Metal,
+            WeightInGrams = x.WeightInGrams,
+            Purity = x.PurityInPercentage,
+            HasStones = x.HasStones,
+            StoneWeight = x.StoneWeight,
+            StonePrice = x.StonePrice,
+            HallMarkCharge = x.HallMarkCharge,
+            MakingChargeType = x.MakingChargeType,
+            MakingChargePercentage = x.MakingChargePercentage,
+            MakingChargeWeight = x.MakingChargeWeight,
+            CreatedAt = x.CreatedAt
+        })
+        .ToListAsync();
+
+    return new PagedResponse<JewelryListResponse>
+    {
+        Items = items,
+        PageNumber = request.PageNumber,
+        PageSize = request.PageSize,
+        TotalCount = totalRecords
+    };
+}
 }

@@ -11,7 +11,7 @@ public class SilverJewelryItemService : JewelryServiceBase, ISilverJewelryItemSe
 {
     public SilverJewelryItemService(
         IJewelryItemRepository repository,
-        IJewelryCategoryRepository categoryRepository,
+        IItemCategoryRepository categoryRepository,
         ISkuGenerator skuGenerator,
         IBarcodeService barcodeService,
         IFileStorageService fileStorage)

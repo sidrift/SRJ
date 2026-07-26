@@ -13,6 +13,7 @@ public class AuthenticationService : IAuthenticationService
         _httpClient = httpClient;
     }
 
+
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         var response =
@@ -20,10 +21,22 @@ public class AuthenticationService : IAuthenticationService
                 "auth/login",
                 request);
 
-        response.EnsureSuccessStatusCode();
 
-        return (await response.Content.ReadFromJsonAsync<LoginResponse>())!;
+        if (!response.IsSuccessStatusCode)
+        {
+            var apiError =
+                await response.Content.ReadFromJsonAsync<ApiError>();
+
+            throw new Exception(
+                apiError?.Message ?? "Login failed.");
+        }
+
+
+        return (await response.Content
+            .ReadFromJsonAsync<LoginResponse>())!;
     }
+
+
 
     public async Task RegisterAsync(RegisterRequest request)
     {
@@ -32,6 +45,22 @@ public class AuthenticationService : IAuthenticationService
                 "auth/register",
                 request);
 
-        response.EnsureSuccessStatusCode();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var apiError =
+                await response.Content.ReadFromJsonAsync<ApiError>();
+
+            throw new Exception(
+                apiError?.Message ?? "Registration failed.");
+        }
+
+    }
+
+
+
+    private class ApiError
+    {
+        public string? Message { get; set; }
     }
 }

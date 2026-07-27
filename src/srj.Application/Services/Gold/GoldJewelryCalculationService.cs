@@ -95,7 +95,13 @@ public class GoldJewelryCalculationService : IGoldJewelryCalculationService
 
             HallmarkAmount = hallmarkAmount,
 
-            TotalAmount = totalAmount
+            TotalAmount = totalAmount,
+
+            TodaysGoldPricePure = goldPrice.SellPrice24KImp,
+            PurityInPercentage =  item.PurityInPercentage,
+            StoneType =  item.StoneType,
+            MakingChargePercentage  =  item.MakingChargePercentage,
+            HasStones =  item.HasStones
         };
     }
 

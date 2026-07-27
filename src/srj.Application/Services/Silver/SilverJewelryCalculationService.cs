@@ -64,7 +64,9 @@ public class SilverJewelryCalculationService : ISilverJewelryCalculationService
 
             FinalRatePerGram = finalRatePerGram,
 
-            TotalAmount = totalAmount
+            TotalAmount = totalAmount,
+
+            PurityInPercentage =  item.PurityInPercentage
         };
     }
 }

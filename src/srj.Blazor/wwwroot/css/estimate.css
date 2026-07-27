@@ -1,249 +1,397 @@
+/* ========================================
+   THEME VARIABLES
+======================================== */
+.estimate-container.gold-theme {
+	--primary: #d4af37;
+	--primary-dark: #9c7b16;
+	--primary-light: #fff8dc;
+	--primary-bg: #fffdf4;
+	--primary-border: #eed77d;
+	--accent: #4b3600;
+	--success: #198754;
+	--danger: #dc3545;
+}
+
+.estimate-container.silver-theme {
+	--primary: #adb5bd;
+	--primary-dark: #6c757d;
+	--primary-light: #f3f5f7;
+	--primary-bg: #fafbfc;
+	--primary-border: #d9dee4;
+	--accent: #374151;
+	--success: #198754;
+	--danger: #dc3545;
+}
+
+.stone-type {
+	margin-left: 6px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #6c757d;
+
+}
+
+.making-charge-type {
+	margin-left: 6px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #6c757d;
+}
+/* ========================================
+   PAGE
+======================================== */
+
 .estimate-container {
-
-	padding:24px;
-	max-width:1200px;
-	margin:auto;
-
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 32px 20px;
 }
 
-
-
-.estimate-header {
-
-	display:flex;
-	justify-content:space-between;
-	align-items:center;
-
-	margin-bottom:25px;
-
-}
-
-
-
-.estimate-header h2 {
-
-	margin:0;
-
-	font-weight:700;
-
-	color:#333;
-
-}
-
-
-.estimate-header p {
-
-	margin:5px 0 0;
-
-	color:#777;
-
-}
-
-
-
-.metal-badge {
-
-	padding:10px 25px;
-
-	border-radius:30px;
-
-	font-weight:700;
-
-}
-
-
-
-.metal-badge.gold {
-
-	background:#fff3cd;
-
-	color:#9c7200;
-
-}
-
-
-
-.metal-badge.silver {
-
-	background:#e9ecef;
-
-	color:#495057;
-
-}
-
-
-
-.estimate-grid {
-
-
-	display:grid;
-
-	grid-template-columns:1fr 1fr;
-
-	gap:24px;
-
-
-}
-
-
-
-.estimate-card {
-
-
-	background:white;
-
-	border-radius:18px;
-
-	padding:25px;
-
-	box-shadow:
-			0 8px 25px rgba(0,0,0,.08);
-
-
-}
-
-
-
-.estimate-card h5 {
-
-
-	display:flex;
-
-	align-items:center;
-
-	gap:10px;
-
-
-	color:#b8860b;
-
-	font-weight:700;
-
-
-	margin-bottom:20px;
-
-
-}
-
-
-
-.detail-row,
-.price-row {
-
-
-	display:flex;
-
-	justify-content:space-between;
-
-	padding:14px 0;
-
-	border-bottom:1px solid #eee;
-
-
-}
-
-
-
-.detail-row span,
-.price-row span {
-
-	color:#666;
-
-}
-
-
-
-.detail-row strong,
-.price-row strong {
-
-	font-weight:700;
-
-}
-
-
-
-.total {
-
-
-	display:flex;
-
-	justify-content:space-between;
-
-	font-size:22px;
-
-	margin-top:20px;
-
-	color:#b8860b;
-
-
-}
-
-
+/* ========================================
+   LOADING
+======================================== */
 
 .loading {
-
-	text-align:center;
-
-	padding:80px;
-
+	padding: 80px 20px;
+	text-align: center;
 }
 
+.loading p {
+	margin-top: 16px;
+	color: #666;
+}
 
+/* ========================================
+   HEADER
+======================================== */
 
-@media(max-width:768px)
-{
+.estimate-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	margin-bottom: 28px;
+}
 
+.estimate-header h2 {
+	margin: 0;
+	font-size: 2rem;
+	font-weight: 700;
+	color: #222;
+}
+
+.estimate-header h2 i {
+	color: var(--primary);
+	margin-right: 8px;
+}
+
+.estimate-header p {
+	margin: 8px 0 0;
+	color: #6c757d;
+	font-size: .95rem;
+	word-break: break-word;
+}
+
+/* ========================================
+   METAL BADGE
+======================================== */
+
+.metal-badge {
+	padding: 10px 24px;
+	border-radius: 999px;
+	font-weight: 700;
+	letter-spacing: .5px;
+	color: var(--accent);
+	background: linear-gradient(
+			135deg,
+			var(--primary-light),
+			var(--primary)
+	);
+	border: 1px solid var(--primary-border);
+	box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+/* ========================================
+   CARD
+======================================== */
+
+.estimate-card {
+	background: white;
+	border-radius: 18px;
+	padding: 30px;
+	border: 1px solid var(--primary-border);
+	box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.estimate-card h4 {
+	margin: 0 0 26px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: var(--accent);
+}
+
+.estimate-card h4::before {
+	content: "";
+	width: 5px;
+	height: 24px;
+	border-radius: 10px;
+	background: linear-gradient(
+			var(--primary),
+			var(--primary-dark)
+	);
+}
+
+/* ========================================
+   ROWS
+======================================== */
+
+.price-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 18px;
+	padding: 15px 0;
+	border-bottom: 1px solid #ececec;
+}
+
+.price-row:last-child {
+	border-bottom: none;
+}
+
+.price-row span {
+	color: #555;
+	font-weight: 500;
+}
+
+.price-row strong {
+	font-weight: 700;
+	color: #222;
+	text-align: right;
+}
+
+/* ========================================
+   ADD / LESS
+======================================== */
+
+.addition span,
+.addition strong {
+	color: var(--success);
+}
+
+.deduction span,
+.deduction strong {
+	color: var(--danger);
+}
+
+/* ========================================
+   HIGHLIGHT
+======================================== */
+
+.highlight {
+	margin: 16px -8px;
+	padding: 18px 20px;
+	border-radius: 14px;
+	background: var(--primary-bg);
+	border: 1px solid var(--primary-border);
+}
+
+.highlight span,
+.highlight strong {
+	display: block;
+	line-height: 1.5;
+	color: var(--accent);
+	font-weight: 700;
+}
+
+.highlight strong {
+	font-size: 1.15rem;
+	margin-top: 4px;
+}
+/* ========================================
+   RATE DISPLAY
+======================================== */
+.rate-value {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.rate-multiply,
+.rate-equals {
+	color: #666;
+	font-weight: 600;
+}
+
+.purity-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: var(--primary-light);
+	color: var(--accent);
+	border: 1px solid var(--primary-border);
+	font-size: .9rem;
+	font-weight: 700;
+}
+
+/* ========================================
+   FORMULA
+======================================== */
+
+.formula {
+	margin: 22px 0;
+	padding: 18px;
+	text-align: center;
+	font-weight: 700;
+	font-size: 1.05rem;
+	color: var(--accent);
+	background: var(--primary-bg);
+	border: 2px dashed var(--primary-border);
+	border-radius: 12px;
+}
+
+/* ========================================
+   GRAND TOTAL
+======================================== */
+
+.grand-total {
+	margin-top: 28px;
+	padding: 22px;
+	border-radius: 14px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	background: linear-gradient(
+			135deg,
+			var(--primary),
+			var(--primary-light)
+	);
+}
+
+.grand-total span {
+	font-size: 1.15rem;
+	font-weight: 700;
+	color: var(--accent);
+}
+
+.grand-total strong {
+	font-size: 2rem;
+	font-weight: 800;
+	color: var(--accent);
+}
+
+/* ========================================
+   DIVIDER
+======================================== */
+
+hr {
+	border: 0;
+	border-top: 1px solid #e5e5e5;
+	margin: 24px 0;
+}
+
+/* ========================================
+   ALERT
+======================================== */
+
+.alert {
+	border-radius: 12px;
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width:768px) {
 
 	.estimate-container {
-
-		padding:14px;
-
+		padding: 16px;
 	}
-
-
 
 	.estimate-header {
-
-		flex-direction:column;
-
-		align-items:flex-start;
-
-		gap:15px;
-
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 14px;
 	}
 
-
-
-	.estimate-grid {
-
-		grid-template-columns:1fr;
-
+	.estimate-header h2 {
+		font-size: 1.55rem;
 	}
 
-
+	.metal-badge {
+		align-self: flex-start;
+	}
 
 	.estimate-card {
-
-		padding:18px;
-
+		padding: 20px;
 	}
 
-
-
-	.detail-row,
 	.price-row {
+		padding: 13px 0;
+		font-size: .95rem;
+	}
 
-
-		font-size:.95rem;
-
+	.highlight {
+		margin: 16px 0;
+		padding: 16px 18px;
 	}
 
 
-
-	.total {
-
-		font-size:18px;
-
+	.formula {
+		font-size: .95rem;
+		word-break: break-word;
 	}
 
+	.grand-total {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
 
+	.grand-total strong {
+		font-size: 1.6rem;
+	}
+}
+
+/* ========================================
+   SMALL PHONES
+======================================== */
+
+@media (max-width:420px) {
+
+	.estimate-container {
+		padding: 12px;
+	}
+
+	.estimate-card {
+		padding: 16px;
+	}
+
+	.estimate-header h2 {
+		font-size: 1.35rem;
+	}
+
+	.price-row {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+	}
+
+	.price-row strong {
+		width: 100%;
+		text-align: left;
+	}
+
+	.formula {
+		font-size: .9rem;
+	}
+
+	.grand-total strong {
+		font-size: 1.45rem;
+	}
 }

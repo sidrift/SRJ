@@ -8,6 +8,9 @@
     ".NETCoreApp,Version=v9.0": {
       "srj.Blazor/1.0.0": {
         "dependencies": {
+          "ZXing": "2.1.1",
+          "ZXing.Net": "0.16.11",
+          "ZXing.Net.Mobile": "2.4.1",
           "srj.Application": "1.0.0"
         },
         "runtime": {
@@ -119,6 +122,31 @@
         }
       },
       "System.Text.Json/8.0.5": {},
+      "ZXing/2.1.1": {
+        "runtime": {
+          "lib/net20/zxing.dll": {
+            "assemblyVersion": "1.0.4727.18517",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "ZXing.Net/0.16.11": {},
+      "ZXing.Net.Mobile/2.4.1": {
+        "runtime": {
+          "lib/netstandard1.0/ZXing.Net.Mobile.Core.dll": {
+            "assemblyVersion": "2.4.1.0",
+            "fileVersion": "0.0.0.0"
+          },
+          "lib/netstandard1.0/ZXingNetMobile.dll": {
+            "assemblyVersion": "2.4.1.0",
+            "fileVersion": "0.0.0.0"
+          },
+          "lib/netstandard1.0/zxing.portable.dll": {
+            "assemblyVersion": "0.16.2.0",
+            "fileVersion": "0.16.2.0"
+          }
+        }
+      },
       "srj.Application/1.0.0": {
         "dependencies": {
           "BarcodeLib": "3.1.5",
@@ -196,6 +224,27 @@
       "sha512": "sha512-0f1B50Ss7rqxXiaBJyzUu9bWFOO2/zSlifZ/UNMdiIpDYe4cY4LQQicP4nirK1OS31I43rn062UIJ1Q9bpmHpg==",
       "path": "system.text.json/8.0.5",
       "hashPath": "system.text.json.8.0.5.nupkg.sha512"
+    },
+    "ZXing/2.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/FvWeSR8A5tVX+Lqxr3edWFEmibdU0v00z8tu4cG5DhSZe0VF8/GWX9JHAkbUpxi+A2cQhyaTIMmTYFYyUiGSg==",
+      "path": "zxing/2.1.1",
+      "hashPath": "zxing.2.1.1.nupkg.sha512"
+    },
+    "ZXing.Net/0.16.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OZfAVu88hl87BffQ+rlWCj/vLvAhhCK4QnFaoveeF/MY8SjHNSYBQ3qyUEWlPKNgBQGh1syXhCDg10vUnCsqkg==",
+      "path": "zxing.net/0.16.11",
+      "hashPath": "zxing.net.0.16.11.nupkg.sha512"
+    },
+    "ZXing.Net.Mobile/2.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iCL2WcqOyUnC1iFFdzXijk0EXfoLMDqW88MyhoTZigSyhJZM2C5hKgSZVyfx9E35tgkde/IZwHkk8cVDnbQlYg==",
+      "path": "zxing.net.mobile/2.4.1",
+      "hashPath": "zxing.net.mobile.2.4.1.nupkg.sha512"
     },
     "srj.Application/1.0.0": {
       "type": "project",

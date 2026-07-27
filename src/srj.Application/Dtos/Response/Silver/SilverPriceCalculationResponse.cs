@@ -13,4 +13,6 @@ public class SilverPriceCalculationResponse
     public decimal FinalRatePerGram { get; set; }
 
     public decimal TotalAmount { get; set; }
+
+    public decimal PurityInPercentage { get; set; }
 }

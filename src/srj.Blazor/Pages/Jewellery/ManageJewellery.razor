@@ -2,6 +2,7 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
 @using srj.Application.Dtos.Request.Gold
 @using srj.Application.Dtos.Request.Silver
 @using srj.Application.Dtos.Response.Gold
@@ -10,7 +11,7 @@
 @using srj.Domain.Enums
 @inject HttpClient Http
 @inject NavigationManager Navigation
-
+@inject IJSRuntime JS
 <PageTitle>Manage Jewellery</PageTitle>
 
 <HeadContent>
@@ -88,13 +89,41 @@
 
 			</button>
 
+			<button type="button"
+			        class="scan-btn"
+			        @onclick="StartScanner">
+
+				<i class="bi bi-camera-fill me-2"></i>
+
+				Scan
+
+			</button>
 
 		</div>
 
 
+
 	</div>
 
+	@if (_showScanner)
+	{
+		<div class="scanner-panel mt-3">
 
+			<video id="barcode-video"
+			       autoplay
+			       playsinline></video>
+
+			<button class="cancel-btn mt-3"
+			        @onclick="StopScanner">
+
+				<i class="bi bi-x-circle me-2"></i>
+
+				Close Scanner
+
+			</button>
+
+		</div>
+	}
 
 	@if (!string.IsNullOrWhiteSpace(_error))
 	{
@@ -375,6 +404,72 @@
 
 
 					</div>
+
+					<!-- Stone Details -->
+
+					<div class="rate-section">
+
+						<h5>
+							<i class="bi bi-diamond-fill"></i>
+							Stone Details
+						</h5>
+
+						<div class="stone-toggle">
+
+							<label class="switch">
+
+								<InputCheckbox @bind-Value="_goldItem!.HasStones"
+								               disabled="@(!_isEditing)" />
+
+								<span class="slider"></span>
+
+							</label>
+
+							<span class="stone-label">
+								Has Stones
+							</span>
+
+						</div>
+
+						@if (_goldItem.HasStones)
+						{
+							<div class="rate-grid mt-3">
+
+								<div class="rate-field">
+
+									<label>Stone Type</label>
+
+									<InputText class="form-control"
+									           @bind-Value="_goldItem.StoneType"
+									           disabled="@(!_isEditing)" />
+
+								</div>
+
+								<div class="rate-field">
+
+									<label>Stone Weight (grams)</label>
+
+									<InputNumber class="form-control"
+									             @bind-Value="_goldItem.StoneWeight"
+									             disabled="@(!_isEditing)" />
+
+								</div>
+
+								<div class="rate-field">
+
+									<label>Stone Price (₹)</label>
+
+									<InputNumber class="form-control"
+									             @bind-Value="_goldItem.StonePrice"
+									             disabled="@(!_isEditing)" />
+
+								</div>
+
+							</div>
+						}
+
+					</div>
+
 				</div>
 
 			} else if (IsSilver) {
@@ -558,15 +653,17 @@
 
 				<div class="left-actions">
 
-					<button type="button"
-					        class="estimate-btn"
-					        @onclick="GenerateEstimate">
+					@if (!_isEditing)
+					{
+						<button type="button"
+						        class="estimate-btn"
+						        @onclick="GenerateEstimate">
 
-						<i class="bi bi-receipt-cutoff me-2"></i>
+							<i class="bi bi-receipt-cutoff me-2"></i>
+							Generate Estimate
 
-						Generate Estimate
-
-					</button>
+						</button>
+					}
 
 				</div>
 
@@ -799,7 +896,7 @@
 
 
 	private string? _error;
-
+	private bool _showScanner;
 
 
 	private bool IsGold =>
@@ -959,6 +1056,8 @@
 			await UpdateGold();
 		else
 			await UpdateSilver();
+
+		CreateEditContext();
 	}
 
 
@@ -1292,10 +1391,7 @@
 	private void CreateEditContext()
 	{
 		if (_editContext != null)
-		{
 			_editContext.OnFieldChanged -= OnFieldChanged;
-		}
-
 
 		if (IsGold && _goldItem != null)
 		{
@@ -1423,8 +1519,28 @@
 			_originalGoldItem.HallMarkCharge;
 	}
 
+	private DotNetObjectReference<ManageJewellery>? _objRef;
 
+	protected override void OnInitialized()
+	{
+		_objRef = DotNetObjectReference.Create(this);
+	}
 
+	private async Task StartScanner()
+	{
+		_showScanner = true;
+
+		await InvokeAsync(StateHasChanged);
+
+		await JS.InvokeVoidAsync("barcodeScanner.start", _objRef);
+	}
+
+	private async Task StopScanner()
+	{
+		await JS.InvokeVoidAsync("barcodeScanner.stop");
+
+		_showScanner = false;
+	}
 
 	private bool HasSilverChanges()
 	{
@@ -1664,10 +1780,17 @@
 	}
 
 
+	[JSInvokable]
+	public async Task BarcodeScanned(string sku)
+	{
+		_sku = sku;
 
+		await StopScanner();
 
+		await LoadItem();
 
-
+		await InvokeAsync(StateHasChanged);
+	}
 
 
 	private static SilverJewelryDetailsResponse Clone(

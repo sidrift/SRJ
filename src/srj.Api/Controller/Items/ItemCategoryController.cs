@@ -17,6 +17,7 @@ public class ItemCategoryController : ControllerBase
     {
         _service = service;
     }
+
     [HttpGet]
     public async Task<ActionResult<List<ItemCategoryResponse>>> GetAll(
         [FromQuery] Metal? metal,

@@ -14,6 +14,8 @@ public class GoldPriceCalculationResponse
 
     public decimal MakingChargeWeight { get; set; }
 
+    public decimal? MakingChargePercentage { get; set; }
+
     public decimal TotalChargeableGoldWeight { get; set; }
 
     public decimal GoldAmount { get; set; }
@@ -23,4 +25,12 @@ public class GoldPriceCalculationResponse
     public decimal HallmarkAmount { get; set; }
 
     public decimal TotalAmount { get; set; }
+
+    public decimal PurityInPercentage { get; set; }
+
+    public decimal TodaysGoldPricePure { get; set; }
+
+    public string? StoneType { get; set; }
+
+    public bool HasStones { get; set; }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2rtrj4YMJXE=",
+  "dgSpecHash": "qnAEYafcch8=",
   "success": true,
   "projectFilePath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/srj.Blazor.csproj",
   "expectedPackageFiles": [
@@ -10,7 +10,23 @@
     "/Users/sid/.nuget/packages/skiasharp.nativeassets.macos/4.150.1/skiasharp.nativeassets.macos.4.150.1.nupkg.sha512",
     "/Users/sid/.nuget/packages/skiasharp.nativeassets.win32/4.150.1/skiasharp.nativeassets.win32.4.150.1.nupkg.sha512",
     "/Users/sid/.nuget/packages/system.resources.extensions/8.0.0/system.resources.extensions.8.0.0.nupkg.sha512",
-    "/Users/sid/.nuget/packages/system.text.json/8.0.5/system.text.json.8.0.5.nupkg.sha512"
+    "/Users/sid/.nuget/packages/system.text.json/8.0.5/system.text.json.8.0.5.nupkg.sha512",
+    "/Users/sid/.nuget/packages/zxing/2.1.1/zxing.2.1.1.nupkg.sha512",
+    "/Users/sid/.nuget/packages/zxing.net/0.16.11/zxing.net.0.16.11.nupkg.sha512",
+    "/Users/sid/.nuget/packages/zxing.net.mobile/2.4.1/zxing.net.mobile.2.4.1.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'ZXing 2.1.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0'. This package may not be fully compatible with your project.",
+      "projectPath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/srj.Blazor.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/srj.Blazor.csproj",
+      "libraryId": "ZXing",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

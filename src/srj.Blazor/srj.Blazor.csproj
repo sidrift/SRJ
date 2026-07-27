@@ -22,4 +22,10 @@
         <Folder Include="Models\"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ZXing" Version="2.1.1" />
+      <PackageReference Include="ZXing.Net" Version="0.16.11" />
+      <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+    </ItemGroup>
+
 </Project>

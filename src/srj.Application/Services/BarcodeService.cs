@@ -1,7 +1,8 @@
-using BarcodeStandard;
+using System.Runtime.InteropServices;
 using SkiaSharp;
 using srj.Application.Interface.Services;
-using Type = BarcodeStandard.Type;
+using ZXing;
+using ZXing.Common;
 
 namespace srj.Application.Services;
 
@@ -18,21 +19,50 @@ public class BarcodeService : IBarcodeService
         string sku,
         decimal weightInGrams)
     {
-        var barcode = new Barcode();
+        // -----------------------------
+        // Data Matrix
+        // -----------------------------
+        const int matrixSize = 120;
 
-        using var barcodeImage = barcode.Encode(
-            Type.Code128,
-            sku,
-            SKColors.Black,
-            SKColors.White,
-            400,
-            100);
+        var writer = new BarcodeWriterPixelData
+        {
+            Format = BarcodeFormat.DATA_MATRIX,
+            Options = new EncodingOptions
+            {
+                Width = matrixSize,
+                Height = matrixSize,
+                Margin = 1,
+                PureBarcode = true
+            }
+        };
 
+        var pixelData = writer.Write(sku);
 
-        const int width = 420;
-        const int height = 180;
+        using var matrixBitmap = new SKBitmap(
+            new SKImageInfo(
+                pixelData.Width,
+                pixelData.Height,
+                SKColorType.Bgra8888,
+                SKAlphaType.Premul));
 
+        Marshal.Copy(
+            pixelData.Pixels,
+            0,
+            matrixBitmap.GetPixels(),
+            pixelData.Pixels.Length);
 
+        // -----------------------------
+        // Label dimensions
+        // -----------------------------
+        const int width = 260;
+        const int height = 120;
+
+        // Displayed Data Matrix size
+        const int matrixDrawSize = 80;
+
+        // -----------------------------
+        // Create canvas
+        // -----------------------------
         using var surface = SKSurface.Create(
             new SKImageInfo(width, height));
 
@@ -40,38 +70,68 @@ public class BarcodeService : IBarcodeService
 
         canvas.Clear(SKColors.White);
 
+        // -----------------------------
+        // Paint
+        // -----------------------------
         using var paint = new SKPaint
         {
             Color = SKColors.Black,
             IsAntialias = true
         };
 
+        // -----------------------------
+        // Font
+        // -----------------------------
         using var font = new SKFont
         {
-            Size = 18
+            Size = 12
         };
 
+        // -----------------------------
+        // WEIGHT - TOP
+        // -----------------------------
         canvas.DrawText(
             $"Weight: {weightInGrams:F2} g",
             width / 2f,
-            22,
+            13f,
             SKTextAlign.Center,
             font,
             paint);
 
-        canvas.DrawImage(
-            barcodeImage,
-            10,
-            35);
+        // -----------------------------
+        // DATA MATRIX - MIDDLE
+        // -----------------------------
+        const float matrixY = 16f;
+
+        var matrixX = (width - matrixDrawSize) / 2f;
+
+        canvas.DrawBitmap(
+            matrixBitmap,
+            SKRect.Create(
+                matrixX,
+                matrixY,
+                matrixDrawSize,
+                matrixDrawSize),
+            paint);
+
+        // -----------------------------
+        // SKU - BOTTOM
+        // -----------------------------
+        const float skuGap = 5f;
+
+        var skuY = matrixY + matrixDrawSize + skuGap + 10f;
 
         canvas.DrawText(
             sku,
             width / 2f,
-            165,
+            skuY,
             SKTextAlign.Center,
             font,
             paint);
 
+        // -----------------------------
+        // Generate PNG
+        // -----------------------------
         using var image = surface.Snapshot();
 
         using var data = image.Encode(

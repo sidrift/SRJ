@@ -167,6 +167,10 @@
             "SkiaSharp": {
               "target": "Package",
               "version": "[4.150.1, )"
+            },
+            "ZXing.Net": {
+              "target": "Package",
+              "version": "[0.16.11, )"
             }
           },
           "imports": [

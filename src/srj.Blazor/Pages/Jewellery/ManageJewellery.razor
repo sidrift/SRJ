@@ -107,19 +107,17 @@
 
 	@if (_showScanner)
 	{
-		<div class="scanner-panel mt-3">
+		<div class="scanner-container">
 
 			<video id="barcode-video"
 			       autoplay
-			       playsinline></video>
+			       playsinline
+			       muted>
+			</video>
 
-			<button class="cancel-btn mt-3"
+			<button class="cancel-btn"
 			        @onclick="StopScanner">
-
-				<i class="bi bi-x-circle me-2"></i>
-
-				Close Scanner
-
+				Close Camera
 			</button>
 
 		</div>
@@ -1529,16 +1527,57 @@
 	private async Task StartScanner()
 	{
 		_showScanner = true;
+		_error = null;
+		StateHasChanged();
+
+		await Task.Delay(100);
+
+		_objRef ??= DotNetObjectReference.Create(this);
+
+		try
+		{
+			await JS.InvokeVoidAsync("startBarcodeScanner", _objRef);
+		}
+		catch (JSException ex)
+		{
+			_error = $"Unable to start camera: {ex.Message}";
+			_showScanner = false;
+			StateHasChanged();
+		}
+	}
+
+	[JSInvokable]
+	public async Task OnScannerError(string message)
+	{
+		_error = message;
+		_showScanner = false;
+		await InvokeAsync(StateHasChanged);
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		await JS.InvokeVoidAsync("stopBarcodeScanner");
+
+		_objRef?.Dispose();
+
+	}
+	[JSInvokable]
+	public async Task BarcodeDetected(string barcode)
+	{
+		_sku = barcode;
 
 		await InvokeAsync(StateHasChanged);
 
-		await JS.InvokeVoidAsync("barcodeScanner.start", _objRef);
+		await LoadItem();
+
+		await StopScanner();
+		await InvokeAsync(StateHasChanged);
 	}
+
 
 	private async Task StopScanner()
 	{
-		await JS.InvokeVoidAsync("barcodeScanner.stop");
-
+		await JS.InvokeVoidAsync("stopBarcodeScanner");
 		_showScanner = false;
 	}
 

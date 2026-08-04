@@ -1361,9 +1361,31 @@
 
 
 .scan-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 	white-space: nowrap;
+	height: 46px;
+	padding: 0 22px;
+	border: none;
+	border-radius: 10px;
+	font-weight: 600;
+	color: white;
+	background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+	box-shadow: 0 6px 16px rgba(0,0,0,.15);
+	transition: .2s ease;
+	cursor: pointer;
 }
 
+.scan-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 22px rgba(0,0,0,.22);
+}
+
+.scan-btn:active {
+	transform: translateY(0);
+}
 .scanner-panel {
 	margin-top: 1rem;
 	border: 2px dashed #d4af37;
@@ -1380,4 +1402,36 @@
 	background: #000;
 	min-height: 280px;
 	object-fit: cover;
+}
+
+.scanner-container {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+
+	padding: 24px;
+	background: rgba(0, 0, 0, .75);
+	backdrop-filter: blur(4px);
+}
+
+#barcode-video {
+	width: 100%;
+	max-width: 480px;
+	aspect-ratio: 4 / 3;
+	border-radius: 16px;
+	border: 3px solid var(--primary);
+	background: #000;
+	object-fit: cover;
+	box-shadow: 0 12px 40px rgba(0,0,0,.5);
+}
+
+.scanner-container .cancel-btn {
+	width: 100%;
+	max-width: 220px;
 }

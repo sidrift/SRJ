@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@zxing/library@0.21.3",
+      "destination": "wwwroot/lib/zxing/",
+      "files": [ "umd/index.min.js" ]
+    }
+  ]
+}

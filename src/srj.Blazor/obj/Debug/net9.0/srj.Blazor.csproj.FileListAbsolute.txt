@@ -237,6 +237,9 @@
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/bin/Debug/net9.0/ZXing.Net.Mobile.Core.dll
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/bin/Debug/net9.0/ZXingNetMobile.dll
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/bin/Debug/net9.0/zxing.portable.dll
-/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/jx0oayjrbq-h9avujplvx.gz
 /Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/ycp5sefnb0-40gy0hg2tq.gz
-/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/7lgke4854i-jahd7q256m.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/jx0oayjrbq-zm9ofxgt8d.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/bin/Debug/net9.0/libman.json
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/5fgdsy7o5t-zhxhl1z4uu.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/7lgke4854i-rar0wcc6nn.gz
+/Users/sid/RiderProjects/TheSRJProject/src/srj.Blazor/obj/Debug/net9.0/compressed/0e3vo7wyn3-j6418sjpqw.gz

@@ -1,6 +1,4 @@
-/* ========================================
-   THEME VARIABLES
-======================================== */
+/* ======================================== THEME VARIABLES ======================================== */
 .estimate-container.gold-theme {
 	--primary: #d4af37;
 	--primary-dark: #9c7b16;
@@ -28,7 +26,6 @@
 	font-size: 0.9rem;
 	font-weight: 600;
 	color: #6c757d;
-
 }
 
 .making-charge-type {
@@ -37,20 +34,15 @@
 	font-weight: 600;
 	color: #6c757d;
 }
-/* ========================================
-   PAGE
-======================================== */
 
+/* ======================================== PAGE ======================================== */
 .estimate-container {
 	max-width: 900px;
 	margin: 0 auto;
 	padding: 32px 20px;
 }
 
-/* ========================================
-   LOADING
-======================================== */
-
+/* ======================================== LOADING ======================================== */
 .loading {
 	padding: 80px 20px;
 	text-align: center;
@@ -61,10 +53,7 @@
 	color: #666;
 }
 
-/* ========================================
-   HEADER
-======================================== */
-
+/* ======================================== HEADER ======================================== */
 .estimate-header {
 	display: flex;
 	justify-content: space-between;
@@ -92,35 +81,25 @@
 	word-break: break-word;
 }
 
-/* ========================================
-   METAL BADGE
-======================================== */
-
+/* ======================================== METAL BADGE ======================================== */
 .metal-badge {
 	padding: 10px 24px;
 	border-radius: 999px;
 	font-weight: 700;
 	letter-spacing: .5px;
 	color: var(--accent);
-	background: linear-gradient(
-			135deg,
-			var(--primary-light),
-			var(--primary)
-	);
+	background: linear-gradient(135deg, var(--primary-light), var(--primary));
 	border: 1px solid var(--primary-border);
-	box-shadow: 0 6px 16px rgba(0,0,0,.08);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
 }
 
-/* ========================================
-   CARD
-======================================== */
-
+/* ======================================== CARD ======================================== */
 .estimate-card {
 	background: white;
 	border-radius: 18px;
 	padding: 30px;
 	border: 1px solid var(--primary-border);
-	box-shadow: 0 10px 30px rgba(0,0,0,.08);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
 }
 
 .estimate-card h4 {
@@ -138,16 +117,10 @@
 	width: 5px;
 	height: 24px;
 	border-radius: 10px;
-	background: linear-gradient(
-			var(--primary),
-			var(--primary-dark)
-	);
+	background: linear-gradient(var(--primary), var(--primary-dark));
 }
 
-/* ========================================
-   ROWS
-======================================== */
-
+/* ======================================== ROWS ======================================== */
 .price-row {
 	display: flex;
 	justify-content: space-between;
@@ -172,24 +145,16 @@
 	text-align: right;
 }
 
-/* ========================================
-   ADD / LESS
-======================================== */
-
-.addition span,
-.addition strong {
+/* ======================================== ADD / LESS ======================================== */
+.addition span, .addition strong {
 	color: var(--success);
 }
 
-.deduction span,
-.deduction strong {
+.deduction span, .deduction strong {
 	color: var(--danger);
 }
 
-/* ========================================
-   HIGHLIGHT
-======================================== */
-
+/* ======================================== HIGHLIGHT ======================================== */
 .highlight {
 	margin: 16px -8px;
 	padding: 18px 20px;
@@ -198,8 +163,7 @@
 	border: 1px solid var(--primary-border);
 }
 
-.highlight span,
-.highlight strong {
+.highlight span, .highlight strong {
 	display: block;
 	line-height: 1.5;
 	color: var(--accent);
@@ -210,9 +174,8 @@
 	font-size: 1.15rem;
 	margin-top: 4px;
 }
-/* ========================================
-   RATE DISPLAY
-======================================== */
+
+/* ======================================== RATE DISPLAY ======================================== */
 .rate-value {
 	display: flex;
 	align-items: center;
@@ -220,8 +183,7 @@
 	flex-wrap: wrap;
 }
 
-.rate-multiply,
-.rate-equals {
+.rate-multiply, .rate-equals {
 	color: #666;
 	font-weight: 600;
 }
@@ -238,10 +200,7 @@
 	font-weight: 700;
 }
 
-/* ========================================
-   FORMULA
-======================================== */
-
+/* ======================================== FORMULA ======================================== */
 .formula {
 	margin: 22px 0;
 	padding: 18px;
@@ -254,10 +213,7 @@
 	border-radius: 12px;
 }
 
-/* ========================================
-   GRAND TOTAL
-======================================== */
-
+/* ======================================== GRAND TOTAL ======================================== */
 .grand-total {
 	margin-top: 28px;
 	padding: 22px;
@@ -266,11 +222,7 @@
 	justify-content: space-between;
 	align-items: center;
 	gap: 20px;
-	background: linear-gradient(
-			135deg,
-			var(--primary),
-			var(--primary-light)
-	);
+	background: linear-gradient(135deg, var(--primary), var(--primary-light));
 }
 
 .grand-total span {
@@ -285,30 +237,20 @@
 	color: var(--accent);
 }
 
-/* ========================================
-   DIVIDER
-======================================== */
-
+/* ======================================== DIVIDER ======================================== */
 hr {
 	border: 0;
 	border-top: 1px solid #e5e5e5;
 	margin: 24px 0;
 }
 
-/* ========================================
-   ALERT
-======================================== */
-
+/* ======================================== ALERT ======================================== */
 .alert {
 	border-radius: 12px;
 }
 
-/* ========================================
-   MOBILE
-======================================== */
-
-@media (max-width:768px) {
-
+/* ======================================== MOBILE ======================================== */
+@media (max-width: 768px) {
 	.estimate-container {
 		padding: 16px;
 	}
@@ -341,7 +283,6 @@ hr {
 		padding: 16px 18px;
 	}
 
-
 	.formula {
 		font-size: .95rem;
 		word-break: break-word;
@@ -356,14 +297,11 @@ hr {
 	.grand-total strong {
 		font-size: 1.6rem;
 	}
+
 }
 
-/* ========================================
-   SMALL PHONES
-======================================== */
-
-@media (max-width:420px) {
-
+/* ======================================== SMALL PHONES ======================================== */
+@media (max-width: 420px) {
 	.estimate-container {
 		padding: 12px;
 	}
@@ -394,4 +332,5 @@ hr {
 	.grand-total strong {
 		font-size: 1.45rem;
 	}
+
 }

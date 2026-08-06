@@ -12,7 +12,11 @@ public class SilverPriceCalculationResponse
 
     public decimal FinalRatePerGram { get; set; }
 
-    public decimal TotalAmount { get; set; }
+    public decimal TotalAmountExcludingGst { get; set; }
+
+    public decimal EstimateGstAmount { get; set; }
+
+    public decimal TotalAmountIncludingGst { get; set; }
 
     public decimal PurityInPercentage { get; set; }
 }

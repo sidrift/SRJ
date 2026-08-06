@@ -13,14 +13,12 @@ public class AuthenticationService : IAuthenticationService
         _httpClient = httpClient;
     }
 
-
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         var response =
             await _httpClient.PostAsJsonAsync(
                 "auth/login",
                 request);
-
 
         if (!response.IsSuccessStatusCode)
         {
@@ -36,15 +34,12 @@ public class AuthenticationService : IAuthenticationService
             .ReadFromJsonAsync<LoginResponse>())!;
     }
 
-
-
     public async Task RegisterAsync(RegisterRequest request)
     {
         var response =
             await _httpClient.PostAsJsonAsync(
                 "auth/register",
                 request);
-
 
         if (!response.IsSuccessStatusCode)
         {
@@ -54,10 +49,7 @@ public class AuthenticationService : IAuthenticationService
             throw new Exception(
                 apiError?.Message ?? "Registration failed.");
         }
-
     }
-
-
 
     private class ApiError
     {

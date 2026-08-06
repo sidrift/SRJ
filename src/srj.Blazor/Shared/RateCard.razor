@@ -1,66 +1,46 @@
-<div class="dashboard-rate-card @Theme">
-
-	<div class="dashboard-rate-header @Theme">
-
-		<i class="@(Theme == "gold" ? "bi bi-coin" : "bi bi-circle-half")"></i>
-
+<div class = "dashboard-rate-card @Theme">
+	<div class = "dashboard-rate-header @Theme">
+		<i class = "@(Theme == "gold" ? "bi bi-coin" : "bi bi-circle-half")">
+		</i>
 		@Title
-
 	</div>
-
-	<div class="dashboard-rate-body">
-
-		@if (Buy.HasValue)
-		{
-			<div class="dashboard-price-item">
-
-				<span>Sell Price</span>
-
+	<div class = "dashboard-rate-body">
+		@if (Buy.HasValue) {
+			<div class = "dashboard-price-item">
+				<span>
+					Sell Price
+				</span>
 				<strong>
 					₹ @Sell?.ToString("N2")
 				</strong>
-
 			</div>
-
-			<div class="dashboard-price-item">
-
-				<span>Buy Price</span>
-
+			<div class = "dashboard-price-item">
+				<span>
+					Buy Price
+				</span>
 				<strong>
 					₹ @Buy?.ToString("N2")
 				</strong>
-
 			</div>
-		}
-		else
-		{
-			<div class="dashboard-price-item">
-
-				<span>Sell Price</span>
-
+		} else {
+			<div class = "dashboard-price-item">
+				<span>
+					Sell Price
+				</span>
 				<strong>
 					₹ @Sell?.ToString("N2")
 				</strong>
-
 			</div>
 		}
-
 	</div>
-
 </div>
 
 @code {
+	[Parameter] public string Theme { get; set; } = "gold";
 
-	[Parameter]
-	public string Theme { get; set; } = "gold";
+	[Parameter] public string Title { get; set; } = "";
 
-	[Parameter]
-	public string Title { get; set; } = "";
+	[Parameter] public decimal? Sell { get; set; }
 
-	[Parameter]
-	public decimal? Sell { get; set; }
-
-	[Parameter]
-	public decimal? Buy { get; set; }
-
+	[Parameter] public decimal? Buy { get; set; }
 }

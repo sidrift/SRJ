@@ -1,117 +1,141 @@
 ﻿@inject IJSRuntime Js
 
-<div class="top-row navbar navbar-dark">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="/">
+<div class = "top-row navbar navbar-dark">
+	<div class = "container-fluid">
+		<a class = "navbar-brand"
+		   href = "/">
 			SRJ
 		</a>
 	</div>
 </div>
-
-<input id="menu-toggle"
-       type="checkbox"
-       class="menu-toggle"
-       @ref="_menuToggle"/>
-
-<label for="menu-toggle"
-       class="navbar-toggler"
+<input id = "menu-toggle"
+       type = "checkbox"
+       class = "menu-toggle"
+       @ref = "_menuToggle" />
+<label for = "menu-toggle"
+       class = "navbar-toggler"
        @onclick:stopPropagation>
-	<i class="bi bi-list"></i>
+	<i class = "bi bi-list">
+	</i>
 </label>
-
-<div class="nav-scrollable" @ref="_sidebar">
-	<nav class="nav flex-column">
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/" Match="NavLinkMatch.All" @onclick="CloseMenu">
-				<span class="nav-icon"><i class="bi bi-house-door-fill"></i></span>
-				<span class="nav-text">Home</span>
-			</NavLink>
-		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/gold-rates" @onclick="CloseMenu">
-                <span class="nav-icon">
-                    <i class="bi bi-coin"></i>
-                </span>
-
-				<span class="nav-text">
-                    Set Gold Rates
-                </span>
-			</NavLink>
-		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/silver-rates" @onclick="CloseMenu">
-                <span class="nav-icon">
-                    <i class="bi bi-circle-half"></i>
-                </span>
-
-				<span class="nav-text">
-                    Set Silver Rates
-                </span>
-			</NavLink>
-		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/item-categories" @onclick="CloseMenu">
-				<span class="nav-icon"><i class="bi bi-tags-fill"></i></span>
-				<span class="nav-text">Add Item Categories</span>
-			</NavLink>
-		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/gold-jewellery" @onclick="CloseMenu">
-				<span class="nav-icon"><i class="bi bi-gem"></i></span>
-				<span class="nav-text">Add Gold Jewellery</span>
-			</NavLink>
-		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/silver-jewellery" @onclick="CloseMenu">
-				<span class="nav-icon"><i class="bi bi-gem"></i></span>
-				<span class="nav-text">Add Silver Jewellery</span>
-			</NavLink>
-		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/jewellery" @onclick="CloseMenu">
-				<span class="nav-icon">
-					<i class="bi bi-box-seam"></i>
+<div class = "nav-scrollable"
+     @ref = "_sidebar">
+	<nav class = "nav flex-column">
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/"
+			         Match = "NavLinkMatch.All"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-house-door-fill">
+					</i>
 				</span>
-
-				<span class="nav-text">
+				<span class = "nav-text">
+					Home
+				</span>
+			</NavLink>
+		</div>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/gold-rates"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-coin">
+					</i>
+				</span>
+				<span class = "nav-text">
+					Set Gold Rates
+				</span>
+			</NavLink>
+		</div>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/silver-rates"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-circle-half">
+					</i>
+				</span>
+				<span class = "nav-text">
+					Set Silver Rates
+				</span>
+			</NavLink>
+		</div>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/item-categories"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-tags-fill">
+					</i>
+				</span>
+				<span class = "nav-text">
+					Add Item Categories
+				</span>
+			</NavLink>
+		</div>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/gold-jewellery"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-gem">
+					</i>
+				</span>
+				<span class = "nav-text">
+					Add Gold Jewellery
+				</span>
+			</NavLink>
+		</div>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/silver-jewellery"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-gem">
+					</i>
+				</span>
+				<span class = "nav-text">
+					Add Silver Jewellery
+				</span>
+			</NavLink>
+		</div>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/jewellery"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-box-seam">
+					</i>
+				</span>
+				<span class = "nav-text">
 					Jewellery Inventory
 				</span>
 			</NavLink>
 		</div>
-
-		<div class="nav-item">
-			<NavLink class="nav-link" href="/manage-jewellery" @onclick="CloseMenu">
-				<span class="nav-icon">
-					<i class="bi bi-upc-scan"></i>
+		<div class = "nav-item">
+			<NavLink class = "nav-link"
+			         href = "/manage-jewellery"
+			         @onclick = "CloseMenu">
+				<span class = "nav-icon">
+					<i class = "bi bi-upc-scan">
+					</i>
 				</span>
-
-				<span class="nav-text">
+				<span class = "nav-text">
 					Scan
 				</span>
 			</NavLink>
 		</div>
-
 	</nav>
 </div>
 
 @code {
-
 	private ElementReference _sidebar;
 
 	private ElementReference _menuToggle;
 
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if(firstRender)
-		{
+	protected override async Task OnAfterRenderAsync(bool firstRender) {
+		if (firstRender) {
 			await Js.InvokeVoidAsync(
 				"registerSidebarOutsideClick",
 				_sidebar,
@@ -119,12 +143,8 @@
 		}
 	}
 
-
-
-	private async Task CloseMenu()
-	{
+	private async Task CloseMenu() {
 		await Js.InvokeVoidAsync(
 			"closeNavMenu");
 	}
-
 }

@@ -14,15 +14,9 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
         IItemCategoryRepository categoryRepository,
         ISkuGenerator skuGenerator,
         IBarcodeService barcodeService,
-        IFileStorageService fileStorage)
-        : base(
-            repository,
-            categoryRepository,
-            skuGenerator,
-            barcodeService,
-            fileStorage)
-    {
-    }
+        IFileStorageService fileStorage
+    )
+        : base(repository, categoryRepository, skuGenerator, barcodeService, fileStorage) { }
 
     public async Task<JewelryItem> CreateAsync(CreateGoldJewelryRequest request)
     {
@@ -33,20 +27,25 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
             request.StonePrice = null;
         }
 
-        var (category, sku, barcodeUrl) =
-            await PrepareNewItemAsync(
-                request.CategoryId,
-                request.WeightInGrams);
+        if (request.Purity > 100m)
+            throw new InvalidOperationException(
+                "Invalid purity value. Purity must be less than 100."
+            );
+
+        var (category, sku, barcodeUrl) = await PrepareNewItemAsync(
+            request.CategoryId,
+            request.WeightInGrams
+        );
 
         if (category.Metal != Metal.Gold)
-            throw new InvalidOperationException(
-                "Selected category is not a Gold category.");
+            throw new InvalidOperationException("Selected category is not a Gold category.");
 
         var makingChargeWeight = CalculateMakingChargeWeight(
             request.WeightInGrams,
             request.MakingChargeType,
             request.MakingChargePercentage,
-            request.MakingChargeWeight);
+            request.MakingChargeWeight
+        );
 
         var item = new JewelryItem
         {
@@ -76,7 +75,7 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
 
             BarcodeImageUrl = barcodeUrl,
 
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         return await Repository.CreateAsync(item);
@@ -89,8 +88,7 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
         var category = await GetCategoryAsync(request.CategoryId);
 
         if (category.Metal != Metal.Gold)
-            throw new InvalidOperationException(
-                "The selected category does not belong to Gold.");
+            throw new InvalidOperationException("The selected category does not belong to Gold.");
 
         if (!request.HasStones)
         {
@@ -105,7 +103,8 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
             request.WeightInGrams,
             request.MakingChargeType,
             request.MakingChargePercentage,
-            request.MakingChargeWeight);
+            request.MakingChargeWeight
+        );
 
         item.CategoryId = category.Id;
 
@@ -129,7 +128,8 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
 
         item.HallMarkCharge = request.HallMarkCharge;
 
-        if (weightChanged) await RegenerateBarcodeAsync(item);
+        if (weightChanged)
+            await RegenerateBarcodeAsync(item);
 
         await Repository.UpdateAsync(item);
 
@@ -140,27 +140,25 @@ public class GoldJewelryItemService : JewelryServiceBase, IGoldJewelryItemServic
         decimal weightInGrams,
         MakingChargeType makingChargeType,
         decimal? makingChargePercentage,
-        decimal? makingChargeWeight)
+        decimal? makingChargeWeight
+    )
     {
         return makingChargeType switch
         {
-            MakingChargeType.Percentage when makingChargePercentage.HasValue =>
-                weightInGrams * (makingChargePercentage.Value / 100m),
+            MakingChargeType.Percentage when makingChargePercentage.HasValue => weightInGrams
+                * (makingChargePercentage.Value / 100m),
 
-            MakingChargeType.Weight when makingChargeWeight.HasValue =>
-                makingChargeWeight.Value,
+            MakingChargeType.Weight when makingChargeWeight.HasValue => makingChargeWeight.Value,
 
-            MakingChargeType.Percentage =>
-                throw new ArgumentException(
-                    "Making charge percentage is required."),
+            MakingChargeType.Percentage => throw new ArgumentException(
+                "Making charge percentage is required."
+            ),
 
-            MakingChargeType.Weight =>
-                throw new ArgumentException(
-                    "Making charge weight is required."),
+            MakingChargeType.Weight => throw new ArgumentException(
+                "Making charge weight is required."
+            ),
 
-            _ =>
-                throw new InvalidOperationException(
-                    "Invalid making charge type.")
+            _ => throw new InvalidOperationException("Invalid making charge type."),
         };
     }
 }

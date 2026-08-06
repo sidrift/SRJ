@@ -4,91 +4,57 @@
 @inject TokenService TokenService
 @inject IJSRuntime Js
 
-<div class="page">
-
-	<div class="sidebar">
-		<NavMenu/>
+<div class = "page">
+	<div class = "sidebar">
+		<NavMenu />
 	</div>
-
 	<main>
-
-		<div class="top-row px-4">
-
-			<div class="profile-container">
-
-				<details class="profile-menu" @ref="_profileMenu">
-
-					<summary class="profile-summary">
-
-						<div class="profile-avatar">
+		<div class = "top-row px-4">
+			<div class = "profile-container">
+				<details class = "profile-menu"
+				         @ref = "_profileMenu">
+					<summary class = "profile-summary">
+						<div class = "profile-avatar">
 							@(_userName[..1].ToUpper())
 						</div>
-
-						<div class="profile-info">
-
-                            <span class="profile-name">
+						<div class = "profile-info">
+                            <span class = "profile-name">
                                 @_userName
                             </span>
-
 						</div>
-
-						<i class="bi bi-chevron-down profile-arrow"></i>
-
+						<i class = "bi bi-chevron-down profile-arrow">
+						</i>
 					</summary>
-
-					<div class="profile-dropdown">
-
-					<!-- 	<button class="dropdown-item"
-						        @onclick="GoToProfile">
-
-                            <span class="dropdown-icon">
-                                <i class="bi bi-person-gear"></i>
+					<div class = "profile-dropdown">
+						<button class = "dropdown-item logout-button"
+						        @onclick = "Logout">
+                            <span class = "dropdown-icon">
+                                <i class = "bi bi-box-arrow-right">
+                                </i>
                             </span>
-
-							<span>Edit Profile</span>
-
-						</button>
-						-->
-
-						<button class="dropdown-item logout-button"
-						        @onclick="Logout">
-
-                            <span class="dropdown-icon">
-                                <i class="bi bi-box-arrow-right"></i>
+							<span>
+                                Logout
                             </span>
-
-							<span>Logout</span>
-
 						</button>
-
 					</div>
-
 				</details>
-
 			</div>
-
 		</div>
-
-		<article class="content px-4">
+		<article class = "content px-4">
 			@Body
 		</article>
-
 	</main>
-
 </div>
-
-<div id="blazor-error-ui" data-nosnippet>
-
+<div id = "blazor-error-ui"
+     data-nosnippet>
 	An unhandled error has occurred.
-
-	<a href="." class="reload">
+	<a href = "."
+	   class = "reload">
 		Reload
 	</a>
-
-	<span class="dismiss">
+	<span class = "dismiss">
 		🗙
 	</span>
-
 </div>
 
 @code
@@ -97,34 +63,23 @@
 
 	private ElementReference _profileMenu;
 
-
-	protected override void OnInitialized()
-	{
+	protected override void OnInitialized() {
 		_userName = TokenService.GetUserName() ?? "User";
 	}
 
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if(firstRender)
-		{
+	protected override async Task OnAfterRenderAsync(bool firstRender) {
+		if (firstRender) {
 			await Js.InvokeVoidAsync(
 				"registerOutsideClick",
 				_profileMenu);
 		}
 	}
 
-
-
-	private void GoToProfile()
-	{
+	private void GoToProfile() {
 		NavigationManager.NavigateTo("/profile");
 	}
 
-
-
-	private void Logout()
-	{
+	private void Logout() {
 		TokenService.Clear();
 
 		NavigationManager.NavigateTo("/login", true);

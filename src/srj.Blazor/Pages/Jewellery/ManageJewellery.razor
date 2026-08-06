@@ -12,837 +12,499 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
+
 <PageTitle>Manage Jewellery</PageTitle>
 
 <HeadContent>
-    <link href="css/manage-jewellery.css" rel="stylesheet" />
+	<link href = "css/manage-jewellery.css"
+	      rel = "stylesheet" />
 </HeadContent>
 
-<div class="gold-rate-container @(IsGold ? "gold-theme" : IsSilver ? "silver-theme" : "")">
-
-
+<div class = "gold-rate-container @(IsGold ? "gold-theme" : IsSilver ? "silver-theme" : "")">
 	<!-- Header -->
-
-	<div class="gold-header">
-
+	<div class = "gold-header">
 		<div>
-
 			<h2>
-				<i class="bi bi-pencil-square"></i>
+				<i class = "bi bi-pencil-square">
+				</i>
 				Manage Jewellery
 			</h2>
-
-			<p class="text-muted mb-0">
+			<p class = "text-muted mb-0">
 				Scan barcode or enter SKU to view jewellery details.
 			</p>
-
 		</div>
-
-
-		@if (!string.IsNullOrWhiteSpace(_metal))
-		{
-			<div class="metal-banner @(IsGold ? "gold-banner" : "silver-banner")">
-				<i class="bi @(IsGold ? "bi-gem" : "bi-circle-half")"></i>
-
-				<div class="metal-text">
-					<span class="metal-name">@_metal</span>
+		@if (!string.IsNullOrWhiteSpace(_metal)) {
+			<div class = "metal-banner @(IsGold ? "gold-banner" : "silver-banner")">
+				<i class = "bi @(IsGold ? "bi-gem" : "bi-circle-half")">
+				</i>
+				<div class = "metal-text">
+					<span class = "metal-name">
+						@_metal
+					</span>
 				</div>
 			</div>
 		}
-
-
 	</div>
-
-
-
 	<!-- Search -->
-
-	<div class="rate-card">
-
-
-		<div class="search-row">
-
-
-			<InputText class="form-control"
-			           @bind-Value="_sku"
-			           @onkeydown="HandleKeyDown"
-			           placeholder="Scan / Enter SKU..." />
-
-
-			<button class="save-btn"
-			        @onclick="LoadItem"
-			        disabled="@_loading">
-
-
-				@if (_loading)
-				{
-					<span class="spinner-border spinner-border-sm"></span>
-				}
-				else
-				{
-					<i class="bi bi-search me-2"></i>
+	<div class = "rate-card">
+		<div class = "search-row">
+			<InputText class = "form-control"
+			           @bind-Value = "_sku"
+			           @onkeydown = "HandleKeyDown"
+			           placeholder = "Scan / Enter SKU..." />
+			<button class = "save-btn"
+			        @onclick = "LoadItem"
+			        disabled = "@_loading">
+				@if (_loading) {
+					<span class = "spinner-border spinner-border-sm">
+					</span>
+				} else {
+					<i class = "bi bi-search me-2">
+					</i>
 				}
 
 
 				Search
-
-
 			</button>
-
-			<button type="button"
-			        class="scan-btn"
-			        @onclick="StartScanner">
-
-				<i class="bi bi-camera-fill me-2"></i>
-
+			<button type = "button"
+			        class = "scan-btn"
+			        @onclick = "StartScanner">
+				<i class = "bi bi-camera-fill me-2">
+				</i>
 				Scan
-
 			</button>
-
 		</div>
-
-
-
 	</div>
-
-	@if (_showScanner)
-	{
-		<div class="scanner-container">
-
-			<video id="barcode-video"
+	@if (_showScanner) {
+		<div class = "scanner-container">
+			<video id = "barcode-video"
 			       autoplay
 			       playsinline
 			       muted>
 			</video>
-
-			<button class="cancel-btn"
-			        @onclick="StopScanner">
+			<button class = "cancel-btn"
+			        @onclick = "StopScanner">
 				Close Camera
 			</button>
-
 		</div>
 	}
 
-	@if (!string.IsNullOrWhiteSpace(_error))
-	{
-		<div class="alert alert-danger mt-3">
-
+	@if (!string.IsNullOrWhiteSpace(_error)) {
+		<div class = "alert alert-danger mt-3">
 			@_error
-
 		</div>
 	}
 
 
 
-	@if (_itemLoaded)
-	{
-		<EditForm EditContext="_editContext">
-		<div class="rate-card mt-3">
-
-
-			<!-- Barcode -->
-
-
-			@if (!string.IsNullOrWhiteSpace(CurrentBarcodeImageUrl)) {
-				<div class="barcode-section">
-
-					<img src="@GetBarcodeUrl(CurrentBarcodeImageUrl)"
-					     class="barcode-image"/>
-
-				</div>
-			}
+	@if (_itemLoaded) {
+		<EditForm EditContext = "_editContext">
+			<div class = "rate-card mt-3">
+				<!-- Barcode -->
+				@if (!string.IsNullOrWhiteSpace(CurrentBarcodeImageUrl)) {
+					<div class = "barcode-section">
+						<img src = "@GetBarcodeUrl(CurrentBarcodeImageUrl)"
+						     class = "barcode-image" />
+					</div>
+				}
 
 
 
-			@if (IsGold) {
-
+				@if (IsGold) {
 				<!-- GOLD DETAILS -->
-
-				<div class="rate-section gold-section">
-
-
-
-
-					<!-- Category -->
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-tags-fill"></i>
-							Category
-						</h5>
-
-
-						<div class="rate-field">
-
-
-							<label>
+					<div class = "rate-section gold-section">
+						<!-- Category -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-tags-fill">
+								</i>
 								Category
-							</label>
-
-
-							<InputSelect class="form-select"
-							             @bind-Value="_selectedCategoryId"
-							             @bind-Value:after="NotifyChange"
-							             @onchange="CategoryChanged"
-							             disabled="@(!_isEditing)">
-
-
-
-								<option value="0">
-									Select Category
-								</option>
-
-
-								@foreach (var category in _categories) {
-
-									<option value="@category.Id">
-
-										@category.Name
-
+							</h5>
+							<div class = "rate-field">
+								<label>
+									Category
+								</label>
+								<InputSelect class = "form-select"
+								             @bind-Value = "_selectedCategoryId"
+								             @bind-Value:after = "NotifyChange"
+								             @onchange = "CategoryChanged"
+								             disabled = "@(!_isEditing)">
+									<option value = "0">
+										Select Category
 									</option>
-
-								}
-
-
-							</InputSelect>
-
-
-						</div>
-
-
-					</div>
-
-
-
-
-					<!-- Weight & Purity -->
-
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-speedometer2"></i>
-							Weight & Purity
-						</h5>
-
-
-
-						<div class="rate-grid">
-
-
-							<div class="rate-field">
-
-
-								<label>
-									Weight (grams)
-								</label>
-
-
-								<InputNumber class="form-control"
-								             @bind-Value="_goldItem!.WeightInGrams"
-								             disabled="@(!_isEditing)"/>
-
-
+									@foreach (var category in _categories) {
+										<option value = "@category.Id">
+											@category.Name
+										</option>
+									}
+								</InputSelect>
 							</div>
-
-
-
-							<div class="rate-field">
-
-
-								<label>
-									Purity (%)
-								</label>
-
-
-								<InputNumber class="form-control"
-								             @bind-Value="_goldItem!.PurityInPercentage"
-								             disabled="@(!_isEditing)"/>
-
-
-							</div>
-
-
 						</div>
-
-
-					</div>
-
-
-
-
-					<!-- Making Charges -->
-
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-cash-stack"></i>
-							Making Charges
-						</h5>
-
-
-
-						<div class="charge-type-group">
-
-
-							<InputRadioGroup @bind-Value="_goldItem.MakingChargeType">
-
-								<label class="charge-option @(_goldItem.MakingChargeType == MakingChargeType.Percentage ? "active" : "")">
-
-									<InputRadio Value="MakingChargeType.Percentage"
-									            disabled="@(!_isEditing)" />
-
-									<span>
-										<i class="bi bi-percent"></i>
-										Percentage
+						<!-- Weight & Purity -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-speedometer2">
+								</i>
+								Weight & Purity
+							</h5>
+							<div class = "rate-grid">
+								<div class = "rate-field">
+									<label>
+										Weight (grams)
+									</label>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldItem!.WeightInGrams"
+									             disabled = "@(!_isEditing)" />
+								</div>
+								<div class = "rate-field">
+									<label>
+										Purity (%)
+									</label>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldItem!.PurityInPercentage"
+									             disabled = "@(!_isEditing)" />
+								</div>
+							</div>
+						</div>
+						<!-- Making Charges -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-cash-stack">
+								</i>
+								Making Charges
+							</h5>
+							<div class = "charge-type-group">
+								<InputRadioGroup @bind-Value = "_goldItem.MakingChargeType">
+									<label class = "charge-option @(_goldItem.MakingChargeType == MakingChargeType.Percentage ? "active" : "")">
+										<InputRadio Value = "MakingChargeType.Percentage"
+										            disabled = "@(!_isEditing)" />
+										<span>
+											<i class = "bi bi-percent">
+											</i>
+											Percentage
+										</span>
+									</label>
+									<label class = "charge-option @(_goldItem.MakingChargeType == MakingChargeType.Weight ? "active" : "")">
+										<InputRadio Value = "MakingChargeType.Weight"
+										            disabled = "@(!_isEditing)" />
+										<span>
+											<i class = "bi bi-speedometer2">
+											</i>
+											Per Gram
+										</span>
+									</label>
+								</InputRadioGroup>
+							</div>
+							@if (_goldItem.MakingChargeType == MakingChargeType.Percentage) {
+								<div class = "rate-field">
+									<label>
+										Making Charge (%)
+									</label>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldItem.MakingChargePercentage"
+									             disabled = "@(!_isEditing)" />
+								</div>
+							} else {
+								<div class = "rate-field">
+									<label>
+										Making Charge Weight (grams)
+									</label>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldItem.MakingChargeWeight"
+									             disabled = "@(!_isEditing)" />
+								</div>
+							}
+						</div>
+						<!-- Hallmark -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-patch-check-fill">
+								</i>
+								Hallmark
+							</h5>
+							<div class = "rate-field">
+								<label>
+									Hallmark Charge
+								</label>
+								<InputNumber class = "form-control"
+								             @bind-Value = "_goldItem.HallMarkCharge"
+								             disabled = "@(!_isEditing)" />
+							</div>
+						</div>
+						<!-- Stone Details -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-diamond-fill">
+								</i>
+								Stone Details
+							</h5>
+							<div class = "stone-toggle">
+								<label class = "switch">
+									<InputCheckbox @bind-Value = "_goldItem!.HasStones"
+									               disabled = "@(!_isEditing)" />
+									<span class = "slider">
 									</span>
-
 								</label>
-
-								<label class="charge-option @(_goldItem.MakingChargeType == MakingChargeType.Weight ? "active" : "")">
-
-									<InputRadio Value="MakingChargeType.Weight"
-									            disabled="@(!_isEditing)" />
-
-									<span>
-										<i class="bi bi-speedometer2"></i>
-										Per Gram
-									</span>
-
-								</label>
-
-							</InputRadioGroup>
-
-
-						</div>
-
-
-
-
-
-						@if (_goldItem.MakingChargeType == MakingChargeType.Percentage) {
-
-
-							<div class="rate-field">
-
-
-								<label>
-									Making Charge (%)
-								</label>
-
-
-								<InputNumber class="form-control"
-								             @bind-Value="_goldItem.MakingChargePercentage"
-								             disabled="@(!_isEditing)"/>
-
-
+								<span class = "stone-label">
+									Has Stones
+								</span>
 							</div>
-
-
-						} else {
-
-
-							<div class="rate-field">
-
-
-								<label>
-									Making Charge Weight (grams)
-								</label>
-
-
-								<InputNumber class="form-control"
-								             @bind-Value="_goldItem.MakingChargeWeight"
-								             disabled="@(!_isEditing)"/>
-
-
-							</div>
-
-
-						}
-
-
-					</div>
-
-
-
-
-
-					<!-- Hallmark -->
-
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-patch-check-fill"></i>
-							Hallmark
-						</h5>
-
-
-
-						<div class="rate-field">
-
-
-							<label>
-								Hallmark Charge
-							</label>
-
-
-							<InputNumber class="form-control"
-							             @bind-Value="_goldItem.HallMarkCharge"
-							             disabled="@(!_isEditing)"/>
-
-
+							@if (_goldItem.HasStones) {
+								<div class = "rate-grid mt-3">
+									<div class = "rate-field">
+										<label>
+											Stone Type
+										</label>
+										<InputText class = "form-control"
+										           @bind-Value = "_goldItem.StoneType"
+										           disabled = "@(!_isEditing)" />
+									</div>
+									<div class = "rate-field">
+										<label>
+											Stone Weight (grams)
+										</label>
+										<InputNumber class = "form-control"
+										             @bind-Value = "_goldItem.StoneWeight"
+										             disabled = "@(!_isEditing)" />
+									</div>
+									<div class = "rate-field">
+										<label>
+											Stone Price (₹)
+										</label>
+										<InputNumber class = "form-control"
+										             @bind-Value = "_goldItem.StonePrice"
+										             disabled = "@(!_isEditing)" />
+									</div>
+								</div>
+							}
 						</div>
-
-
 					</div>
-
-					<!-- Stone Details -->
-
-					<div class="rate-section">
-
-						<h5>
-							<i class="bi bi-diamond-fill"></i>
-							Stone Details
-						</h5>
-
-						<div class="stone-toggle">
-
-							<label class="switch">
-
-								<InputCheckbox @bind-Value="_goldItem!.HasStones"
-								               disabled="@(!_isEditing)" />
-
-								<span class="slider"></span>
-
-							</label>
-
-							<span class="stone-label">
-								Has Stones
-							</span>
-
-						</div>
-
-						@if (_goldItem.HasStones)
-						{
-							<div class="rate-grid mt-3">
-
-								<div class="rate-field">
-
-									<label>Stone Type</label>
-
-									<InputText class="form-control"
-									           @bind-Value="_goldItem.StoneType"
-									           disabled="@(!_isEditing)" />
-
-								</div>
-
-								<div class="rate-field">
-
-									<label>Stone Weight (grams)</label>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_goldItem.StoneWeight"
-									             disabled="@(!_isEditing)" />
-
-								</div>
-
-								<div class="rate-field">
-
-									<label>Stone Price (₹)</label>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_goldItem.StonePrice"
-									             disabled="@(!_isEditing)" />
-
-								</div>
-
-							</div>
-						}
-
-					</div>
-
-				</div>
-
-			} else if (IsSilver) {
-
+				} else if (IsSilver) {
 				<!-- SILVER DETAILS -->
-
-
-				<div class="rate-section silver-section">
-
-
-
-
-					<!-- Category -->
-
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-tags-fill"></i>
-							Category
-						</h5>
-
-
-
-						<div class="rate-field">
-
-
-							<label>
+					<div class = "rate-section silver-section">
+						<!-- Category -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-tags-fill">
+								</i>
 								Category
-							</label>
-
-
-							<InputSelect class="form-select"
-							             @bind-Value="_selectedCategoryId"
-							             @bind-Value:after="NotifyChange"
-							             @bind-Value:after="CategoryChanged"
-							             disabled="@(!_isEditing)">
-
-
-								<option value="0">
-									Select Category
-								</option>
-
-
-
-								@foreach (var category in _categories) {
-
-									<option value="@category.Id">
-
-										@category.Name
-
+							</h5>
+							<div class = "rate-field">
+								<label>
+									Category
+								</label>
+								<InputSelect class = "form-select"
+								             @bind-Value = "_selectedCategoryId"
+								             @bind-Value:after = "NotifyChange"
+								             @bind-Value:after = "CategoryChanged"
+								             disabled = "@(!_isEditing)">
+									<option value = "0">
+										Select Category
 									</option>
-
-								}
-
-
-							</InputSelect>
-
-
-						</div>
-
-
-					</div>
-
-
-
-
-
-					<!-- Weight & Purity -->
-
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-speedometer2"></i>
-							Weight & Purity
-						</h5>
-
-
-
-						<div class="rate-grid">
-
-
-							<div class="rate-field">
-
-
-								<label>
-									Weight (grams)
-								</label>
-
-
-								<InputNumber class="form-control"
-								             @bind-Value="_silverItem!.WeightInGrams"
-								             disabled="@(!_isEditing)"/>
-
-
+									@foreach (var category in _categories) {
+										<option value = "@category.Id">
+											@category.Name
+										</option>
+									}
+								</InputSelect>
 							</div>
-
-
-
-
-
-							<div class="rate-field">
-
-
-								<label>
-									Purity (%)
-								</label>
-
-
-								<InputNumber class="form-control"
-								             @bind-Value="_silverItem!.Purity"
-								             disabled="@(!_isEditing)"/>
-
-
+						</div>
+						<!-- Weight & Purity -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-speedometer2">
+								</i>
+								Weight & Purity
+							</h5>
+							<div class = "rate-grid">
+								<div class = "rate-field">
+									<label>
+										Weight (grams)
+									</label>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_silverItem!.WeightInGrams"
+									             disabled = "@(!_isEditing)" />
+								</div>
+								<div class = "rate-field">
+									<label>
+										Purity (%)
+									</label>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_silverItem!.Purity"
+									             disabled = "@(!_isEditing)" />
+								</div>
 							</div>
-
-
 						</div>
-
-
-					</div>
-
-
-
-
-
-
-					<!-- Silver Making Charges -->
-
-
-					<div class="rate-section">
-
-
-						<h5>
-							<i class="bi bi-cash-stack"></i>
-							Making Charges
-						</h5>
-
-
-
-
-						<div class="rate-field">
-
-
-							<label>
-								Making Charge (₹ / gram)
-							</label>
-
-
-
-							<InputNumber class="form-control"
-							             @bind-Value="_silverItem!.SilverMakingChargePerGram"
-							             disabled="@(!_isEditing)"/>
-
-
+						<!-- Silver Making Charges -->
+						<div class = "rate-section">
+							<h5>
+								<i class = "bi bi-cash-stack">
+								</i>
+								Making Charges
+							</h5>
+							<div class = "rate-field">
+								<label>
+									Making Charge (₹ / gram)
+								</label>
+								<InputNumber class = "form-control"
+								             @bind-Value = "_silverItem!.SilverMakingChargePerGram"
+								             disabled = "@(!_isEditing)" />
+							</div>
 						</div>
-
-
-
 					</div>
-
-
-
-
-
-
-
-
+				}
+				<!-- Common Actions -->
+				<!-- Common Actions -->
+				<div class = "action-buttons mt-4">
+					<div class = "left-actions">
+						@if (!_isEditing) {
+							<button type = "button"
+							        class = "estimate-btn"
+							        @onclick = "GenerateEstimate">
+								<i class = "bi bi-receipt-cutoff me-2">
+								</i>
+								Generate Estimate
+							</button>
+						}
+					</div>
+					<div class = "right-actions">
+						@if (!_isEditing) {
+							<button type = "button"
+							        class = "edit-btn"
+							        @onclick = "ShowEditDialog">
+								<i class = "bi bi-pencil-fill me-2">
+								</i>
+								Edit
+							</button>
+						} else {
+							<button type = "button"
+							        class = "save-btn"
+							        disabled = "@(!_canUpdate || _saving)"
+							        @onclick = "ConfirmUpdate">
+								<i class = "bi bi-floppy-fill me-2">
+								</i>
+								Update
+							</button>
+							<button type = "button"
+							        class = "cancel-btn"
+							        @onclick = "CancelEdit">
+								<i class = "bi bi-x-circle me-2">
+								</i>
+								Cancel
+							</button>
+						}
+						<button type = "button"
+						        class = "delete-btn"
+						        @onclick = "ShowDeleteDialog">
+							<i class = "bi bi-trash-fill me-2">
+							</i>
+							Delete
+						</button>
+					</div>
 				</div>
-
-
-			}
-
-
-			<!-- Common Actions -->
-			<!-- Common Actions -->
-			<div class="action-buttons mt-4">
-
-				<div class="left-actions">
-
-					@if (!_isEditing)
-					{
-						<button type="button"
-						        class="estimate-btn"
-						        @onclick="GenerateEstimate">
-
-							<i class="bi bi-receipt-cutoff me-2"></i>
-							Generate Estimate
-
-						</button>
-					}
-
-				</div>
-
-
-				<div class="right-actions">
-
-					@if (!_isEditing)
-					{
-						<button type="button"
-						        class="edit-btn"
-						        @onclick="ShowEditDialog">
-
-							<i class="bi bi-pencil-fill me-2"></i>
-							Edit
-
-						</button>
-					}
-					else
-					{
-						<button type="button"
-						        class="save-btn"
-						        disabled="@(!_canUpdate || _saving)"
-						        @onclick="ConfirmUpdate">
-
-							<i class="bi bi-floppy-fill me-2"></i>
-							Update
-
-						</button>
-
-
-						<button type="button"
-						        class="cancel-btn"
-						        @onclick="CancelEdit">
-
-							<i class="bi bi-x-circle me-2"></i>
-							Cancel
-
-						</button>
-					}
-
-
-					<button type="button"
-					        class="delete-btn"
-					        @onclick="ShowDeleteDialog">
-
-						<i class="bi bi-trash-fill me-2"></i>
-
-						Delete
-
-					</button>
-
-				</div>
-
 			</div>
-		</div>
-
-
-		<!-- rate-card -->
+			<!-- rate-card -->
 		</EditForm>
-		}
+	}
 
 
-	@if (_showSavedDialog)
-	{
-		<div class="dialog-overlay">
-
-			<div class="confirm-dialog success">
-
-				<div class="dialog-icon">
-					<i class="bi bi-check-circle-fill"></i>
+	@if (_showSavedDialog) {
+		<div class = "dialog-overlay">
+			<div class = "confirm-dialog success">
+				<div class = "dialog-icon">
+					<i class = "bi bi-check-circle-fill">
+					</i>
 				</div>
-
-				<h4>Jewellery Updated</h4>
-
+				<h4>
+					Jewellery Updated
+				</h4>
 				<p>
 					Jewellery has been updated successfully.
 				</p>
-
-				<button class="save-btn"
-				        @onclick="CloseSavedDialog">
+				<button class = "save-btn"
+				        @onclick = "CloseSavedDialog">
 					OK
 				</button>
-
 			</div>
-
 		</div>
 	}
 
-	@if (_showEditDialog)
-	{
-		<div class="dialog-overlay">
-			<div class="confirm-dialog">
-
-				<div class="dialog-icon warning">
-					<i class="bi bi-pencil-square"></i>
+	@if (_showEditDialog) {
+		<div class = "dialog-overlay">
+			<div class = "confirm-dialog">
+				<div class = "dialog-icon warning">
+					<i class = "bi bi-pencil-square">
+					</i>
 				</div>
-
-				<h4>Edit Jewellery</h4>
-
+				<h4>
+					Edit Jewellery
+				</h4>
 				<p>
 					You are about to edit this jewellery item.
 					Do you want to continue?
 				</p>
-
-				<div class="dialog-buttons">
-
-					<button class="cancel-btn"
-					        @onclick="CancelEditDialog">
+				<div class = "dialog-buttons">
+					<button class = "cancel-btn"
+					        @onclick = "CancelEditDialog">
 						Cancel
 					</button>
-
-					<button class="save-btn"
-					        @onclick="ConfirmEdit">
+					<button class = "save-btn"
+					        @onclick = "ConfirmEdit">
 						Continue
 					</button>
-
 				</div>
 			</div>
 		</div>
 	}
 
-	@if (_showDeleteDialog)
-	{
-		<div class="dialog-overlay">
-			<div class="confirm-dialog">
-
-				<div class="dialog-icon delete">
-					<i class="bi bi-trash-fill"></i>
+	@if (_showDeleteDialog) {
+		<div class = "dialog-overlay">
+			<div class = "confirm-dialog">
+				<div class = "dialog-icon delete">
+					<i class = "bi bi-trash-fill">
+					</i>
 				</div>
-
-				<h4>Delete Jewellery</h4>
-
+				<h4>
+					Delete Jewellery
+				</h4>
 				<p>
-					This action cannot be undone.<br />
+					This action cannot be undone.
+					<br />
 					Delete this jewellery item?
 				</p>
-
-				<div class="dialog-buttons">
-
-					<button class="cancel-btn"
-					        @onclick="CancelDelete">
+				<div class = "dialog-buttons">
+					<button class = "cancel-btn"
+					        @onclick = "CancelDelete">
 						Cancel
 					</button>
-
-					<button class="delete-btn"
-					        @onclick="ConfirmDelete">
+					<button class = "delete-btn"
+					        @onclick = "ConfirmDelete">
 						Delete
 					</button>
-
 				</div>
-
 			</div>
 		</div>
 	}
-	@if (_showDeletedDialog)
-	{
-		<div class="dialog-overlay">
-
-			<div class="confirm-dialog success @(string.Equals(_deletedMetal, "silver", StringComparison.OrdinalIgnoreCase) ? "silver" : "gold")">
-
-				<div class="dialog-icon">
-					<i class="bi bi-check-circle-fill"></i>
+	@if (_showDeletedDialog) {
+		<div class = "dialog-overlay">
+			<div class = "confirm-dialog success @(string.Equals(_deletedMetal, "silver", StringComparison.OrdinalIgnoreCase) ? "silver" : "gold")">
+				<div class = "dialog-icon">
+					<i class = "bi bi-check-circle-fill">
+					</i>
 				</div>
-
-				<h4>Jewellery Deleted</h4>
-
+				<h4>
+					Jewellery Deleted
+				</h4>
 				<p>
 					Jewellery has been deleted successfully.
 				</p>
-
-				<button class="save-btn"
-				        @onclick="CloseDeletedDialog">
+				<button class = "save-btn"
+				        @onclick = "CloseDeletedDialog">
 					OK
 				</button>
-
 			</div>
-
 		</div>
 	}
-
-
 </div>
 
 
@@ -857,197 +519,162 @@
 	private GoldJewelryDetailsResponse? _goldItem;
 	private SilverJewelryDetailsResponse? _silverItem;
 
-
 	// Backup copies for cancel edit
 	private GoldJewelryDetailsResponse? _originalGoldItem;
 	private SilverJewelryDetailsResponse? _originalSilverItem;
 
-
 	private bool _itemLoaded;
 
-
 	private List<CategoryDto> _categories = new();
-
 
 	private long _selectedCategoryId;
 	private long _originalCategoryId;
 
-
 	private EditContext? _editContext;
-
 
 	private bool _loading;
 	private bool _saving;
 
-
 	private bool _isEditing;
 	private bool _canUpdate;
-
 
 	private bool _showEditDialog;
 	private bool _showUpdateDialog;
 	private bool _showDeleteDialog;
 
-
 	private bool _showSavedDialog;
 	private bool _showDeletedDialog;
-
 
 	private string? _error;
 	private bool _showScanner;
 
-
 	private bool IsGold =>
-		string.Equals(_metal,"Gold",
+		string.Equals(_metal, "Gold",
 			StringComparison.OrdinalIgnoreCase);
 
 	private bool IsSilver =>
-		string.Equals(_metal,"Silver",
+		string.Equals(_metal, "Silver",
 			StringComparison.OrdinalIgnoreCase);
 
-	private async Task LoadCategories(string metal)
-	{
-		try
-		{
+	private async Task LoadCategories(string metal) {
+		try {
 			_categories =
 				await Http.GetFromJsonAsync<List<CategoryDto>>(
 					$"item-categories?metal={Uri.EscapeDataString(metal)}")
-				?? new();
+				?? new List<CategoryDto>();
 		}
-		catch
-		{
-			_categories = new();
+		catch {
+			_categories = new List<CategoryDto>();
 		}
 	}
 
+	private async Task LoadItem() {
+		_loading = true;
+		_error = null;
 
+		_goldItem = null;
+		_silverItem = null;
 
+		_originalGoldItem = null;
+		_originalSilverItem = null;
 
-	private async Task LoadItem()
-{
-    _loading = true;
-    _error = null;
+		_itemLoaded = false;
 
-    _goldItem = null;
-    _silverItem = null;
+		_isEditing = false;
+		_canUpdate = false;
 
-    _originalGoldItem = null;
-    _originalSilverItem = null;
+		try {
+			if (string.IsNullOrWhiteSpace(_sku)) {
+				_error = "Please enter SKU.";
+				return;
+			}
 
-    _itemLoaded = false;
+			var httpResponse = await Http.GetAsync(
+				$"jewelry/{Uri.EscapeDataString(_sku)}");
 
-    _isEditing = false;
-    _canUpdate = false;
+			if (!httpResponse.IsSuccessStatusCode) {
+				var apiError =
+					await httpResponse.Content.ReadFromJsonAsync<ApiErrorResponse>();
 
-    try
-    {
-        if (string.IsNullOrWhiteSpace(_sku))
-        {
-            _error = "Please enter SKU.";
-            return;
-        }
+				_error = apiError?.Message
+				         ?? $"Request failed ({(int)httpResponse.StatusCode}).";
 
-        var httpResponse = await Http.GetAsync(
-            $"jewelry/{Uri.EscapeDataString(_sku)}");
+				return;
+			}
 
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var apiError =
-                await httpResponse.Content.ReadFromJsonAsync<ApiErrorResponse>();
+			var response =
+				await httpResponse.Content.ReadFromJsonAsync<JewelleryLookupResponse>();
 
-            _error = apiError?.Message
-                     ?? $"Request failed ({(int)httpResponse.StatusCode}).";
+			if (response == null) {
+				_error = "Jewellery not found.";
+				return;
+			}
 
-            return;
-        }
+			_metal = response.Metal;
 
-        var response =
-            await httpResponse.Content.ReadFromJsonAsync<JewelleryLookupResponse>();
+			await LoadCategories(_metal);
 
-        if (response == null)
-        {
-            _error = "Jewellery not found.";
-            return;
-        }
+			if (_metal.Equals("Gold", StringComparison.OrdinalIgnoreCase)) {
+				_goldItem =
+					JsonSerializer.Deserialize<GoldJewelryDetailsResponse>(
+						response.Data.ToString()!,
+						new JsonSerializerOptions {
+							PropertyNameCaseInsensitive = true
+						});
 
-        _metal = response.Metal;
+				if (_goldItem != null) {
+					_selectedCategoryId =
+						_categories.FirstOrDefault(x => x.Name == _goldItem.Category)?.Id ?? 0;
 
-        await LoadCategories(_metal);
+					_originalCategoryId = _selectedCategoryId;
 
-        if (_metal.Equals("Gold", StringComparison.OrdinalIgnoreCase))
-        {
-            _goldItem =
-                JsonSerializer.Deserialize<GoldJewelryDetailsResponse>(
-                    response.Data.ToString()!,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+					_originalGoldItem = Clone(_goldItem);
 
-            if (_goldItem != null)
-            {
-                _selectedCategoryId =
-                    _categories.FirstOrDefault(x => x.Name == _goldItem.Category)?.Id ?? 0;
+					CreateEditContext();
+				}
+			} else if (_metal.Equals("Silver", StringComparison.OrdinalIgnoreCase)) {
+				_silverItem =
+					JsonSerializer.Deserialize<SilverJewelryDetailsResponse>(
+						response.Data.ToString()!,
+						new JsonSerializerOptions {
+							PropertyNameCaseInsensitive = true
+						});
 
-                _originalCategoryId = _selectedCategoryId;
+				if (_silverItem != null) {
+					_selectedCategoryId =
+						_categories.FirstOrDefault(x => x.Name == _silverItem.Category)?.Id ?? 0;
 
-                _originalGoldItem = Clone(_goldItem);
+					_originalCategoryId = _selectedCategoryId;
 
-                CreateEditContext();
-            }
-        }
-        else if (_metal.Equals("Silver", StringComparison.OrdinalIgnoreCase))
-        {
-            _silverItem =
-                JsonSerializer.Deserialize<SilverJewelryDetailsResponse>(
-                    response.Data.ToString()!,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+					_originalSilverItem = Clone(_silverItem);
 
-            if (_silverItem != null)
-            {
-                _selectedCategoryId =
-                    _categories.FirstOrDefault(x => x.Name == _silverItem.Category)?.Id ?? 0;
+					CreateEditContext();
+				}
+			}
 
-                _originalCategoryId = _selectedCategoryId;
+			_itemLoaded = true;
+		}
+		catch (HttpRequestException) {
+			_error = "Unable to connect to the server.";
+		}
+		catch {
+			_error = "Unable to load jewellery.";
+		}
+		finally {
+			_loading = false;
+		}
+	}
 
-                _originalSilverItem = Clone(_silverItem);
-
-                CreateEditContext();
-            }
-        }
-
-        _itemLoaded = true;
-    }
-    catch (HttpRequestException)
-    {
-        _error = "Unable to connect to the server.";
-    }
-    catch
-    {
-        _error = "Unable to load jewellery.";
-    }
-    finally
-    {
-        _loading = false;
-    }
-}
-
-	private void ShowUpdateDialog()
-	{
+	private void ShowUpdateDialog() {
 		if (_canUpdate)
 			_showUpdateDialog = true;
 	}
 
-	private void CancelUpdate()
-	{
+	private void CancelUpdate() {
 		_showUpdateDialog = false;
 	}
 
-	private async Task ConfirmUpdate()
-	{
+	private async Task ConfirmUpdate() {
 		_showUpdateDialog = false;
 
 		if (IsGold)
@@ -1057,7 +684,6 @@
 
 		CreateEditContext();
 	}
-
 
 	private string GetBarcodeUrl(string? path) {
 		if (string.IsNullOrWhiteSpace(path))
@@ -1070,10 +696,8 @@
 			.ToString();
 	}
 
-
 	private string? CurrentBarcodeImageUrl =>
-		_metal switch
-		{
+		_metal switch {
 			"Gold" when _goldItem != null =>
 				_goldItem.BarcodeImageUrl,
 
@@ -1082,10 +706,6 @@
 
 			_ => null
 		};
-
-
-
-
 
 	private async Task UpdateGold() {
 		if (_goldItem == null)
@@ -1102,7 +722,6 @@
 				_goldItem.StoneWeight = null;
 				_goldItem.StonePrice = null;
 			}
-
 
 
 			var request = new UpdateGoldJewelryRequest {
@@ -1147,12 +766,10 @@
 			};
 
 
-
 			var response =
 				await Http.PutAsJsonAsync(
 					"jewelry/gold",
 					request);
-
 
 
 			if (response.IsSuccessStatusCode) {
@@ -1180,7 +797,6 @@
 				_error =
 					"Unable to update gold jewellery.";
 			}
-
 		}
 		catch {
 			_error =
@@ -1191,14 +807,9 @@
 		}
 	}
 
-
-
-
-	private void GenerateEstimate()
-	{
+	private void GenerateEstimate() {
 		if (string.IsNullOrWhiteSpace(_sku) ||
-		    string.IsNullOrWhiteSpace(_metal))
-		{
+		    string.IsNullOrWhiteSpace(_metal)) {
 			_error = "Please load jewellery before generating estimate.";
 			return;
 		}
@@ -1207,8 +818,6 @@
 		Navigation.NavigateTo(
 			$"/estimate/{_metal.ToLower()}/{Uri.EscapeDataString(_sku)}");
 	}
-
-
 
 	private async Task UpdateSilver() {
 		if (_silverItem == null)
@@ -1220,10 +829,6 @@
 
 
 		try {
-
-
-
-
 			var request = new UpdateSilverJewelryRequest {
 				Sku = _silverItem.Sku,
 
@@ -1240,9 +845,8 @@
 
 
 				SilverMakingChargePerGram =
-					_silverItem.SilverMakingChargePerGram,
+					_silverItem.SilverMakingChargePerGram
 			};
-
 
 
 			var response =
@@ -1251,12 +855,10 @@
 					request);
 
 
-
 			if (response.IsSuccessStatusCode) {
 				_silverItem =
 					await response.Content
 						.ReadFromJsonAsync<SilverJewelryDetailsResponse>();
-
 
 
 				if (_silverItem != null) {
@@ -1278,7 +880,6 @@
 				_error =
 					"Unable to update silver jewellery.";
 			}
-
 		}
 		catch {
 			_error =
@@ -1289,18 +890,6 @@
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
 	private async Task DeleteItem(
 		string sku,
 		string metal) {
@@ -1310,9 +899,7 @@
 					$"jewelry/{metal}/{sku}");
 
 
-
-			if (response.IsSuccessStatusCode)
-			{
+			if (response.IsSuccessStatusCode) {
 				_deletedMetal = metal;
 
 				ResetState();
@@ -1320,12 +907,10 @@
 				_showDeletedDialog = true;
 
 				await InvokeAsync(StateHasChanged);
-			}
-			else {
+			} else {
 				_error =
 					"Unable to delete jewellery.";
 			}
-
 		}
 		catch {
 			_error =
@@ -1333,15 +918,7 @@
 		}
 	}
 
-
-
-
-
-
-
-
 	private void CancelEdit() {
-
 		if (_metal == "Gold" &&
 		    _originalGoldItem != null) {
 			_goldItem =
@@ -1351,7 +928,6 @@
 			_silverItem =
 				Clone(_originalSilverItem);
 		}
-
 
 
 		_selectedCategoryId =
@@ -1367,40 +943,27 @@
 		CreateEditContext();
 	}
 
-
-
-
-
-
 	private void CloseDeletedDialog() {
 		_showDeletedDialog = false;
 		_deletedMetal = string.Empty;
 	}
 
 	private async Task HandleKeyDown(
-		KeyboardEventArgs e)
-	{
-		if(e.Key == "Enter")
-		{
+		KeyboardEventArgs e) {
+		if (e.Key == "Enter") {
 			await LoadItem();
 		}
 	}
 
-	private void CreateEditContext()
-	{
+	private void CreateEditContext() {
 		if (_editContext != null)
 			_editContext.OnFieldChanged -= OnFieldChanged;
 
-		if (IsGold && _goldItem != null)
-		{
+		if (IsGold && _goldItem != null) {
 			_editContext = new EditContext(_goldItem);
-		}
-		else if (IsSilver && _silverItem != null)
-		{
+		} else if (IsSilver && _silverItem != null) {
 			_editContext = new EditContext(_silverItem);
-		}
-		else
-		{
+		} else {
 			return;
 		}
 
@@ -1416,25 +979,17 @@
 		InvokeAsync(StateHasChanged);
 	}
 
-
-
-
-	private async Task CategoryChanged()
-	{
+	private async Task CategoryChanged() {
 		UpdateCanUpdate();
 
 		await InvokeAsync(StateHasChanged);
 	}
-
-
-
 
 	private void UpdateCanUpdate() {
 		if (!_isEditing) {
 			_canUpdate = false;
 			return;
 		}
-
 
 
 		if (_metal == "Gold") {
@@ -1450,22 +1005,15 @@
 		}
 	}
 
-
-
-
-
-	private void ShowDeleteDialog()
-	{
+	private void ShowDeleteDialog() {
 		_showDeleteDialog = true;
 	}
 
-	private void CancelDelete()
-	{
+	private void CancelDelete() {
 		_showDeleteDialog = false;
 	}
 
-	private async Task ConfirmDelete()
-	{
+	private async Task ConfirmDelete() {
 		_showDeleteDialog = false;
 
 		if (IsGold && _goldItem != null)
@@ -1474,58 +1022,43 @@
 			await DeleteItem(_silverItem.Sku, "silver");
 	}
 
-
 	private bool HasGoldChanges() {
 		if (_goldItem == null ||
 		    _originalGoldItem == null)
 			return false;
 
 
-
 		return
-
 			_selectedCategoryId != _originalCategoryId ||
-
 			_goldItem.WeightInGrams !=
 			_originalGoldItem.WeightInGrams ||
-
 			_goldItem.PurityInPercentage !=
 			_originalGoldItem.PurityInPercentage ||
-
 			_goldItem.HasStones !=
 			_originalGoldItem.HasStones ||
-
 			_goldItem.StoneType !=
 			_originalGoldItem.StoneType ||
-
 			_goldItem.StoneWeight !=
 			_originalGoldItem.StoneWeight ||
-
 			_goldItem.StonePrice !=
 			_originalGoldItem.StonePrice ||
-
 			_goldItem.MakingChargeType !=
 			_originalGoldItem.MakingChargeType ||
-
 			_goldItem.MakingChargePercentage !=
 			_originalGoldItem.MakingChargePercentage ||
-
 			_goldItem.MakingChargeWeight !=
 			_originalGoldItem.MakingChargeWeight ||
-
 			_goldItem.HallMarkCharge !=
 			_originalGoldItem.HallMarkCharge;
 	}
 
 	private DotNetObjectReference<ManageJewellery>? _objRef;
 
-	protected override void OnInitialized()
-	{
+	protected override void OnInitialized() {
 		_objRef = DotNetObjectReference.Create(this);
 	}
 
-	private async Task StartScanner()
-	{
+	private async Task StartScanner() {
 		_showScanner = true;
 		_error = null;
 		StateHasChanged();
@@ -1534,12 +1067,10 @@
 
 		_objRef ??= DotNetObjectReference.Create(this);
 
-		try
-		{
+		try {
 			await JS.InvokeVoidAsync("startBarcodeScanner", _objRef);
 		}
-		catch (JSException ex)
-		{
+		catch (JSException ex) {
 			_error = $"Unable to start camera: {ex.Message}";
 			_showScanner = false;
 			StateHasChanged();
@@ -1547,23 +1078,20 @@
 	}
 
 	[JSInvokable]
-	public async Task OnScannerError(string message)
-	{
+	public async Task OnScannerError(string message) {
 		_error = message;
 		_showScanner = false;
 		await InvokeAsync(StateHasChanged);
 	}
 
-	public async ValueTask DisposeAsync()
-	{
+	public async ValueTask DisposeAsync() {
 		await JS.InvokeVoidAsync("stopBarcodeScanner");
 
 		_objRef?.Dispose();
-
 	}
+
 	[JSInvokable]
-	public async Task BarcodeDetected(string barcode)
-	{
+	public async Task BarcodeDetected(string barcode) {
 		_sku = barcode;
 
 		await InvokeAsync(StateHasChanged);
@@ -1574,15 +1102,12 @@
 		await InvokeAsync(StateHasChanged);
 	}
 
-
-	private async Task StopScanner()
-	{
+	private async Task StopScanner() {
 		await JS.InvokeVoidAsync("stopBarcodeScanner");
 		_showScanner = false;
 	}
 
-	private bool HasSilverChanges()
-	{
+	private bool HasSilverChanges() {
 		if (_silverItem == null ||
 		    _originalSilverItem == null)
 			return false;
@@ -1590,45 +1115,33 @@
 
 		return
 			_selectedCategoryId != _originalCategoryId ||
-
 			_silverItem.WeightInGrams !=
 			_originalSilverItem.WeightInGrams ||
-
 			_silverItem.Purity !=
 			_originalSilverItem.Purity ||
-
 			_silverItem.SilverMakingChargePerGram !=
 			_originalSilverItem.SilverMakingChargePerGram;
 	}
-
-
-
 
 	private bool ValidateGold() {
 		if (_goldItem == null)
 			return false;
 
 
-
 		if (_selectedCategoryId <= 0)
 			return false;
-
 
 
 		if (_goldItem.WeightInGrams <= 0)
 			return false;
 
 
-
 		if (_goldItem.PurityInPercentage <= 0)
 			return false;
 
 
-
 		if (_goldItem.HallMarkCharge < 0)
 			return false;
-
-
 
 
 		if (_goldItem.MakingChargeType ==
@@ -1643,19 +1156,15 @@
 		}
 
 
-
-
 		if (_goldItem.HasStones) {
 			if (string.IsNullOrWhiteSpace(
 				    _goldItem.StoneType))
 				return false;
 
 
-
 			if (!_goldItem.StoneWeight.HasValue ||
 			    _goldItem.StoneWeight <= 0)
 				return false;
-
 
 
 			if (!_goldItem.StonePrice.HasValue ||
@@ -1664,55 +1173,34 @@
 		}
 
 
-
 		return true;
 	}
-
-
-
-
-
-
-
 
 	private bool ValidateSilver() {
 		if (_silverItem == null)
 			return false;
 
 
-
 		if (_selectedCategoryId <= 0)
 			return false;
-
 
 
 		if (_silverItem.WeightInGrams <= 0)
 			return false;
 
 
-
 		if (_silverItem.Purity <= 0)
 			return false;
-
 
 
 		if (_silverItem.SilverMakingChargePerGram < 0)
 			return false;
 
 
-
-
-
-
-
 		return true;
 	}
 
-
-
-
-	private void ConfirmEdit()
-	{
+	private void ConfirmEdit() {
 		_showEditDialog = false;
 
 		_isEditing = true;
@@ -1722,62 +1210,33 @@
 		UpdateCanUpdate();
 	}
 
-	private void ShowEditDialog()
-	{
+	private void ShowEditDialog() {
 		_showEditDialog = true;
 	}
 
-
-	private void CancelEditDialog()
-	{
+	private void CancelEditDialog() {
 		_showEditDialog = false;
 	}
 
-
-	public class JewelleryLookupResponse
-	{
+	public class JewelleryLookupResponse {
 		public string Metal { get; set; } = string.Empty;
 
 		public JsonElement Data { get; set; }
 	}
 
-
-
-	private void CloseSavedDialog()
-	{
+	private void CloseSavedDialog() {
 		_showSavedDialog = false;
 	}
 
-
-
-
-
-
-
-
-
-	private void NotifyChange()
-	{
+	private void NotifyChange() {
 		UpdateCanUpdate();
 	}
 
-
-
-
-
-
-
-	private void CloseDialogs()
-	{
+	private void CloseDialogs() {
 		_showEditDialog = false;
 		_showUpdateDialog = false;
 		_showDeleteDialog = false;
 	}
-
-
-
-
-
 
 	private static GoldJewelryDetailsResponse Clone(
 		GoldJewelryDetailsResponse item) {
@@ -1818,10 +1277,8 @@
 		};
 	}
 
-
 	[JSInvokable]
-	public async Task BarcodeScanned(string sku)
-	{
+	public async Task BarcodeScanned(string sku) {
 		_sku = sku;
 
 		await StopScanner();
@@ -1830,7 +1287,6 @@
 
 		await InvokeAsync(StateHasChanged);
 	}
-
 
 	private static SilverJewelryDetailsResponse Clone(
 		SilverJewelryDetailsResponse item) {
@@ -1856,10 +1312,7 @@
 		};
 	}
 
-
-
-	private void ResetState()
-	{
+	private void ResetState() {
 		_sku = string.Empty;
 
 		_goldItem = null;
@@ -1870,7 +1323,7 @@
 
 		_metal = string.Empty;
 
-		_categories.Clear();      // <-- add this
+		_categories.Clear(); // <-- add this
 
 		_selectedCategoryId = 0;
 		_originalCategoryId = 0;
@@ -1889,10 +1342,6 @@
 		_showDeleteDialog = false;
 	}
 
-
-
-
-
 	public class CategoryDto {
 		public long Id { get; set; }
 
@@ -1902,5 +1351,4 @@
 	public class ApiErrorResponse {
 		public string? Message { get; set; }
 	}
-
-	}
+}

@@ -10,7 +10,6 @@ public abstract class AuthorizedPageBase : ComponentBase
     [Inject]
     protected NavigationManager NavigationManager { get; set; } = default!;
 
-
     protected override void OnInitialized()
     {
         var token = TokenService.GetToken();

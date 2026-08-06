@@ -24,7 +24,11 @@ public class GoldPriceCalculationResponse
 
     public decimal HallmarkAmount { get; set; }
 
-    public decimal TotalAmount { get; set; }
+    public decimal TotalAmountExcludingGst { get; set; }
+
+    public decimal EstimateGstAmount { get; set; }
+
+    public decimal TotalAmountIncludingGst { get; set; }
 
     public decimal PurityInPercentage { get; set; }
 

@@ -1,5 +1,4 @@
 .gold-rate-container {
-
 	--primary: #d4af37;
 	--primary-dark: #9c7b16;
 	--primary-light: #fff8dc;
@@ -10,976 +9,645 @@
 	max-width: 1600px;
 	margin: 0 auto;
 
-	transition: .35s ease;
+	transition: 0.35s ease;
 }
-
 
 /* ============================
    THEMES
 ============================ */
 
 .gold-theme {
-
 	--primary: #d4af37;
 	--primary-dark: #9c7b16;
 	--primary-light: #fff8dc;
 	--border: #e7c55a;
 	--text-accent: #4b3600;
-
 }
 
-
 .silver-theme {
-
 	--primary: #a6b0be;
 	--primary-dark: #5d6878;
 	--primary-light: #f3f5f7;
 	--border: #cfd5dd;
 	--text-accent: #374151;
-
 }
-
-
 
 /* ============================
    HEADER
 ============================ */
 
 .gold-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 
-	display:flex;
-	justify-content:space-between;
-	align-items:center;
+	margin-bottom: 24px;
 
-	margin-bottom:24px;
-
-	gap:20px;
-
+	gap: 20px;
 }
-
 
 .gold-header h2 {
+	margin: 0 0 6px;
 
-	margin:0 0 6px;
+	font-weight: 700;
 
-	font-weight:700;
-
-	color:#222;
-
+	color: #222;
 }
-
 
 .gold-header h2 i {
-
-	color:var(--primary);
-
+	color: var(--primary);
 }
-
 
 .gold-header p {
+	margin: 0;
 
-	margin:0;
-
-	color:#777;
-
+	color: #777;
 }
-
-
 
 /* ============================
    METAL BANNER
 ============================ */
 
-
 .metal-banner {
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
+	gap: 16px;
 
-	gap:16px;
+	padding: 16px 24px;
 
-	padding:16px 24px;
+	border-radius: 18px;
 
-	border-radius:18px;
+	color: var(--text-accent);
 
-	color:var(--text-accent);
+	font-weight: 600;
 
-	font-weight:600;
+	background: linear-gradient(135deg, var(--primary), var(--primary-light));
 
+	border: 1px solid var(--border);
 
-	background:linear-gradient(
-			135deg,
-			var(--primary),
-			var(--primary-light)
-	);
+	box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
 
-
-	border:1px solid var(--border);
-
-	box-shadow:
-			0 10px 28px rgba(0,0,0,.15);
-
-
-	animation:fadeIn .35s ease;
-
+	animation: fadeIn 0.35s ease;
 }
-
-
 
 .metal-banner i {
-
-	font-size:2.2rem;
-
+	font-size: 2.2rem;
 }
-
 
 .metal-name {
+	font-size: 1.6rem;
 
-	font-size:1.6rem;
-
-	font-weight:700;
-
+	font-weight: 700;
 }
 
-
-
 @keyframes fadeIn {
-
 	from {
+		opacity: 0;
 
-		opacity:0;
-
-		transform:translateY(-10px);
-
+		transform: translateY(-10px);
 	}
 
 	to {
+		opacity: 1;
 
-		opacity:1;
-
-		transform:translateY(0);
-
+		transform: translateY(0);
 	}
-
 }
-
-
 
 /* ============================
    CARDS
 ============================ */
 
-
 .rate-card {
+	background: white;
 
-	background:white;
+	border-radius: 16px;
 
-	border-radius:16px;
+	padding: 28px;
 
-	padding:28px;
+	margin-bottom: 25px;
 
-	margin-bottom:25px;
-
-	box-shadow:
-			0 5px 18px rgba(0,0,0,.08);
-
+	box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
 }
-
-
 
 /* ============================
    SEARCH
 ============================ */
 
-
 .search-row {
+	display: flex;
 
-	display:flex;
+	gap: 16px;
 
-	gap:16px;
-
-	align-items:center;
-
+	align-items: center;
 }
-
 
 .search-row .form-control {
-
-	height:46px;
-
+	height: 46px;
 }
-
-
 
 /* ============================
    SECTIONS
 ============================ */
 
-
 .rate-section {
+	margin-bottom: 24px;
 
-	margin-bottom:24px;
+	padding-bottom: 20px;
 
-	padding-bottom:20px;
-
-	border-bottom:1px solid #eee;
-
+	border-bottom: 1px solid #eee;
 }
-
-
 
 .rate-section:last-child {
+	border-bottom: none;
 
-	border-bottom:none;
-
-	margin-bottom:0;
-
+	margin-bottom: 0;
 }
-
-
 
 .rate-section h5 {
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
+	gap: 10px;
 
-	gap:10px;
+	margin-bottom: 18px;
 
-	margin-bottom:18px;
+	font-size: 18px;
 
-	font-size:18px;
-
-	font-weight:700;
-
+	font-weight: 700;
 }
-
-
 
 .rate-section h5 i {
-
-	color:var(--primary);
-
+	color: var(--primary);
 }
-
-
 
 /* ============================
    GRID
 ============================ */
 
-
 .rate-grid {
+	display: grid;
 
-	display:grid;
+	grid-template-columns: repeat(2, 1fr);
 
-	grid-template-columns:repeat(2,1fr);
-
-	gap:18px;
-
+	gap: 18px;
 }
-
-
 
 /* ============================
    FIELDS
 ============================ */
 
-
 .rate-field {
+	display: flex;
 
-	display:flex;
+	flex-direction: column;
 
-	flex-direction:column;
-
-	gap:7px;
-
+	gap: 7px;
 }
-
-
 
 .rate-field label {
+	font-weight: 600;
 
-	font-weight:600;
-
-	color:#555;
-
+	color: #555;
 }
-
-
 
 .form-control,
 .form-select {
+	height: 44px;
 
-	height:44px;
+	border-radius: 10px;
 
-	border-radius:10px;
-
-	border:1px solid #ddd;
-
+	border: 1px solid #ddd;
 }
-
-
 
 .form-control:focus,
 .form-select:focus {
+	border-color: var(--primary);
 
-	border-color:var(--primary);
-
-	box-shadow:
-			0 0 0 .2rem rgba(212,175,55,.18);
-
+	box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.18);
 }
-
-
 
 .form-control:disabled,
 .form-select:disabled {
-
-	background:#f8f9fa;
-
+	background: #f8f9fa;
 }
-
 
 /* ============================
    BARCODE
 ============================ */
 
 .barcode-section {
+	text-align: center;
 
-	text-align:center;
+	margin-bottom: 30px;
 
-	margin-bottom:30px;
+	padding-bottom: 20px;
 
-	padding-bottom:20px;
+	border-bottom: 1px solid #eee;
 
-	border-bottom:1px solid #eee;
+	overflow: hidden;
 
-	overflow:hidden;
-
-	width:100%;
-
+	width: 100%;
 }
 
-
 .barcode-image {
+	display: block;
 
-	display:block;
+	width: 100%;
 
-	width:100%;
+	max-width: 320px;
 
-	max-width:320px;
+	height: auto;
 
-	height:auto;
+	margin: 0 auto;
 
-	margin:0 auto;
+	padding: 15px;
 
-	padding:15px;
+	border-radius: 12px;
 
-	border-radius:12px;
+	border: 1px solid #ddd;
 
-	border:1px solid #ddd;
+	background: white;
 
-	background:white;
+	object-fit: contain;
 
-	object-fit:contain;
-
-	box-sizing:border-box;
-
+	box-sizing: border-box;
 }
 
 /* ============================
    MAKING CHARGE
 ============================ */
 
-
 .charge-type-group {
+	display: flex;
 
-	display:flex;
+	gap: 16px;
 
-	gap:16px;
-
-	margin-bottom:20px;
-
+	margin-bottom: 20px;
 }
-
-
 
 .charge-option {
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
+	gap: 10px;
 
-	gap:10px;
+	padding: 12px 22px;
 
-	padding:12px 22px;
+	border-radius: 12px;
 
-	border-radius:12px;
+	border: 1px solid var(--border);
 
-	border:1px solid var(--border);
+	background: white;
 
-	background:white;
+	cursor: pointer;
 
-	cursor:pointer;
+	font-weight: 600;
 
-	font-weight:600;
-
-	transition:.2s;
-
+	transition: 0.2s;
 }
-
-
 
 .charge-option input {
-
-	display:none;
-
+	display: none;
 }
-
-
 
 .charge-option.active {
+	background: linear-gradient(135deg, var(--primary), var(--primary-light));
 
-	background:linear-gradient(
-			135deg,
-			var(--primary),
-			var(--primary-light)
-	);
-
-	border-color:var(--primary);
-
+	border-color: var(--primary);
 }
-
-
 
 /* ============================
    BUTTONS
 ============================ */
-
 
 .save-btn,
 .edit-btn,
 .cancel-btn,
 .delete-btn,
 .estimate-btn {
+	border: none;
 
+	border-radius: 10px;
 
-	border:none;
+	padding: 11px 22px;
 
-	border-radius:10px;
+	font-weight: 600;
 
-	padding:11px 22px;
+	display: inline-flex;
 
-	font-weight:600;
+	align-items: center;
 
+	justify-content: center;
 
-	display:inline-flex;
+	gap: 8px;
 
-	align-items:center;
-
-	justify-content:center;
-
-	gap:8px;
-
-
-	transition:.2s ease;
-
+	transition: 0.2s ease;
 }
-
-
 
 .save-btn,
 .edit-btn {
+	background: linear-gradient(135deg, var(--primary), var(--primary-dark));
 
-
-	background:linear-gradient(
-			135deg,
-			var(--primary),
-			var(--primary-dark)
-	);
-
-	color:white;
-
+	color: white;
 }
-
-
 
 .cancel-btn {
+	background: #6c757d;
 
-	background:#6c757d;
-
-	color:white;
-
+	color: white;
 }
-
-
 
 .delete-btn {
+	background: #dc3545;
 
-	background:#dc3545;
-
-	color:white;
-
+	color: white;
 }
-
-
 
 .delete-btn:hover {
-
-	background:#bb2d3b;
-
+	background: #bb2d3b;
 }
-
-
 
 /* ============================
    ESTIMATE BUTTON
 ============================ */
 
-
 .estimate-btn {
+	background: linear-gradient(135deg, #0f766e, #14b8a6);
 
+	color: white;
 
-	background:linear-gradient(
-			135deg,
-			#0f766e,
-			#14b8a6
-	);
-
-
-	color:white;
-
-
-	box-shadow:
-			0 6px 16px rgba(20,184,166,.25);
-
-
+	box-shadow: 0 6px 16px rgba(20, 184, 166, 0.25);
 }
-
-
 
 .estimate-btn:hover {
+	transform: translateY(-2px);
 
-	transform:translateY(-2px);
-
-
-	box-shadow:
-			0 10px 22px rgba(20,184,166,.35);
-
+	box-shadow: 0 10px 22px rgba(20, 184, 166, 0.35);
 }
-
-
 
 /* ============================
    ACTIONS
 ============================ */
 
-
 .action-buttons {
+	display: flex;
 
-	display:flex;
+	justify-content: space-between;
 
-	justify-content:space-between;
+	align-items: center;
 
-	align-items:center;
+	margin-top: 25px;
 
-	margin-top:25px;
+	gap: 16px;
 
-	gap:16px;
-
-	flex-wrap:wrap;
-
+	flex-wrap: wrap;
 }
-
-
 
 .left-actions,
 .right-actions {
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
-
-	gap:12px;
-
+	gap: 12px;
 }
-
-
 
 /* ============================
    DIALOG
 ============================ */
 
-
 .dialog-overlay {
+	position: fixed;
 
-	position:fixed;
+	inset: 0;
 
-	inset:0;
+	background: rgba(0, 0, 0, 0.45);
 
-	background:rgba(0,0,0,.45);
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
+	justify-content: center;
 
-	justify-content:center;
-
-	z-index:9999;
-
+	z-index: 9999;
 }
-
-
 
 .confirm-dialog,
 .success-dialog {
+	width: 420px;
 
+	max-width: 92%;
 
-	width:420px;
+	background: white;
 
-	max-width:92%;
+	padding: 30px;
 
-	background:white;
+	border-radius: 18px;
 
-	padding:30px;
+	text-align: center;
 
-	border-radius:18px;
-
-	text-align:center;
-
-	box-shadow:
-			0 12px 35px rgba(0,0,0,.25);
-
+	box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
 }
-
-
 
 .dialog-icon {
+	width: 70px;
 
-	width:70px;
+	height: 70px;
 
-	height:70px;
+	margin: 0 auto 20px;
 
-	margin:0 auto 20px;
+	border-radius: 50%;
 
-	border-radius:50%;
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
+	justify-content: center;
 
-	justify-content:center;
+	font-size: 32px;
 
-	font-size:32px;
+	background: var(--primary);
 
-	background:var(--primary);
-
-	color:white;
-
+	color: white;
 }
-
-
 
 .dialog-icon.warning {
-
-	background:#f0ad4e;
-
+	background: #f0ad4e;
 }
-
-
 
 .dialog-icon.delete {
-
-	background:#dc3545;
-
+	background: #dc3545;
 }
-
-
 
 .dialog-buttons {
+	display: flex;
 
-	display:flex;
+	justify-content: center;
 
-	justify-content:center;
+	gap: 12px;
 
-	gap:12px;
-
-	margin-top:20px;
-
+	margin-top: 20px;
 }
-
-
 
 /* ============================
    SPINNER
 ============================ */
 
-
 .spinner-border {
+	width: 18px;
 
-	width:18px;
-
-	height:18px;
-
+	height: 18px;
 }
-
-
 
 /* ============================
    MOBILE
 ============================ */
 
-
-@media(max-width:768px) {
-
-
+@media (max-width: 768px) {
 	.barcode-section {
+		padding: 0;
 
-		padding:0;
-
-		margin-bottom:18px;
-
+		margin-bottom: 18px;
 	}
 
-
 	.barcode-image {
+		width: 100%;
 
-		width:100%;
+		max-width: 100%;
 
-		max-width:100%;
-
-		padding:10px;
-
+		padding: 10px;
 	}
 
 	.gold-rate-container {
-
-		padding:12px;
-
+		padding: 12px;
 	}
-
-
 
 	.gold-header {
+		flex-direction: column;
 
-		flex-direction:column;
+		align-items: flex-start;
 
-		align-items:flex-start;
-
-		gap:12px;
-
+		gap: 12px;
 	}
-
-
 
 	.gold-header h2 {
-
-		font-size:1.35rem;
-
+		font-size: 1.35rem;
 	}
-
-
 
 	.metal-banner {
+		width: 100%;
 
-		width:100%;
-
-		padding:14px 16px;
-
+		padding: 14px 16px;
 	}
-
-
 
 	.metal-name {
-
-		font-size:1.3rem;
-
+		font-size: 1.3rem;
 	}
-
-
 
 	.rate-card {
-
-		padding:16px;
-
+		padding: 16px;
 	}
-
-
 
 	.search-row {
+		flex-direction: column;
 
-		flex-direction:column;
-
-		align-items:stretch;
-
+		align-items: stretch;
 	}
-
-
 
 	.search-row input,
 	.search-row button {
-
-		width:100%;
-
+		width: 100%;
 	}
-
-
 
 	.rate-grid {
-
-		grid-template-columns:1fr;
-
+		grid-template-columns: 1fr;
 	}
-
-
 
 	.charge-type-group {
-
-		flex-direction:column;
-
+		flex-direction: column;
 	}
-
-
 
 	.charge-option {
+		width: 100%;
 
-		width:100%;
-
-		justify-content:center;
-
+		justify-content: center;
 	}
-
-
 
 	.action-buttons {
+		flex-direction: column;
 
-		flex-direction:column;
-
-		align-items:stretch;
-
+		align-items: stretch;
 	}
-
-
 
 	.left-actions,
 	.right-actions {
+		width: 100%;
 
-		width:100%;
-
-		flex-direction:column;
-
+		flex-direction: column;
 	}
-
-
 
 	.left-actions button,
 	.right-actions button {
-
-		width:100%;
-
+		width: 100%;
 	}
-
-
 
 	.confirm-dialog,
 	.success-dialog {
+		width: calc(100% - 32px);
 
-		width:calc(100% - 32px);
-
-		padding:22px;
-
+		padding: 22px;
 	}
-
-
 
 	.dialog-buttons {
-
-		flex-direction:column;
-
+		flex-direction: column;
 	}
-
-
 
 	.dialog-buttons button {
-
-		width:100%;
-
+		width: 100%;
 	}
-
 }
-
-
 
 /* ============================
    SMALL PHONE
 ============================ */
 
-
-@media(max-width:400px) {
-
-
+@media (max-width: 400px) {
 	.gold-rate-container {
-
-		padding:8px;
-
+		padding: 8px;
 	}
-
 
 	.rate-card {
-
-		padding:14px;
-
+		padding: 14px;
 	}
-
 
 	.gold-header h2 {
-
-		font-size:1.2rem;
-
+		font-size: 1.2rem;
 	}
-
 
 	.metal-name {
-
-		font-size:1.1rem;
-
+		font-size: 1.1rem;
 	}
-
 }
-
-
 
 /* ============================
    SILVER DELETE SUCCESS
 ============================ */
 
-
 .confirm-dialog.success.silver .dialog-icon {
+	background: linear-gradient(135deg, #adb5bd, #dee2e6);
 
-	background:linear-gradient(
-			135deg,
-			#adb5bd,
-			#dee2e6
-	);
-
-	color:#495057;
-
+	color: #495057;
 }
 
-
-
 .confirm-dialog.success.silver .save-btn {
+	background: linear-gradient(135deg, #adb5bd, #dee2e6);
 
-	background:linear-gradient(
-			135deg,
-			#adb5bd,
-			#dee2e6
-	);
-
-	color:#343a40;
-
+	color: #343a40;
 }
 
 /* ============================
@@ -992,277 +660,177 @@
 	box-sizing: border-box;
 }
 
-
 .gold-rate-container {
-	width:100%;
-	overflow-x:hidden;
+	width: 100%;
+	overflow-x: hidden;
 }
-
-
 
 /* ============================
    BARCODE FINAL FIX
 ============================ */
 
 .barcode-section {
-
-	width:100%;
-	overflow:hidden;
-	display:flex;
-	justify-content:center;
-	align-items:center;
-
+	width: 100%;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-
 
 .barcode-image {
+	width: 100%;
+	max-width: 320px;
 
-	width:100%;
-	max-width:320px;
+	height: auto;
 
-	height:auto;
+	display: block;
 
-	display:block;
+	object-fit: contain;
 
-	object-fit:contain;
+	padding: 12px;
 
-	padding:12px;
-
-	box-sizing:border-box;
-
+	box-sizing: border-box;
 }
-
-
 
 /* ============================
    ACTION BUTTON ALIGNMENT
 ============================ */
 
-
 .action-buttons {
+	display: flex;
 
-	display:flex;
+	justify-content: space-between;
 
-	justify-content:space-between;
+	align-items: center;
 
-	align-items:center;
+	width: 100%;
 
-	width:100%;
+	gap: 12px;
 
-	gap:12px;
+	flex-wrap: nowrap;
 
-	flex-wrap:nowrap;
-
-	margin-top:25px;
-
+	margin-top: 25px;
 }
-
-
 
 .left-actions,
 .right-actions {
+	display: flex;
 
-	display:flex;
+	align-items: center;
 
-	align-items:center;
+	gap: 12px;
 
-	gap:12px;
-
-	flex-wrap:nowrap;
-
+	flex-wrap: nowrap;
 }
-
-
 
 .left-actions button,
 .right-actions button {
-
-	white-space:nowrap;
-
+	white-space: nowrap;
 }
-
-
 
 /* Generate Estimate */
 
 .estimate-btn {
+	background: linear-gradient(135deg, #059669, #10b981);
 
-	background:linear-gradient(
-			135deg,
-			#059669,
-			#10b981
-	);
+	color: white;
 
-	color:white;
-
-	box-shadow:
-			0 6px 15px rgba(5,150,105,.25);
-
+	box-shadow: 0 6px 15px rgba(5, 150, 105, 0.25);
 }
-
 
 .estimate-btn:hover {
+	transform: translateY(-2px);
 
-	transform:translateY(-2px);
-
-	box-shadow:
-			0 10px 20px rgba(5,150,105,.35);
-
+	box-shadow: 0 10px 20px rgba(5, 150, 105, 0.35);
 }
-
-
-
 
 /* ============================
    MOBILE RESPONSIVE FIX
 ============================ */
 
-
-@media(max-width:768px) {
-
-
+@media (max-width: 768px) {
 	.gold-rate-container {
-
-		padding:12px;
-
+		padding: 12px;
 	}
-
-
 
 	.rate-card {
-
-		padding:16px;
-
+		padding: 16px;
 	}
-
-
 
 	/* Header */
-
 	.gold-header {
+		flex-direction: column;
 
-		flex-direction:column;
-
-		align-items:flex-start;
-
+		align-items: flex-start;
 	}
-
-
 
 	/* Search */
-
 	.search-row {
+		flex-direction: column;
 
-		flex-direction:column;
-
-		width:100%;
-
+		width: 100%;
 	}
-
 
 	.search-row input,
 	.search-row button {
-
-		width:100%;
-
+		width: 100%;
 	}
-
-
 
 	/* Barcode */
-
 	.barcode-image {
+		max-width: 100%;
 
-		max-width:100%;
-
-		padding:8px;
-
+		padding: 8px;
 	}
-
-
-
 
 	/* Buttons */
-
 	.action-buttons {
+		flex-direction: column;
 
-		flex-direction:column;
+		align-items: stretch;
 
-		align-items:stretch;
-
-		gap:12px;
-
+		gap: 12px;
 	}
-
 
 	.left-actions,
 	.right-actions {
+		width: 100%;
 
-		width:100%;
-
-		flex-direction:column;
-
+		flex-direction: column;
 	}
-
 
 	.left-actions button,
 	.right-actions button {
+		width: 100%;
 
-		width:100%;
-
-		margin-left:0 !important;
-
+		margin-left: 0 !important;
 	}
-
-
-
 }
-
-
 
 /* ============================
    SMALL MOBILE
 ============================ */
 
-
-@media(max-width:400px) {
-
-
+@media (max-width: 400px) {
 	.gold-rate-container {
-
-		padding:8px;
-
+		padding: 8px;
 	}
-
 
 	.rate-card {
-
-		padding:14px;
-
+		padding: 14px;
 	}
-
 
 	.barcode-image {
-
-		padding:6px;
-
+		padding: 6px;
 	}
-
-
 
 	.gold-header h2 {
-
-		font-size:1.15rem;
-
+		font-size: 1.15rem;
 	}
-
 
 	.metal-name {
-
-		font-size:1.1rem;
-
+		font-size: 1.1rem;
 	}
-
 }
 
 /* =========================================
@@ -1281,7 +849,6 @@
 	color: #444;
 }
 
-
 /* Switch */
 
 .switch {
@@ -1298,7 +865,7 @@
 }
 
 .switch input:disabled + .slider {
-	opacity: .65;
+	opacity: 0.65;
 	cursor: not-allowed;
 }
 
@@ -1307,7 +874,7 @@
 	inset: 0;
 	border-radius: 999px;
 	background: #d7d7d7;
-	transition: .25s;
+	transition: 0.25s;
 	cursor: pointer;
 }
 
@@ -1320,8 +887,8 @@
 	height: 22px;
 	background: white;
 	border-radius: 50%;
-	transition: .25s;
-	box-shadow: 0 2px 8px rgba(0,0,0,.25);
+	transition: 0.25s;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .switch input:checked + .slider {
@@ -1332,20 +899,18 @@
 	transform: translateX(24px);
 }
 
-
 /* Stone Grid */
 
 .rate-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	gap: 18px;
 }
-
 
 /* Nice animation */
 
 .rate-grid {
-	animation: fadeStone .2s ease;
+	animation: fadeStone 0.2s ease;
 }
 
 @keyframes fadeStone {
@@ -1359,9 +924,31 @@
 	}
 }
 
-
 .scan-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 	white-space: nowrap;
+	height: 46px;
+	padding: 0 22px;
+	border: none;
+	border-radius: 10px;
+	font-weight: 600;
+	color: white;
+	background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+	transition: 0.2s ease;
+	cursor: pointer;
+}
+
+.scan-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+
+.scan-btn:active {
+	transform: translateY(0);
 }
 
 .scanner-panel {
@@ -1380,4 +967,36 @@
 	background: #000;
 	min-height: 280px;
 	object-fit: cover;
+}
+
+.scanner-container {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+
+	padding: 24px;
+	background: rgba(0, 0, 0, 0.75);
+	backdrop-filter: blur(4px);
+}
+
+#barcode-video {
+	width: 100%;
+	max-width: 480px;
+	aspect-ratio: 4 / 3;
+	border-radius: 16px;
+	border: 3px solid var(--primary);
+	background: #000;
+	object-fit: cover;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.scanner-container .cancel-btn {
+	width: 100%;
+	max-width: 220px;
 }

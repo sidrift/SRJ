@@ -9,166 +9,132 @@
 @inherits srj.Blazor.Services.AuthorizedPageBase
 
 <HeadContent>
-	<link href="css/gold-rate.css" rel="stylesheet"/>
+	<link href = "css/gold-rate.css"
+	      rel = "stylesheet" />
 </HeadContent>
-
 
 <PageTitle>Gold Rates</PageTitle>
 
-
 @if (_showSuccess) {
-	<div class="dialog-overlay">
-		<div class="success-dialog">
-			<i class="bi bi-check-circle-fill"></i>
+	<div class = "dialog-overlay">
+		<div class = "success-dialog">
+			<i class = "bi bi-check-circle-fill"></i>
 			Gold price updated successfully.
 		</div>
 	</div>
 }
 
-
-<div class="@(_showSuccess ? "blur-background" : "")">
-
-	<div class="gold-rate-container">
-
-		<div class="gold-header">
-
+<div class = "@(_showSuccess ? "blur-background" : "")">
+	<div class = "gold-rate-container">
+		<div class = "gold-header">
 			<div>
 				<h2>
-					<i class="bi bi-coin"></i>
+					<i class = "bi bi-coin">
+					</i>
 					Gold Rates
 				</h2>
-
 			</div>
-
-			<div class="gold-date">
-				<i class="bi bi-calendar3"></i>
+			<div class = "gold-date">
+				<i class = "bi bi-calendar3">
+				</i>
 				@DateTime.Now.ToString("dd MMM yyyy")
 			</div>
-
 		</div>
-
-
 		@if (_loading) {
-			<div class="text-center">
-				<div class="spinner-border text-warning"></div>
+			<div class = "text-center">
+				<div class = "spinner-border text-warning">
+				</div>
 			</div>
 		} else {
 			@if (!string.IsNullOrEmpty(_error)) {
-				<div class="alert alert-danger">
+				<div class = "alert alert-danger">
 					@_error
 				</div>
 			}
 
-
-			<EditForm EditContext="_editContext"
-			          OnValidSubmit="SaveRate">
-
-
-				<div class="rate-card">
-
-
-					<div class="rate-section">
-
+			<EditForm EditContext = "_editContext"
+			          OnValidSubmit = "SaveRate">
+				<div class = "rate-card">
+					<div class = "rate-section">
 						<h5>
-							<i class="bi bi-box-seam"></i>
+							<i class = "bi bi-box-seam">
+							</i>
 							Gold Imported (24K)
 						</h5>
-
-
-						<div class="rate-grid">
-
-							<div class="rate-field">
-								<label>Sell Price</label>
-
-								<div class="input-group">
-									<span>₹</span>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_goldRate.SellPrice24KImp"/>
+						<div class = "rate-grid">
+							<div class = "rate-field">
+								<label>
+									Sell Price
+								</label>
+								<div class = "input-group">
+									<span>
+										₹
+									</span>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldRate.SellPrice24KImp" />
 								</div>
 							</div>
-
-
-							<div class="rate-field">
-								<label>Buy Price</label>
-
-								<div class="input-group">
-									<span>₹</span>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_goldRate.BuyPrice24KImp"/>
+							<div class = "rate-field">
+								<label>
+									Buy Price
+								</label>
+								<div class = "input-group">
+									<span>
+										₹
+									</span>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldRate.BuyPrice24KImp" />
 								</div>
 							</div>
-
 						</div>
-
 					</div>
-
-
-					<div class="rate-section">
-
+					<div class = "rate-section">
 						<h5>
-							<i class="bi bi-gem"></i>
+							<i class = "bi bi-gem">
+							</i>
 							Gold FT (24K)
 						</h5>
-
-
-						<div class="rate-grid">
-
-							<div class="rate-field">
-								<label>Sell Price</label>
-
-								<div class="input-group">
-									<span>₹</span>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_goldRate.SellPrice24KFt"/>
+						<div class = "rate-grid">
+							<div class = "rate-field">
+								<label>
+									Sell Price
+								</label>
+								<div class = "input-group">
+									<span>
+										₹
+									</span>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldRate.SellPrice24KFt" />
 								</div>
 							</div>
-
-
-							<div class="rate-field">
-								<label>Buy Price</label>
-
-								<div class="input-group">
-									<span>₹</span>
-
-									<InputNumber class="form-control"
-									             @bind-Value="_goldRate.BuyPrice24KFt"/>
+							<div class = "rate-field">
+								<label>
+									Buy Price
+								</label>
+								<div class = "input-group">
+									<span>
+										₹
+									</span>
+									<InputNumber class = "form-control"
+									             @bind-Value = "_goldRate.BuyPrice24KFt" />
 								</div>
 							</div>
-
 						</div>
-
 					</div>
-
-
-					<div class="text-end mt-4">
-
-						<button class="save-btn"
-						        type="submit"
-						        disabled="@(!_canSave || _saving)">
-
-							<i class="bi bi-floppy-fill me-2"></i>
-
+					<div class = "text-end mt-4">
+						<button class = "save-btn"
+						        type = "submit"
+						        disabled = "@(!_canSave || _saving)">
+							<i class = "bi bi-floppy-fill me-2">
+							</i>
 							@(_saving ? "Saving..." : "Save Gold Rates")
-
 						</button>
-
 					</div>
-
-
 				</div>
-
-
 			</EditForm>
 		}
-
 	</div>
-
 </div>
-
-
 
 @code {
 	private GoldRateRequest _goldRate = new();
@@ -186,12 +152,10 @@
 	protected override async Task OnInitializedAsync() {
 		_loading = true;
 
-
 		try {
 			var rate =
 				await Http.GetFromJsonAsync<GoldRateResponse>(
 					"gold-rate/today");
-
 
 			if (rate != null) {
 				_goldRate = new GoldRateRequest {
@@ -201,7 +165,6 @@
 					BuyPrice24KFt = rate.BuyPrice24KFt
 				};
 
-
 				_originalRate = Clone(_goldRate);
 			}
 		}
@@ -210,7 +173,6 @@
 			_originalRate = new GoldRateRequest();
 		}
 
-
 		_editContext = new EditContext(_goldRate);
 
 		_editContext.OnFieldChanged += (_, _) => {
@@ -218,43 +180,32 @@
 			StateHasChanged();
 		};
 
-
 		_loading = false;
 	}
 
 	private async Task SaveRate() {
 		_error = null;
 
-
 		if (!IsValidRate()) {
 			_error = "All gold prices must be greater than 0.";
 			return;
 		}
 
-
 		_saving = true;
-
 
 		var response =
 			await Http.PutAsJsonAsync(
 				"gold-rate",
 				_goldRate);
 
-
 		if (response.IsSuccessStatusCode) {
 			_showSuccess = true;
-
 			StateHasChanged();
-
-
 			await Task.Delay(2000);
-
-
 			NavigationManager.NavigateTo("/");
 		} else {
 			_error = "Failed to update gold rate.";
 		}
-
 
 		_saving = false;
 	}

@@ -10,7 +10,6 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
 	/* Space around the card on small screens */
 	padding: 24px;
 	box-sizing: border-box;
@@ -19,15 +18,10 @@ body {
 .auth-card {
 	width: 100%;
 	max-width: 420px;
-
 	background: #fff;
-
 	padding: 40px;
-
 	border-radius: 12px;
-
 	box-shadow: 0 8px 25px rgba(0, 0, 0, .10);
-
 	box-sizing: border-box;
 }
 
@@ -82,7 +76,6 @@ body {
 
 /* Tablet */
 @media (max-width: 768px) {
-
 	.auth-container {
 		padding: 20px;
 	}
@@ -90,11 +83,11 @@ body {
 	.auth-card {
 		padding: 32px 24px;
 	}
+
 }
 
 /* Phone */
 @media (max-width: 480px) {
-
 	.auth-container {
 		padding: 18px;
 		align-items: center;
@@ -113,4 +106,5 @@ body {
 	.auth-card .btn {
 		height: 44px;
 	}
+
 }

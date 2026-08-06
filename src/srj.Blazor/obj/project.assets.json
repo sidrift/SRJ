@@ -189,6 +189,7 @@
         "dependencies": {
           "BarcodeLib": "3.1.5",
           "SkiaSharp": "4.150.1",
+          "ZXing.Net": "0.16.11",
           "srj.Domain": "1.0.0"
         },
         "compile": {

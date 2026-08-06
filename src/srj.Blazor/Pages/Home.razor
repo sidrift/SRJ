@@ -6,280 +6,245 @@
 @inherits srj.Blazor.Services.AuthorizedPageBase
 
 <HeadContent>
-    <link href="css/dashboard.css" rel="stylesheet" />
+	<link href = "css/dashboard.css"
+	      rel = "stylesheet" />
 </HeadContent>
 
 <PageTitle>Home</PageTitle>
 
-<div class="dashboard-container">
+<div class = "dashboard-container">
+	@if (!string.IsNullOrWhiteSpace(_warning)) {
+		<div class = "alert alert-warning dashboard-warning">
+			<i class = "bi bi-exclamation-triangle-fill">
+			</i>
+			@_warning
+		</div>
+	}
 
-    @if (!string.IsNullOrWhiteSpace(_warning))
-    {
-        <div class="alert alert-warning dashboard-warning">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            @_warning
-        </div>
-    }
+	@if (_loading) {
+		<div class = "text-center py-5">
+			<div class = "spinner-border text-warning">
+			</div>
+		</div>
+	} else if (_rates == null) {
+		<div class = "alert alert-danger">
+			<i class = "bi bi-exclamation-triangle-fill">
+			</i>
+			Unable to load gold and silver rates.
+		</div>
+	} else {
+		<div class = "dashboard-header">
+			<div>
+				<h2>
+					<i class = "bi bi-speedometer2">
+					</i>
+					Dashboard
+				</h2>
+			</div>
+			<div class = "dashboard-date-picker">
+				<label class = "dashboard-date-label">
+					<i class = "bi bi-calendar3">
+					</i>
+					Select Date
+				</label>
+				<input type = "date"
+				       class = "form-control"
+				       value = "@_selectedDate.ToString("yyyy-MM-dd")"
+				       min = "@_minDate.ToString("yyyy-MM-dd")"
+				       max = "@_today.ToString("yyyy-MM-dd")"
+				       @onchange = "DateChanged" />
+			</div>
+		</div>
+		@if (IsHistorical) {
+			<div class = "alert alert-danger historical-warning">
+				<i class = "bi bi-clock-history me-2">
+				</i>
+				<strong>
+					Historical Rates:
+				</strong>
+				You are viewing gold and silver prices for
+				<strong>
+					@_selectedDate.ToString("dd MMM yyyy")
+				</strong>
+				.
+			</div>
+		}
 
-    @if (_loading)
-    {
-        <div class="text-center py-5">
-            <div class="spinner-border text-warning"></div>
-        </div>
-    }
-    else if (_rates == null)
-    {
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            Unable to load gold and silver rates.
-        </div>
-    }
-    else
-    {
-        <div class="dashboard-header">
+		@if (_rates.Gold is not null) {
+			<div class = "dashboard-section gold-section">
+				<h3 class = "section-title gold-title">
+					<i class = "bi bi-coin">
+					</i>
+					Gold Rates
+				</h3>
+				<div class = "dashboard-grid">
+					<RateCard
+						Theme = "gold"
+						Title = "Imported Gold (24K)"
+						Sell = "@_rates.Gold.SellPrice24KImp"
+						Buy = "@_rates.Gold.BuyPrice24KImp" />
+					<RateCard
+						Theme = "gold"
+						Title = "Finished Gold (24K)"
+						Sell = "@_rates.Gold.SellPrice24KFt"
+						Buy = "@_rates.Gold.BuyPrice24KFt" />
+					<RateCard
+						Theme = "gold"
+						Title = "22K Gold"
+						Sell = "@_rates.Gold.SellPrice22K" />
+					<RateCard
+						Theme = "gold"
+						Title = "20K Gold"
+						Sell = "@_rates.Gold.SellPrice20K" />
+					<RateCard
+						Theme = "gold"
+						Title = "18K Gold"
+						Sell = "@_rates.Gold.SellPrice18K" />
+				</div>
+			</div>
+		}
 
-            <div>
-                <h2>
-                    <i class="bi bi-speedometer2"></i>
-                    Dashboard
-                </h2>
-
-            </div>
-
-            <div class="dashboard-date-picker">
-
-                <label class="dashboard-date-label">
-                    <i class="bi bi-calendar3"></i>
-                    Select Date
-                </label>
-
-                <input type="date"
-                       class="form-control"
-                       value="@_selectedDate.ToString("yyyy-MM-dd")"
-                       min="@_minDate.ToString("yyyy-MM-dd")"
-                       max="@_today.ToString("yyyy-MM-dd")"
-                       @onchange="DateChanged" />
-
-            </div>
-
-        </div>
-
-        @if (IsHistorical)
-        {
-	        <div class="alert alert-danger historical-warning">
-		        <i class="bi bi-clock-history me-2"></i>
-
-		        <strong>Historical Rates:</strong>
-		        You are viewing gold and silver prices for
-		        <strong>@_selectedDate.ToString("dd MMM yyyy")</strong>.
-	        </div>
-        }
-
-        @if (_rates.Gold is not null)
-        {
-            <div class="dashboard-section gold-section">
-
-                <h3 class="section-title gold-title">
-                    <i class="bi bi-coin"></i>
-                    Gold Rates
-                </h3>
-
-                <div class="dashboard-grid">
-
-                    <RateCard
-                        Theme="gold"
-                        Title="Imported Gold (24K)"
-                        Sell="@_rates.Gold.SellPrice24KImp"
-                        Buy="@_rates.Gold.BuyPrice24KImp" />
-
-                    <RateCard
-                        Theme="gold"
-                        Title="Finished Gold (24K)"
-                        Sell="@_rates.Gold.SellPrice24KFt"
-                        Buy="@_rates.Gold.BuyPrice24KFt" />
-
-                    <RateCard
-                        Theme="gold"
-                        Title="22K Gold"
-                        Sell="@_rates.Gold.SellPrice22K" />
-
-                    <RateCard
-                        Theme="gold"
-                        Title="20K Gold"
-                        Sell="@_rates.Gold.SellPrice20K" />
-
-                    <RateCard
-                        Theme="gold"
-                        Title="18K Gold"
-                        Sell="@_rates.Gold.SellPrice18K" />
-
-                </div>
-
-            </div>
-        }
-
-        @if (_rates.Silver is not null)
-        {
-            <div class="dashboard-section silver-section">
-
-                <h3 class="section-title silver-title">
-                    <i class="bi bi-circle-half"></i>
-                    Silver Rates
-                </h3>
-
-                <div class="dashboard-grid">
-
-                    <RateCard
-                        Theme="silver"
-                        Title="Silver Silly"
-                        Sell="@_rates.Silver.SellPriceSilly"
-                        Buy="@_rates.Silver.BuyPriceSilly" />
-
-                    <RateCard
-                        Theme="silver"
-                        Title="Silver 99"
-                        Sell="@_rates.Silver.SellPrice99"
-                        Buy="@_rates.Silver.BuyPrice99" />
-
-                </div>
-
-            </div>
-        }
-    }
-
+		@if (_rates.Silver is not null) {
+			<div class = "dashboard-section silver-section">
+				<h3 class = "section-title silver-title">
+					<i class = "bi bi-circle-half">
+					</i>
+					Silver Rates
+				</h3>
+				<div class = "dashboard-grid">
+					<RateCard
+						Theme = "silver"
+						Title = "Silver Silly"
+						Sell = "@_rates.Silver.SellPriceSilly"
+						Buy = "@_rates.Silver.BuyPriceSilly" />
+					<RateCard
+						Theme = "silver"
+						Title = "Silver 99"
+						Sell = "@_rates.Silver.SellPrice99"
+						Buy = "@_rates.Silver.BuyPrice99" />
+				</div>
+			</div>
+		}
+	}
 </div>
 
 @code {
+	private DashboardRates? _rates;
 
-    private DashboardRates? _rates;
+	private bool _loading;
 
-    private bool _loading;
+	private string? _warning;
 
-    private string? _warning;
+	private readonly DateOnly _today =
+		DateOnly.FromDateTime(DateTime.Today);
 
-    private readonly DateOnly _today =
-        DateOnly.FromDateTime(DateTime.Today);
+	private readonly DateOnly _minDate =
+		DateOnly.FromDateTime(DateTime.Today.AddDays(-30));
 
-    private readonly DateOnly _minDate =
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-30));
+	private DateOnly _selectedDate =
+		DateOnly.FromDateTime(DateTime.Today);
 
-    private DateOnly _selectedDate =
-        DateOnly.FromDateTime(DateTime.Today);
+	private bool IsHistorical =>
+		_selectedDate != _today;
 
-    private bool IsHistorical =>
-        _selectedDate != _today;
+	protected override async Task OnInitializedAsync() {
+		await LoadRates(_today);
+	}
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadRates(_today);
-    }
+	private async Task DateChanged(ChangeEventArgs e) {
+		if (e.Value is null)
+			return;
 
-    private async Task DateChanged(ChangeEventArgs e)
-    {
-        if (e.Value is null)
-            return;
+		if (!DateOnly.TryParse(e.Value.ToString(), out var date))
+			return;
 
-        if (!DateOnly.TryParse(e.Value.ToString(), out var date))
-            return;
+		await LoadRates(date);
+	}
 
-        await LoadRates(date);
-    }
+	private async Task LoadRates(DateOnly date) {
+		_loading = true;
+		_warning = null;
 
-    private async Task LoadRates(DateOnly date)
-    {
-        _loading = true;
-        _warning = null;
+		try {
+			var response =
+				await Http.GetAsync($"dashboard/rates/{date:yyyy-MM-dd}");
 
-        try
-        {
-            var response =
-                await Http.GetAsync($"dashboard/rates/{date:yyyy-MM-dd}");
+			response.EnsureSuccessStatusCode();
 
-            response.EnsureSuccessStatusCode();
+			var body =
+				await response.Content.ReadAsStringAsync();
 
-            var body =
-                await response.Content.ReadAsStringAsync();
+			// No rates exist for selected date
+			if (body.Trim() == "[]") {
+				_warning =
+					$"No rates were found for {date:dd MMM yyyy}. Showing today's latest rates instead.";
 
-            // No rates exist for selected date
-            if (body.Trim() == "[]")
-            {
-                _warning =
-                    $"No rates were found for {date:dd MMM yyyy}. Showing today's latest rates instead.";
+				_selectedDate = _today;
 
-                _selectedDate = _today;
+				var todayResponse =
+					await Http.GetAsync($"dashboard/rates/{_today:yyyy-MM-dd}");
 
-                var todayResponse =
-                    await Http.GetAsync($"dashboard/rates/{_today:yyyy-MM-dd}");
+				todayResponse.EnsureSuccessStatusCode();
 
-                todayResponse.EnsureSuccessStatusCode();
+				_rates =
+					await todayResponse.Content.ReadFromJsonAsync<DashboardRates>();
 
-                _rates =
-                    await todayResponse.Content.ReadFromJsonAsync<DashboardRates>();
+				if (_rates != null) {
+					_rates.Gold ??= new GoldRate();
+					_rates.Silver ??= new SilverRate();
+				}
+			} else {
+				_rates =
+					await response.Content.ReadFromJsonAsync<DashboardRates>();
 
-                if (_rates != null)
-                {
-                    _rates.Gold ??= new GoldRate();
-                    _rates.Silver ??= new SilverRate();
-                }
-            }
-            else
-            {
-                _rates =
-                    await response.Content.ReadFromJsonAsync<DashboardRates>();
+				if (_rates != null) {
+					// If either section is missing, still render cards with N/A
+					_rates.Gold ??= new GoldRate();
+					_rates.Silver ??= new SilverRate();
 
-                if (_rates != null)
-                {
-                    // If either section is missing, still render cards with N/A
-                    _rates.Gold ??= new GoldRate();
-                    _rates.Silver ??= new SilverRate();
+					_selectedDate = date;
+				}
+			}
+		}
+		catch {
+			_rates = null;
+			_warning = "Unable to load rates.";
+		}
 
-                    _selectedDate = date;
-                }
-            }
-        }
-        catch
-        {
-            _rates = null;
-            _warning = "Unable to load rates.";
-        }
+		_loading = false;
+	}
 
-        _loading = false;
-    }
+	public class DashboardRates {
+		public DateOnly PriceDate { get; set; }
 
-    public class DashboardRates
-    {
-        public DateOnly PriceDate { get; set; }
+		public GoldRate? Gold { get; set; }
 
-        public GoldRate? Gold { get; set; }
+		public SilverRate? Silver { get; set; }
+	}
 
-        public SilverRate? Silver { get; set; }
-    }
+	public class GoldRate {
+		public decimal? SellPrice24KImp { get; set; }
 
-    public class GoldRate
-    {
-        public decimal? SellPrice24KImp { get; set; }
+		public decimal? BuyPrice24KImp { get; set; }
 
-        public decimal? BuyPrice24KImp { get; set; }
+		public decimal? SellPrice24KFt { get; set; }
 
-        public decimal? SellPrice24KFt { get; set; }
+		public decimal? BuyPrice24KFt { get; set; }
 
-        public decimal? BuyPrice24KFt { get; set; }
+		public decimal? SellPrice22K { get; set; }
 
-        public decimal? SellPrice22K { get; set; }
+		public decimal? SellPrice20K { get; set; }
 
-        public decimal? SellPrice20K { get; set; }
+		public decimal? SellPrice18K { get; set; }
+	}
 
-        public decimal? SellPrice18K { get; set; }
-    }
+	public class SilverRate {
+		public decimal? SellPriceSilly { get; set; }
 
-    public class SilverRate
-    {
-        public decimal? SellPriceSilly { get; set; }
+		public decimal? BuyPriceSilly { get; set; }
 
-        public decimal? BuyPriceSilly { get; set; }
+		public decimal? SellPrice99 { get; set; }
 
-        public decimal? SellPrice99 { get; set; }
-
-        public decimal? BuyPrice99 { get; set; }
-    }
+		public decimal? BuyPrice99 { get; set; }
+	}
 }

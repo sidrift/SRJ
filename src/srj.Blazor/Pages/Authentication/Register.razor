@@ -16,94 +16,69 @@
 <PageTitle>Register</PageTitle>
 
 <HeadContent>
-	<link href="css/auth.css" rel="stylesheet"/>
+	<link href = "css/auth.css"
+	      rel = "stylesheet" />
 </HeadContent>
 
-<div class="auth-container">
-
-	<div class="auth-card">
-
-		<h2>Create Account</h2>
-
+<div class = "auth-container">
+	<div class = "auth-card">
+		<h2>
+			Create Account
+		</h2>
 		@if (!string.IsNullOrWhiteSpace(_error)) {
-			<div class="alert alert-danger">
+			<div class = "alert alert-danger">
 				@_error
 			</div>
 		}
-
-		<EditForm Model="_model"
-		          FormName="RegisterForm"
-		          OnValidSubmit="RegisterAsync">
-
-			<DataAnnotationsValidator/>
-
-			<ValidationSummary/>
-
-			<div class="mb-3">
-
-				<label class="form-label">
+		<EditForm Model = "_model"
+		          FormName = "RegisterForm"
+		          OnValidSubmit = "RegisterAsync">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+			<div class = "mb-3">
+				<label class = "form-label">
 					Full Name
 				</label>
-
-				<InputText class="form-control"
-				           @bind-Value="_model.FullName"/>
-
-				<ValidationMessage For="@(() => _model.FullName)"
-				                   class="validation-message"/>
-
+				<InputText class = "form-control"
+				           @bind-Value = "_model.FullName" />
+				<ValidationMessage For = "@(() =>
+					                          _model.FullName)"
+				                   class = "validation-message" />
 			</div>
-
-			<div class="mb-3">
-
-				<label class="form-label">
+			<div class = "mb-3">
+				<label class = "form-label">
 					Email
 				</label>
-
-				<InputText class="form-control"
-				           @bind-Value="_model.Email"/>
-
-				<ValidationMessage For="@(() => _model.Email)"
-				                   class="validation-message"/>
-
+				<InputText class = "form-control"
+				           @bind-Value = "_model.Email" />
+				<ValidationMessage For = "@(() =>
+					                          _model.Email)"
+				                   class = "validation-message" />
 			</div>
-
-			<div class="mb-4">
-
-				<label class="form-label">
+			<div class = "mb-4">
+				<label class = "form-label">
 					Password
 				</label>
-
-				<InputText class="form-control"
-				           type="password"
-				           @bind-Value="_model.Password"/>
-
-				<ValidationMessage For="@(() => _model.Password)"
-				                   class="validation-message"/>
-
+				<InputText class = "form-control"
+				           type = "password"
+				           @bind-Value = "_model.Password" />
+				<ValidationMessage For = "@(() =>
+					                          _model.Password)"
+				                   class = "validation-message" />
 			</div>
-
-			<button class="btn btn-success w-100"
-			        type="submit"
-			        disabled="@_loading">
-
+			<button class = "btn btn-success w-100"
+			        type = "submit"
+			        disabled = "@_loading">
 				@(_loading ? "Creating Account..." : "Register")
-
 			</button>
-
 		</EditForm>
-
-		<div class="auth-footer">
-
+		<div class = "auth-footer">
 			Already have an account?
-
-			<NavLink href="/login">
+			<NavLink href = "/login">
 				Login
 			</NavLink>
-
 		</div>
-
 	</div>
-
 </div>
 
 @code

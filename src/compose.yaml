@@ -1,0 +1,50 @@
+﻿services:
+
+  postgres:
+    image: postgres:17
+    container_name: srj-postgres
+    environment:
+      POSTGRES_DB: srjdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d srjdb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  srj.api:
+    image: srj.api
+    container_name: srj-api
+    build:
+      context: .
+      dockerfile: srj.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=srjdb;Username=postgres;Password=postgres"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  srj.blazor:
+    image: srj.blazor
+    container_name: srj-blazor
+    build:
+      context: .
+      dockerfile: srj.Blazor/Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ApiSettings__BaseUrl: "http://srj.api:8080/api/"
+    depends_on:
+      - srj.api
+
+volumes:
+  postgres_data:

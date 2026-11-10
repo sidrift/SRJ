@@ -1,4 +1,6 @@
 using System.Text;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +24,6 @@ using srj.Application.Services.Silver;
 using srj.Infrastructure.DbContext;
 using srj.Infrastructure.Identity;
 using srj.Infrastructure.Repositories;
-using TheSRJProject.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,36 +39,37 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "SRJ API",
-        Version = "v1"
-    });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "SRJ API", Version = "v1" });
 
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "Enter JWT token only. Swagger will prepend Bearer automatically.",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT"
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+    options.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Id = "Bearer",
-                    Type = ReferenceType.SecurityScheme
-                }
-            },
-            Array.Empty<string>()
+            Description = "Enter JWT token only. Swagger will prepend Bearer automatically.",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
         }
-    });
+    );
+
+    options.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Id = "Bearer",
+                        Type = ReferenceType.SecurityScheme,
+                    },
+                },
+                Array.Empty<string>()
+            },
+        }
+    );
 });
 
 #endregion
@@ -75,15 +77,15 @@ builder.Services.AddSwaggerGen(options =>
 #region Database
 
 builder.Services.AddDbContext<JewelryDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 #endregion
 
 #region Identity
 
-builder.Services
-    .AddIdentityCore<ApplicationUser>(options =>
+builder
+    .Services.AddIdentityCore<ApplicationUser>(options =>
     {
         options.Password.RequireDigit = true;
         options.Password.RequireUppercase = true;
@@ -102,36 +104,40 @@ builder.Services
 
 #region Authentication
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
 
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(
-                            builder.Configuration["Jwt:Key"]!))
-            };
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            ),
+        };
     });
 
 builder.Services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
+    options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 });
 
 #endregion
+
+var storageAccountName = builder.Configuration["AzureStorage:AccountName"];
+
+var accountUri = new Uri($"https://{storageAccountName}.blob.core.windows.net");
+
+builder.Services.AddSingleton(new BlobServiceClient(accountUri, new AzureCliCredential()));
+
+builder.Services.AddScoped<IFileStorageService, AzureBlobStorageService>();
 
 #region Dependency Injection
 
@@ -158,7 +164,7 @@ builder.Services.AddScoped<ISilverJewelryCalculationService, SilverJewelryCalcul
 
 builder.Services.AddScoped<ISkuGenerator, SkuGenerator>();
 builder.Services.AddScoped<IBarcodeService, BarcodeService>();
-builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
 builder.Services.AddScoped<IIndiaDateTimeService, IndiaDateTimeService>();
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
@@ -166,6 +172,17 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 #endregion
 
 var app = builder.Build();
+
+#region Database Migration
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<JewelryDbContext>();
+
+    db.Database.Migrate();
+}
+
+#endregion
 
 #region Middleware
 

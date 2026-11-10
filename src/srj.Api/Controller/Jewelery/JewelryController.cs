@@ -3,9 +3,11 @@ using srj.Application.Dtos.Commons;
 using srj.Application.Dtos.Request.Jewelery;
 using srj.Application.Dtos.Response.Gold;
 using srj.Application.Dtos.Response.Silver;
+using srj.Application.Interface.Services;
 using srj.Application.Interface.Services.Gold;
 using srj.Application.Interface.Services.Jewelery;
 using srj.Application.Interface.Services.Silver;
+using srj.Domain.Models;
 
 namespace TheSRJProject.Controller.Jewelery;
 
@@ -19,17 +21,25 @@ public class JewelryController : ControllerBase
 
     private readonly ISilverJewelryItemService _silverJeweleryService;
 
-    public JewelryController(IJewelryQueryService service,
-        IGoldJewelryItemService goldJeweleryService, ISilverJewelryItemService silverJeweleryService)
+    private readonly IFileStorageService _fileStorage;
+
+    public JewelryController(
+        IJewelryQueryService service,
+        IGoldJewelryItemService goldJeweleryService,
+        ISilverJewelryItemService silverJeweleryService,
+        IFileStorageService fileStorage
+    )
     {
         _service = service;
         _goldJeweleryService = goldJeweleryService;
         _silverJeweleryService = silverJeweleryService;
+        _fileStorage = fileStorage;
     }
 
     [HttpGet]
     public async Task<ActionResult<PagedResponse<JewelryListResponse>>> GetAll(
-        [FromQuery] JewelrySearchRequest request)
+        [FromQuery] JewelrySearchRequest request
+    )
     {
         var result = await _service.GetAllAsync(request);
 
@@ -38,90 +48,109 @@ public class JewelryController : ControllerBase
 
     [HttpGet("{sku}")]
     public async Task<ActionResult<object>> GetBySku(string sku)
-
     {
-    if (string.IsNullOrWhiteSpace(sku))
-        return BadRequest(new
+        if (string.IsNullOrWhiteSpace(sku))
+            return BadRequest(new { Message = "SKU is required." });
+
+        try
         {
-            Message = "SKU is required."
-
-        });
-
-    try
-    {
-        if (sku.StartsWith("G-", StringComparison.OrdinalIgnoreCase))
-        {
-            var gold = await _goldJeweleryService.GetBySkuAsync(sku);
-
-
-            return new
+            if (sku.StartsWith("G-", StringComparison.OrdinalIgnoreCase))
             {
-                metal = gold.Category.Metal.ToString(),
+                var gold = await _goldJeweleryService.GetBySkuAsync(sku);
 
-                data = new GoldJewelryDetailsResponse
+                return new
                 {
-                    Id = gold.Id,
-                    Sku = gold.Sku,
+                    metal = gold.Category.Metal.ToString(),
 
-                    Category = gold.Category?.Name ?? string.Empty,
+                    data = new GoldJewelryDetailsResponse
+                    {
+                        Id = gold.Id,
+                        Sku = gold.Sku,
 
-                    WeightInGrams = gold.WeightInGrams,
+                        Category = gold.Category?.Name ?? string.Empty,
 
-                    HasStones = gold.HasStones,
-                    StoneWeight = gold.StoneWeight,
-                    StoneType = gold.StoneType,
-                    StonePrice = gold.StonePrice,
+                        WeightInGrams = gold.WeightInGrams,
 
-                    PurityInPercentage = gold.PurityInPercentage,
-                    MakingChargeType = gold.MakingChargeType!.Value,
-                    MakingChargePercentage = gold.MakingChargePercentage,
-                    MakingChargeWeight = gold.MakingChargeWeight!.Value,
-                    HallMarkCharge = gold.HallMarkCharge!.Value,
+                        HasStones = gold.HasStones,
+                        StoneWeight = gold.StoneWeight,
+                        StoneType = gold.StoneType,
+                        StonePrice = gold.StonePrice,
 
-                    BarcodeImageUrl = gold.BarcodeImageUrl
-                }
-            };
-        }
+                        PurityInPercentage = gold.PurityInPercentage,
+                        MakingChargeType = gold.MakingChargeType!.Value,
+                        MakingChargePercentage = gold.MakingChargePercentage,
+                        MakingChargeWeight = gold.MakingChargeWeight!.Value,
+                        HallMarkCharge = gold.HallMarkCharge!.Value,
 
+                        BarcodeImageUrl = gold.BarcodeImageUrl,
+                    },
+                };
+            }
 
-        if (sku.StartsWith("S-", StringComparison.OrdinalIgnoreCase))
-        {
-            var silver = await _silverJeweleryService.GetBySkuAsync(sku);
-
-
-            return new
+            if (sku.StartsWith("S-", StringComparison.OrdinalIgnoreCase))
             {
-                metal = silver.Category.Metal.ToString(),
+                var silver = await _silverJeweleryService.GetBySkuAsync(sku);
 
-                data = new SilverJewelryDetailsResponse
+                return new
                 {
-                    Id = silver.Id,
-                    Sku = silver.Sku,
+                    metal = silver.Category.Metal.ToString(),
 
-                    Category = silver.Category?.Name ?? string.Empty,
+                    data = new SilverJewelryDetailsResponse
+                    {
+                        Id = silver.Id,
+                        Sku = silver.Sku,
 
-                    WeightInGrams = silver.WeightInGrams,
-                    Purity = silver.PurityInPercentage,
-                    SilverMakingChargePerGram = silver.SilverMakingChargePerGram ?? 0,
+                        Category = silver.Category?.Name ?? string.Empty,
 
-                    BarcodeImageUrl = silver.BarcodeImageUrl
-                }
-            };
+                        WeightInGrams = silver.WeightInGrams,
+                        Purity = silver.PurityInPercentage,
+                        SilverMakingChargePerGram = silver.SilverMakingChargePerGram ?? 0,
+
+                        BarcodeImageUrl = silver.BarcodeImageUrl,
+                    },
+                };
+            }
+
+            return BadRequest(
+                new { Message = "Invalid SKU format. SKU must start with G- or S-." }
+            );
         }
-
-
-        return BadRequest(new
+        catch (KeyNotFoundException)
         {
-            Message = "Invalid SKU format. SKU must start with G- or S-."
-        });
+            return NotFound(new { Message = "Jewellery item not found." });
+        }
     }
-    catch (KeyNotFoundException)
+
+    [HttpGet("{sku}/barcode")]
+    public async Task<IActionResult> GetBarcode(string sku)
     {
-        return NotFound(new
-        {
-            Message = "Jewellery item not found."
+        if (string.IsNullOrWhiteSpace(sku))
+            return BadRequest(new { Message = "SKU is required." });
 
-        });
-    }
+        try
+        {
+            JewelryItem? item;
+
+            if (sku.StartsWith("G-", StringComparison.OrdinalIgnoreCase))
+                item = await _goldJeweleryService.GetBySkuAsync(sku);
+            else if (sku.StartsWith("S-", StringComparison.OrdinalIgnoreCase))
+                item = await _silverJeweleryService.GetBySkuAsync(sku);
+            else
+                return BadRequest(new { Message = "Invalid SKU format." });
+
+            if (string.IsNullOrWhiteSpace(item.BarcodeImageUrl))
+                return NotFound(new { Message = "Barcode image not found." });
+
+            var imageBytes = await _fileStorage.GetFileAsync(item.BarcodeImageUrl);
+
+            if (imageBytes == null)
+                return NotFound(new { Message = "Barcode image not found in storage." });
+
+            return File(imageBytes, "image/png");
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { Message = "Jewellery item not found." });
+        }
     }
 }

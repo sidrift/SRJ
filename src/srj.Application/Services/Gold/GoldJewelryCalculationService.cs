@@ -26,6 +26,10 @@ public class GoldJewelryCalculationService : IGoldJewelryCalculationService
 
     public async Task<GoldPriceCalculationResponse> CalculateAsync(string sku)
     {
+        int? name = null;
+
+        var r = name ?? 0;
+
         var item = await _jewelryRepository.GetBySkuAsync(sku);
 
         if (item == null)

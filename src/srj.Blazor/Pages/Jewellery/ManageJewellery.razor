@@ -100,14 +100,16 @@
 	@if (_itemLoaded) {
 		<EditForm EditContext = "_editContext">
 			<div class = "rate-card mt-3">
+
 				<!-- Barcode -->
-				@if (!string.IsNullOrWhiteSpace(CurrentBarcodeImageUrl)) {
-					<div class = "barcode-section">
-						<img src = "@GetBarcodeUrl(CurrentBarcodeImageUrl)"
-						     class = "barcode-image" />
+				@if (!string.IsNullOrWhiteSpace(BarcodeImageDataUrl))
+				{
+					<div class="barcode-section">
+						<img src="@BarcodeImageDataUrl"
+						     class="barcode-image"
+						     alt="Jewellery Barcode" />
 					</div>
 				}
-
 
 
 				@if (IsGold) {
@@ -571,7 +573,7 @@
 	private async Task LoadItem() {
 		_loading = true;
 		_error = null;
-
+		BarcodeImageDataUrl = null;
 		_goldItem = null;
 		_silverItem = null;
 
@@ -652,7 +654,15 @@
 				}
 			}
 
+			var barcodeSku = IsGold
+				? _goldItem?.Sku
+				: _silverItem?.Sku;
+
+			await LoadBarcodeImage(barcodeSku);
+
 			_itemLoaded = true;
+
+
 		}
 		catch (HttpRequestException) {
 			_error = "Unable to connect to the server.";
@@ -685,16 +695,40 @@
 		CreateEditContext();
 	}
 
-	private string GetBarcodeUrl(string? path) {
-		if (string.IsNullOrWhiteSpace(path))
-			return string.Empty;
+	private async Task LoadBarcodeImage(string? sku)
+	{
+		BarcodeImageDataUrl = null;
 
+		if (string.IsNullOrWhiteSpace(sku))
+			return;
 
-		return new Uri(
-				Http.BaseAddress!,
-				path)
-			.ToString();
+		try
+		{
+			var response = await Http.GetAsync(
+				$"jewelry/{Uri.EscapeDataString(sku)}/barcode");
+
+			if (!response.IsSuccessStatusCode)
+			{
+				Console.WriteLine($"Barcode API failed: {response.StatusCode}");
+				return;
+			}
+
+			var imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+			if (imageBytes.Length == 0)
+				return;
+
+			BarcodeImageDataUrl =
+				$"data:image/png;base64,{Convert.ToBase64String(imageBytes)}";
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Barcode loading failed: {ex.Message}");
+			BarcodeImageDataUrl = null;
+		}
 	}
+
+	private string? BarcodeImageDataUrl;
 
 	private string? CurrentBarcodeImageUrl =>
 		_metal switch {
@@ -1317,7 +1351,7 @@
 
 		_goldItem = null;
 		_silverItem = null;
-
+		BarcodeImageDataUrl = null;
 		_originalGoldItem = null;
 		_originalSilverItem = null;
 
